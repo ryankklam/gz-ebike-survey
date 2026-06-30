@@ -1023,8 +1023,7 @@ function renderQuestion(index) {
 
   container.innerHTML = html;
   updateProgress(index);
-  // Restore selected state for mutual exclusive and checkbox_limit
-  const currentAnswer = answers[q.id];
+  // Restore disabled state for mutual exclusive and checkbox_limit
   if (currentAnswer && (q.mutuallyExclusive || q.maxSelect)) {
     setTimeout(() => refreshDisabledState(q, currentAnswer), 0);
   }
