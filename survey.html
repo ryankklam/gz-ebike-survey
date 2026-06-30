@@ -1023,6 +1023,11 @@ function renderQuestion(index) {
 
   container.innerHTML = html;
   updateProgress(index);
+  // Restore selected state for mutual exclusive and checkbox_limit
+  const currentAnswer = answers[q.id];
+  if (currentAnswer && (q.mutuallyExclusive || q.maxSelect)) {
+    setTimeout(() => refreshDisabledState(q, currentAnswer), 0);
+  }
 }
 
 function escapeAttr(str) {
@@ -1048,6 +1053,11 @@ function selectCheckbox(qid, value, maxSel, el) {
   const arr = answers[qid];
   const idx = arr.indexOf(value);
 
+  // Find current question definition for mutual exclusive logic
+  const q = visibleQuestions[currentPage];
+  const exclusiveIndexes = q.mutuallyExclusive || [];
+  const valueIdx = q.options ? q.options.indexOf(value) : -1;
+
   if (idx >= 0) {
     arr.splice(idx, 1);
     el.classList.remove('selected');
@@ -1056,22 +1066,50 @@ function selectCheckbox(qid, value, maxSel, el) {
       showToast(`最多只能选择 ${maxSel} 项`);
       return;
     }
+    // Mutual exclusive: if selecting an exclusive option, clear others
+    if (exclusiveIndexes.includes(valueIdx)) {
+      answers[qid] = [value];
+      el.parentElement.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      updateNextBtn();
+      refreshDisabledState(q, answers[qid]);
+      return;
+    }
     arr.push(value);
     el.classList.add('selected');
   }
   if (arr.length === 0) delete answers[qid];
   updateNextBtn();
-  // Refresh disabled state for checkbox_limit
-  if (maxSel) {
-    const items = el.parentElement.querySelectorAll('.option-item');
-    items.forEach(item => {
-      if (!item.classList.contains('selected') && arr.length >= maxSel) {
+  // Refresh disabled state for checkbox_limit and mutual exclusive
+  refreshDisabledState(q, answers[qid] || []);
+}
+
+function refreshDisabledState(q, selectedValues) {
+  const maxSel = q.maxSelect;
+  const exclusiveIndexes = q.mutuallyExclusive || [];
+  const items = document.querySelectorAll('.question-container .option-item');
+  const selectedExclusive = selectedValues.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
+
+  items.forEach((item, i) => {
+    if (maxSel && !item.classList.contains('selected') && selectedValues.length >= maxSel) {
+      item.classList.add('disabled-selected');
+    } else {
+      item.classList.remove('disabled-selected');
+    }
+    // Mutual exclusive: disable all non-selected when an exclusive option is selected
+    if (exclusiveIndexes.length > 0) {
+      if (selectedExclusive && !item.classList.contains('selected')) {
         item.classList.add('disabled-selected');
-      } else {
-        item.classList.remove('disabled-selected');
+      } else if (!selectedExclusive) {
+        // Disable exclusive options if any non-exclusive is selected
+        if (exclusiveIndexes.includes(i) && selectedValues.length > 0) {
+          item.classList.add('disabled-selected');
+        } else {
+          item.classList.remove('disabled-selected');
+        }
       }
-    });
-  }
+    }
+  });
 }
 
 function selectLikert(qid, value, el) {
