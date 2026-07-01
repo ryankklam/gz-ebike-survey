@@ -899,6 +899,11 @@ textarea.question-textarea:focus {
 // ====== CONSTANTS ======
 const ADMIN_PASSWORD = 'gz2024survey';
 const STORAGE_KEY = 'gz_ebike_survey_data';
+const JSONBIN_CONFIG = {
+  binId: '6a44a4c3f5f4af5e294b53f1',
+  accessKey: '$2a$10$oLOf8xGIMv8dMGhvbT478eEP.mZd2e4rPNnPlq83bZj4hzw3EG7hu',
+  baseUrl: 'https://api.jsonbin.io/v3/b/6a44a4c3f5f4af5e294b53f1'
+};
 let TOTAL_QUESTIONS = 0;
 
 // ====== DATA ======
@@ -922,6 +927,78 @@ function saveSurveyData(entry) {
   const data = getSurveyData();
   data.push(entry);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// ====== CLOUD STORAGE (JSONBin.io) ======
+async function fetchCloudData() {
+  try {
+    const response = await fetch(JSONBIN_CONFIG.baseUrl + '/latest', {
+      method: 'GET',
+      headers: {
+        'X-Master-Key': JSONBIN_CONFIG.accessKey,
+        'X-Bin-Meta': 'false'
+      }
+    });
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+    const data = await response.json();
+    // Data may be an array or an object (single _init record)
+    let records = Array.isArray(data) ? data : [data];
+    // Filter out _init placeholder records
+    records = records.filter(r => !(r && r._init));
+    return records;
+  } catch (err) {
+    console.error('fetchCloudData error:', err);
+    return null; // null means cloud fetch failed
+  }
+}
+
+async function saveToCloud(newRecord) {
+  try {
+    // 1. GET current data
+    const response = await fetch(JSONBIN_CONFIG.baseUrl + '/latest', {
+      method: 'GET',
+      headers: {
+        'X-Master-Key': JSONBIN_CONFIG.accessKey,
+        'X-Bin-Meta': 'false'
+      }
+    });
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+    let data = await response.json();
+    let records = Array.isArray(data) ? [...data] : [data];
+    // Filter out _init placeholder records
+    records = records.filter(r => !(r && r._init));
+    // 2. Append new record
+    records.push(newRecord);
+    // 3. PUT back
+    const putResponse = await fetch(JSONBIN_CONFIG.baseUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_CONFIG.accessKey
+      },
+      body: JSON.stringify(records)
+    });
+    if (!putResponse.ok) {
+      throw new Error('HTTP ' + putResponse.status);
+    }
+    return true;
+  } catch (err) {
+    console.error('saveToCloud error:', err);
+    return false;
+  }
+}
+
+async function getAllData() {
+  // Try cloud first, fallback to localStorage
+  const cloudData = await fetchCloudData();
+  if (cloudData !== null) {
+    return cloudData;
+  }
+  return getSurveyData();
 }
 
 // ====== PAGE MANAGEMENT ======
@@ -1158,7 +1235,7 @@ function prevQuestion() {
   }
 }
 
-function submitSurvey() {
+async function submitSurvey() {
   const q = visibleQuestions[currentPage];
   if (q.required && !answers[q.id]) {
     showToast('请先回答本题');
@@ -1170,7 +1247,20 @@ function submitSurvey() {
     answers: { ...answers }
   };
 
+  // Always save to localStorage first
   saveSurveyData(entry);
+
+  // Show loading state
+  showToast('正在提交...');
+
+  // Try saving to cloud
+  const cloudSuccess = await saveToCloud(entry);
+  if (cloudSuccess) {
+    showToast('提交成功！');
+  } else {
+    showToast('已保存到本地，网络保存失败');
+  }
+
   showPage('pageThankyou');
   document.getElementById('progressContainer').style.display = 'none';
 }
@@ -1195,7 +1285,7 @@ function showAdminLogin() {
 function checkAdminPassword() {
   const pwd = document.getElementById('adminPassword').value;
   if (pwd === ADMIN_PASSWORD) {
-    renderStats();
+    loadAndRenderStats();
     showPage('pageStats');
     document.getElementById('progressContainer').style.display = 'none';
   } else {
@@ -1205,12 +1295,23 @@ function checkAdminPassword() {
   }
 }
 
+async function loadAndRenderStats() {
+  const container = document.getElementById('statsContent');
+  // Show loading indicator
+  container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">正在加载统计数据...</p></div>';
+  const data = await getAllData();
+  renderStatsWithData(data);
+}
+
 function renderStats() {
   if (!questionsLoaded || questions.length === 0) {
     showToast('题目数据尚未加载，请稍候...');
     return;
   }
-  const data = getSurveyData();
+  loadAndRenderStats();
+}
+
+function renderStatsWithData(data) {
   const container = document.getElementById('statsContent');
 
   let html = `<div class="stats-header">
@@ -1328,8 +1429,9 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function exportJSON() {
-  const data = getSurveyData();
+async function exportJSON() {
+  showToast('正在导出数据...');
+  const data = await getAllData();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
