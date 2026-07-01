@@ -1,7 +1,11 @@
 const crypto = require('crypto');
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'gz2024survey';
-const JWT_SECRET = process.env.JWT_SECRET || 'gz-ebike-survey-secret-key-2026';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!ADMIN_PASSWORD || !JWT_SECRET) {
+  console.error('Missing required environment variables: ADMIN_PASSWORD, JWT_SECRET');
+}
 
 function generateToken() {
   const timestamp = Date.now();
@@ -23,6 +27,11 @@ export default function handler(req, res) {
 
   if (req.method !== 'POST') {
     res.status(405).json({ success: false, message: 'Method not allowed' });
+    return;
+  }
+
+  if (!ADMIN_PASSWORD) {
+    res.status(500).json({ success: false, message: 'Server not configured' });
     return;
   }
 

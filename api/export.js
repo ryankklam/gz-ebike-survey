@@ -21,9 +21,10 @@ export default async function handler(req, res) {
 
   try {
     const data = await fetchCloudData();
+    const jsonStr = JSON.stringify(data, null, 2);
+    res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader('Content-Disposition', 'attachment; filename="survey_data.json"');
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ success: true, data });
+    res.status(200).send(jsonStr);
   } catch (err) {
     console.error('Export error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
