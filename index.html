@@ -824,21 +824,13 @@ textarea.question-textarea:focus {
     <p class="subtitle">我们希望了解您对广州市电动自行车管理现状的看法与建议，您的参与对完善城市交通管理具有重要参考价值。</p>
     <div class="landing-info">
       <div class="info-item">
-        <div class="info-icon">1</div>
-        <div>本问卷共 <strong>20 题</strong>，预计填写时间约 <strong>5-6 分钟</strong></div>
+        <div class="info-icon">⏱</div>
+        <div id="landingSurveyInfo">只需5分钟，你的选择代表广州市民的心声</div>
       </div>
       <div class="info-item">
-        <div class="info-icon">2</div>
-        <div>问卷采用匿名方式，所有数据仅用于学术研究</div>
-      </div>
-      <div class="info-item">
-        <div class="info-icon">3</div>
+        <div class="info-icon">📊</div>
         <div>调研结束后将通过公开渠道发布完整报告</div>
       </div>
-    </div>
-    <div class="landing-privacy">
-      <strong>隐私承诺：</strong>您的所有回答将严格保密，不会收集任何可识别个人身份的信息。所有数据经过汇总统计后使用，原始数据仅研究团队可见。<br>
-      <strong>结果反馈承诺：</strong>调研结束后，我们将通过公开渠道发布完整的调研报告，感谢您的参与和贡献。
     </div>
     <button class="btn-primary" onclick="startSurvey()">开始填写</button>
   </div>
@@ -1426,6 +1418,8 @@ document.addEventListener('DOMContentLoaded', () => {
       questions = data;
       TOTAL_QUESTIONS = questions.length;
       questionsLoaded = true;
+      const info = document.getElementById('landingSurveyInfo');
+      if (info) info.textContent = `只需5分钟，${TOTAL_QUESTIONS}道选择题，你的选择代表广州市民的心声`;
     })
     .catch(error => {
       console.error('Failed to load questions:', error);
