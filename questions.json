@@ -1,4 +1,6 @@
-[
+{
+  "version": "v0.1",
+  "questions": [
   {
     "id": "q1",
     "part": "第一部分：基本信息",
@@ -180,4 +182,5 @@
     "required": false,
     "placeholder": "请畅所欲言，您的建议对我们非常重要..."
   }
-]
+  ]
+}

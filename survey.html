@@ -74,6 +74,13 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.version-badge {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gray-500);
+  margin-left: 6px;
+  vertical-align: middle;
+}
 .header-right {
   display: flex;
   align-items: center;
@@ -804,7 +811,7 @@ textarea.question-textarea:focus {
 <!-- Header -->
 <div class="header">
   <div class="header-inner">
-    <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研</div>
+    <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研 <span id="surveyVersion" class="version-badge"></span></div>
     <div class="header-right">
       <button class="header-admin-btn" onclick="showAdminLogin()">查看统计结果</button>
     </div>
@@ -894,6 +901,7 @@ const API_BASE = '/api';
 let adminToken = localStorage.getItem('gz_ebike_admin_token') || '';
 const STORAGE_KEY = 'gz_ebike_survey_data';
 let TOTAL_QUESTIONS = 0;
+let surveyVersion = '';
 
 // ====== DATA ======
 let questions = [];
@@ -1161,6 +1169,7 @@ async function submitSurvey() {
 
   const entry = {
     timestamp: new Date().toISOString(),
+    version: surveyVersion,
     answers: { ...answers }
   };
 
@@ -1173,7 +1182,7 @@ async function submitSurvey() {
     const res = await fetch(`${API_BASE}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answers })
+      body: JSON.stringify({ version: surveyVersion, answers })
     });
     const data = await res.json();
 
@@ -1416,9 +1425,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return response.json();
     })
     .then(data => {
-      questions = data;
+      surveyVersion = data.version || 'unknown';
+      questions = data.questions || [];
       TOTAL_QUESTIONS = questions.length;
       questionsLoaded = true;
+      // Display version badge
+      const versionEl = document.getElementById('surveyVersion');
+      if (versionEl) versionEl.textContent = surveyVersion;
       const info = document.getElementById('landingSurveyInfo');
       if (info) info.textContent = `只需5分钟，${TOTAL_QUESTIONS}道选择题，你的选择代表广州市民的心声`;
     })
