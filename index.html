@@ -223,6 +223,92 @@ body {
   line-height: 1.8;
 }
 
+/* Name Input Page */
+.name-input-page {
+  text-align: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+.name-input-page h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.name-input-page .name-input-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+.name-input-wrapper {
+  max-width: 320px;
+  margin: 0 auto 24px;
+  text-align: left;
+}
+.name-input-wrapper label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-700);
+  margin-bottom: 8px;
+}
+.name-input-wrapper .name-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 16px;
+  background: var(--white);
+  color: var(--gray-900);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+.name-input-wrapper .name-input::placeholder {
+  color: var(--gray-400);
+}
+.name-input-wrapper .name-input.prefilled {
+  color: var(--gray-400);
+}
+.name-input-wrapper .name-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+}
+.name-input-wrapper .name-hint {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-top: 6px;
+}
+.name-input-wrapper .name-error {
+  font-size: 13px;
+  color: var(--danger);
+  margin-top: 6px;
+  display: none;
+}
+.name-input-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.name-input-actions .btn-secondary {
+  flex: 1;
+  padding: 12px 20px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--gray-600);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.name-input-actions .btn-secondary:hover {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   color: var(--white);
@@ -844,6 +930,25 @@ textarea.question-textarea:focus {
   </div>
 </div>
 
+<!-- Page: Name Input -->
+<div class="page" id="pageName">
+  <div class="name-input-page">
+    <div class="landing-icon">&#128100;</div>
+    <h2>请填写您的称呼</h2>
+    <p class="name-input-subtitle">方便我们区分不同用户的反馈，您可以修改</p>
+    <div class="name-input-wrapper">
+      <label for="userNameInput">您的称呼</label>
+      <input type="text" id="userNameInput" class="name-input" maxlength="10" placeholder="请输入您的称呼" oninput="if(this.classList.contains('prefilled')) this.classList.remove('prefilled')" onkeydown="if(event.key==='Enter') confirmNameAndStart()">
+      <div class="name-hint">最长10个字，可修改系统生成的随机名</div>
+      <div class="name-error" id="nameError">请输入有效的称呼（2-10个字）</div>
+    </div>
+    <div class="name-input-actions">
+      <button class="btn-secondary" onclick="backToLanding()">返回</button>
+      <button class="btn-primary" onclick="confirmNameAndStart()">确认并开始</button>
+    </div>
+  </div>
+</div>
+
 <!-- Page: Survey -->
 <div class="page" id="pageSurvey"></div>
 
@@ -921,6 +1026,57 @@ function getSurveyData() {
   } catch(e) { return []; }
 }
 
+// ====== USER NAME ======
+const USERNAME_KEY = 'gz_ebike_username';
+
+const SURNAME_LIST = ['赵','钱','孙','李','周','吴','郑','王','冯','陈','褚','卫','蒋','沈','韩','杨','朱','秦','尤','许','何','吕','施','张','孔','曹','严','华','金','魏','陶','姜'];
+const NAME_LIST = ['伟','芳','娜','秀英','敏','静','丽','强','磊','军','洋','勇','艳','杰','娟','涛','明','超','秀兰','霞','平','刚','桂英'];
+
+function generateRandomChineseName() {
+  const s = SURNAME_LIST[Math.floor(Math.random() * SURNAME_LIST.length)];
+  const n = NAME_LIST[Math.floor(Math.random() * NAME_LIST.length)];
+  return s + n;
+}
+
+function getUserName() {
+  try {
+    return localStorage.getItem(USERNAME_KEY) || '';
+  } catch(e) { return ''; }
+}
+
+function setUserName(name) {
+  try {
+    localStorage.setItem(USERNAME_KEY, name);
+  } catch(e) {}
+}
+
+function initNameInput() {
+  const input = document.getElementById('userNameInput');
+  const cached = getUserName();
+  if (cached) {
+    input.value = cached;
+    input.classList.remove('prefilled');
+  } else {
+    const randomName = generateRandomChineseName();
+    input.value = randomName;
+    input.classList.add('prefilled');
+  }
+  document.getElementById('nameError').style.display = 'none';
+}
+
+function confirmNameAndStart() {
+  const input = document.getElementById('userNameInput');
+  const name = input.value.trim();
+  if (!name || name.length < 2 || name.length > 10) {
+    document.getElementById('nameError').style.display = 'block';
+    input.focus();
+    return;
+  }
+  document.getElementById('nameError').style.display = 'none';
+  setUserName(name);
+  doStartSurvey();
+}
+
 function saveSurveyData(entry) {
   const data = getSurveyData();
   data.push(entry);
@@ -945,6 +1101,11 @@ function startSurvey() {
     showToast('题目加载中，请稍候...');
     return;
   }
+  initNameInput();
+  showPage('pageName');
+}
+
+function doStartSurvey() {
   currentPage = 0;
   answers = {};
   visibleQuestions = [...questions];
@@ -1168,10 +1329,12 @@ async function submitSurvey() {
     return;
   }
 
+  const userName = getUserName();
   const entry = {
     timestamp: new Date().toISOString(),
     version: surveyVersion,
     submitter: submitterId,
+    userName: userName,
     answers: { ...answers }
   };
 
@@ -1184,7 +1347,7 @@ async function submitSurvey() {
     const res = await fetch(`${API_BASE}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ version: surveyVersion, submitter: submitterId, answers })
+      body: JSON.stringify({ version: surveyVersion, submitter: submitterId, userName, answers })
     });
     const data = await res.json();
 
