@@ -902,6 +902,7 @@ let adminToken = localStorage.getItem('gz_ebike_admin_token') || '';
 const STORAGE_KEY = 'gz_ebike_survey_data';
 let TOTAL_QUESTIONS = 0;
 let surveyVersion = '';
+const submitterId = new URLSearchParams(window.location.search).get('u') || '';
 
 // ====== DATA ======
 let questions = [];
@@ -1170,6 +1171,7 @@ async function submitSurvey() {
   const entry = {
     timestamp: new Date().toISOString(),
     version: surveyVersion,
+    submitter: submitterId,
     answers: { ...answers }
   };
 
@@ -1182,7 +1184,7 @@ async function submitSurvey() {
     const res = await fetch(`${API_BASE}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ version: surveyVersion, answers })
+      body: JSON.stringify({ version: surveyVersion, submitter: submitterId, answers })
     });
     const data = await res.json();
 
