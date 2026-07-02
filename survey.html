@@ -1029,13 +1029,20 @@ function getSurveyData() {
 // ====== USER NAME ======
 const USERNAME_KEY = 'gz_ebike_username';
 
-const SURNAME_LIST = ['赵','钱','孙','李','周','吴','郑','王','冯','陈','褚','卫','蒋','沈','韩','杨','朱','秦','尤','许','何','吕','施','张','孔','曹','严','华','金','魏','陶','姜'];
-const NAME_LIST = ['伟','芳','娜','秀英','敏','静','丽','强','磊','军','洋','勇','艳','杰','娟','涛','明','超','秀兰','霞','平','刚','桂英'];
+const SURNAME_LIST = ['李','王','张','刘','陈','杨','黄','赵','周','吴','徐','孙','马','朱','胡','郭','何','林','罗','高','郑','梁','谢','宋','唐','许','韩','冯','邓','曹','彭','曾','肖','田','董','袁','潘','于','蒋','蔡','余','杜','叶','程','苏','魏','吕','丁','任','沈'];
+const NAME_SINGLE = ['嘉','宇','欣','辰','泽','沐','安','瑞','轩','昊','晨','涵','梓','诺','妍','琪','霖','航','睿','桐'];
+const NAME_DOUBLE = ['沐安','嘉辰','宇泽','欣怡','辰瑞','泽轩','安诺','瑞霖','轩航','昊晨','晨涵','梓桐','诺妍','琪宇','霖安','航泽','睿辰','桐嘉','怡沐','涵宇'];
 
 function generateRandomChineseName() {
   const s = SURNAME_LIST[Math.floor(Math.random() * SURNAME_LIST.length)];
-  const n = NAME_LIST[Math.floor(Math.random() * NAME_LIST.length)];
-  return s + n;
+  const useDouble = Math.random() < 0.7; // 70% 概率双字
+  if (useDouble) {
+    const n = NAME_DOUBLE[Math.floor(Math.random() * NAME_DOUBLE.length)];
+    return s + n; // 3字姓名
+  } else {
+    const n = NAME_SINGLE[Math.floor(Math.random() * NAME_SINGLE.length)];
+    return s + n; // 2字姓名
+  }
 }
 
 function getUserName() {
