@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     }
 
     const record = {
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false }),
       version: version || '',
       submitter: submitter || '',
       userName: userName || '',
