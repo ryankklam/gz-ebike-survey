@@ -50,6 +50,15 @@ body {
 }
 
 /* Header */
+.test-banner {
+  background: #fbbf24;
+  color: #92400e;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .header {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   color: var(--white);
@@ -935,6 +944,9 @@ textarea.question-textarea:focus {
 </head>
 <body>
 
+<!-- Test Mode Banner -->
+<div id="testBanner" class="test-banner" style="display:none;">⚠️ 当前为测试模式 — 提交的答案将标记为测试数据</div>
+
 <!-- Header -->
 <div class="header">
   <div class="header-inner">
@@ -1056,6 +1068,8 @@ const STORAGE_KEY = 'gz_ebike_survey_data';
 let TOTAL_QUESTIONS = 0;
 let surveyVersion = '';
 const submitterId = new URLSearchParams(window.location.search).get('u') || '';
+const isTestMode = new URLSearchParams(window.location.search).get('test') === '1';
+let filterTestData = true;
 
 // ====== DATA ======
 let questions = [];
@@ -1390,6 +1404,7 @@ async function submitSurvey() {
     version: surveyVersion,
     submitter: submitterId,
     userName: userName,
+    isTest: isTestMode,
     answers: { ...answers }
   };
 
@@ -1402,7 +1417,7 @@ async function submitSurvey() {
     const res = await fetch(`${API_BASE}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ version: surveyVersion, submitter: submitterId, userName, answers })
+      body: JSON.stringify({ version: surveyVersion, submitter: submitterId, userName, isTest: isTestMode, answers })
     });
     const data = await res.json();
 
@@ -1505,18 +1520,26 @@ function renderStats() {
 
 function renderStatsWithData(data) {
   const container = document.getElementById('statsContent');
+  // 保存原始数据供切换时重渲染
+  window._rawStatsData = data;
+  const testCount = data.filter(d => d.isTest).length;
+  const displayData = filterTestData ? data.filter(d => !d.isTest) : data;
+  const totalInfo = filterTestData && testCount > 0
+    ? `共 ${displayData.length} 份有效回答（已排除 ${testCount} 份测试数据）`
+    : `共 ${displayData.length} 份有效回答`;
 
   let html = `<div class="stats-header">
     <h2>调研统计结果</h2>
-    <span class="stats-total">共 ${data.length} 份有效回答</span>
+    <span class="stats-total">${totalInfo}</span>
   </div>`;
 
   html += `<div class="admin-actions">
+    <button class="btn-secondary" onclick="toggleTestFilter()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
     <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
   </div>`;
 
-  if (data.length === 0) {
-    html += `<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无提交数据</p></div>`;
+  if (displayData.length === 0) {
+    html += `<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">${data.length > 0 ? '所有数据均为测试数据，已被过滤' : '暂无提交数据'}</p></div>`;
     container.innerHTML = html;
     return;
   }
@@ -1526,10 +1549,10 @@ function renderStatsWithData(data) {
     const isFeatured = q.id === 'q16';
     html += `<div class="stats-card${isFeatured ? ' featured' : ''}">`;
     html += `<h3>Q${qi+1}. ${q.title}${isFeatured ? ' (核心结论题)' : ''}</h3>`;
-    html += `<div class="q-desc">有效回答数: ${countValid(q.id, data)}</div>`;
+    html += `<div class="q-desc">有效回答数: ${countValid(q.id, displayData)}</div>`;
 
     if (q.type === 'text') {
-      const responses = data.filter(d => d.answers[q.id] && d.answers[q.id].trim());
+      const responses = displayData.filter(d => d.answers[q.id] && d.answers[q.id].trim());
       if (responses.length === 0) {
         html += `<div class="text-response-empty">暂无文字回答</div>`;
       } else {
@@ -1540,15 +1563,15 @@ function renderStatsWithData(data) {
         html += `</div>`;
       }
     } else if (q.type === 'radio') {
-      const counts = countOptions(q.options, q.id, data);
+      const counts = countOptions(q.options, q.id, displayData);
       const total = counts.reduce((a, b) => a + b.count, 0);
       html += renderBarChart(counts, total, isFeatured);
     } else if (q.type === 'checkbox' || q.type === 'checkbox_limit') {
-      const counts = countOptions(q.options, q.id, data);
+      const counts = countOptions(q.options, q.id, displayData);
       const maxCount = Math.max(...counts.map(c => c.count));
-      html += renderBarChart(counts, data.length, isFeatured);
+      html += renderBarChart(counts, displayData.length, isFeatured);
     } else if (q.type === 'likert') {
-      const counts = countOptions(q.labels, q.id, data);
+      const counts = countOptions(q.labels, q.id, displayData);
       const total = counts.reduce((a, b) => a + b.count, 0);
       if (isFeatured || q.id === 'q13') {
         html += renderBarChart(counts, total, isFeatured);
@@ -1568,6 +1591,12 @@ function renderStatsWithData(data) {
       bar.style.width = bar.dataset.width;
     });
   }, 100);
+}
+
+// ====== TEST DATA FILTER ======
+function toggleTestFilter() {
+  filterTestData = !filterTestData;
+  if (window._rawStatsData) renderStatsWithData(window._rawStatsData);
 }
 
 // ====== MY ANSWERS REVIEW ======
@@ -1627,25 +1656,36 @@ function renderReportWithData(data) {
     container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无提交数据，无法生成报告</p></div>';
     return;
   }
+  // 过滤测试数据
+  const testCount = data.filter(d => d.isTest).length;
+  const displayData = testCount > 0 ? data.filter(d => !d.isTest) : data;
+  if (displayData.length === 0) {
+    container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">所有数据均为测试数据，无法生成报告</p></div>';
+    return;
+  }
+
   let html = '';
   // 报告头部
-  const latestTime = data[data.length - 1] ? data[data.length - 1].timestamp : '未知';
+  const latestTime = displayData[displayData.length - 1] ? displayData[displayData.length - 1].timestamp : '未知';
+  const metaInfo = testCount > 0
+    ? `有效样本：${displayData.length}份（已排除 ${testCount} 份测试数据） | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`
+    : `有效样本：${displayData.length}份 | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`;
   html += `<div class="report-header">
     <h2>广州市电动自行车管理现状及"解禁"可行性调研报告</h2>
-    <div class="report-meta">有效样本：${data.length}份 | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}</div>
+    <div class="report-meta">${metaInfo}</div>
     <div class="report-actions">
       <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
     </div>
   </div>`;
 
   // 第一章到第七章，调用各子函数
-  html += renderChapter1(data);
-  html += renderChapter2(data);
-  html += renderChapter3(data);
-  html += renderChapter4(data);
-  html += renderChapter5(data);
-  html += renderChapter6(data);
-  html += renderChapter7(data);
+  html += renderChapter1(displayData);
+  html += renderChapter2(displayData);
+  html += renderChapter3(displayData);
+  html += renderChapter4(displayData);
+  html += renderChapter5(displayData);
+  html += renderChapter6(displayData);
+  html += renderChapter7(displayData);
 
   container.innerHTML = html;
 
@@ -1980,6 +2020,8 @@ async function exportJSON() {
 
 // ====== INIT ======
 document.addEventListener('DOMContentLoaded', () => {
+  // Show test banner if in test mode
+  if (isTestMode) document.getElementById('testBanner').style.display = 'block';
   fetch('questions.json')
     .then(response => {
       if (!response.ok) throw new Error('Network response was not ok');
