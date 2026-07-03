@@ -1005,7 +1005,7 @@ textarea.question-textarea:focus {
       <p>请点击下方按钮。</p>
     </div>
     <br>
-    <button class="btn-primary" onclick="showReport()">查看统计结果</button>
+    <button class="btn-primary" onclick="showMyAnswers()">查看我的回答</button>
   </div>
 </div>
 
@@ -1417,6 +1417,8 @@ async function submitSurvey() {
 
   showPage('pageThankyou');
   document.getElementById('progressContainer').style.display = 'none';
+  // 缓存本次提交答案用于回顾
+  localStorage.setItem('gz_ebike_my_answers', JSON.stringify(answers));
 }
 
 // ====== TOAST ======
@@ -1567,6 +1569,25 @@ function renderStatsWithData(data) {
       bar.style.width = bar.dataset.width;
     });
   }, 100);
+}
+
+// ====== MY ANSWERS REVIEW ======
+function showMyAnswers() {
+  const container = document.getElementById('statsContent');
+  showPage('pageStats');
+  document.getElementById('progressContainer').style.display = 'none';
+  try {
+    const myAnswers = JSON.parse(localStorage.getItem('gz_ebike_my_answers'));
+    if (!myAnswers) {
+      container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">未找到您的回答记录</p></div>';
+      return;
+    }
+    // 用用户自己的答案构造单条记录
+    const myData = [{ answers: myAnswers }];
+    renderStatsWithData(myData);
+  } catch(e) {
+    container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">未找到您的回答记录</p></div>';
+  }
 }
 
 // ====== REPORT FUNCTIONS ======
