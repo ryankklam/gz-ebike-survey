@@ -53,7 +53,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { answers } = req.body || {};
+    const { answers, version, submitter, userName, isTest } = req.body || {};
     if (!answers || typeof answers !== 'object') {
       res.status(400).json({ success: false, message: 'Invalid answers data' });
       return;
@@ -61,6 +61,10 @@ export default async function handler(req, res) {
 
     const record = {
       timestamp: new Date().toISOString(),
+      version: version || '',
+      submitter: submitter || '',
+      userName: userName || '',
+      isTest: !!isTest,
       answers
     };
 
