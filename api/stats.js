@@ -42,7 +42,7 @@ export default async function handler(req, res) {
          r.submitter_id as submitter,
          r.user_name as "userName",
          r.is_test as "isTest",
-         r.created_at as timestamp
+         r.created_at at time zone 'Asia/Shanghai' as timestamp
        FROM respondents r
        WHERE r.survey_id = $1
          AND ($2 OR r.is_test = false)
