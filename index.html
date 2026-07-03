@@ -1598,6 +1598,10 @@ function toggleTestFilter() {
   filterTestData = !filterTestData;
   if (window._rawStatsData) renderStatsWithData(window._rawStatsData);
 }
+function toggleReportTestFilter() {
+  filterTestData = !filterTestData;
+  if (window._rawReportData) renderReportWithData(window._rawReportData);
+}
 
 // ====== MY ANSWERS REVIEW ======
 function showMyAnswers() {
@@ -1656,9 +1660,10 @@ function renderReportWithData(data) {
     container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无提交数据，无法生成报告</p></div>';
     return;
   }
-  // 过滤测试数据
+  // 保存原始数据供切换时重渲染
+  window._rawReportData = data;
   const testCount = data.filter(d => d.isTest).length;
-  const displayData = testCount > 0 ? data.filter(d => !d.isTest) : data;
+  const displayData = filterTestData ? data.filter(d => !d.isTest) : data;
   if (displayData.length === 0) {
     container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">所有数据均为测试数据，无法生成报告</p></div>';
     return;
@@ -1667,13 +1672,14 @@ function renderReportWithData(data) {
   let html = '';
   // 报告头部
   const latestTime = displayData[displayData.length - 1] ? displayData[displayData.length - 1].timestamp : '未知';
-  const metaInfo = testCount > 0
+  const metaInfo = filterTestData && testCount > 0
     ? `有效样本：${displayData.length}份（已排除 ${testCount} 份测试数据） | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`
     : `有效样本：${displayData.length}份 | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`;
   html += `<div class="report-header">
     <h2>广州市电动自行车管理现状及"解禁"可行性调研报告</h2>
     <div class="report-meta">${metaInfo}</div>
     <div class="report-actions">
+      <button class="btn-secondary" onclick="toggleReportTestFilter()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
       <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
     </div>
   </div>`;
