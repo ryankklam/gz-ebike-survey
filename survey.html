@@ -712,6 +712,32 @@ textarea.question-textarea:focus {
   font-size: 22px;
   color: var(--primary);
 }
+.stats-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0;
+}
+.stats-tab {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.stats-tab:hover {
+  color: var(--primary);
+}
+.stats-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
 .stats-total {
   background: var(--primary);
   color: var(--white);
@@ -1054,7 +1080,12 @@ textarea.question-textarea:focus {
 
 <!-- Page: Admin Stats -->
 <div class="page" id="pageStats">
+  <div class="stats-tabs">
+    <button class="stats-tab active" data-tab="stats" onclick="switchAdminTab('stats')">📊 统计结果</button>
+    <button class="stats-tab" data-tab="questions" onclick="switchAdminTab('questions')">📝 题目管理</button>
+  </div>
   <div class="stats-panel" id="statsContent"></div>
+  <div class="stats-panel" id="questionsContent" style="display:none;"></div>
 </div>
 
 <!-- Toast -->
@@ -1593,6 +1624,277 @@ function renderStatsWithData(data) {
   }, 100);
 }
 
+// ====== ADMIN TABS ======
+function switchAdminTab(tab) {
+  document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.stats-tab[data-tab="${tab}"]`).classList.add('active');
+  if (tab === 'stats') {
+    document.getElementById('statsContent').style.display = 'block';
+    document.getElementById('questionsContent').style.display = 'none';
+  } else {
+    document.getElementById('statsContent').style.display = 'none';
+    document.getElementById('questionsContent').style.display = 'block';
+    loadAdminQuestions();
+  }
+}
+
+// ====== QUESTION MANAGEMENT ======
+let adminQuestions = [];
+
+async function loadAdminQuestions() {
+  const container = document.getElementById('questionsContent');
+  container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">加载中...</p></div>';
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions`, {
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      adminQuestions = data.data;
+      renderAdminQuestions();
+    } else {
+      container.innerHTML = `<div class="stats-card"><p style="text-align:center;color:#ef4444;padding:20px;">加载失败：${data.message || '未知错误'}</p></div>`;
+    }
+  } catch (err) {
+    container.innerHTML = `<div class="stats-card"><p style="text-align:center;color:#ef4444;padding:20px;">加载失败：${err.message}</p></div>`;
+  }
+}
+
+function renderAdminQuestions() {
+  const container = document.getElementById('questionsContent');
+  const typeLabels = {
+    radio: '单选题',
+    checkbox: '多选题',
+    checkbox_limit: '限选多选',
+    text: '文本题',
+    likert: '量表题'
+  };
+
+  let html = `<div class="stats-header">
+    <h2>题目管理</h2>
+    <div>
+      <button class="btn-primary" onclick="showQuestionForm()">+ 新增题目</button>
+    </div>
+  </div>`;
+
+  html += `<div class="admin-actions">
+    <span style="color:var(--text-secondary);font-size:14px;">共 ${adminQuestions.length} 题</span>
+  </div>`;
+
+  if (adminQuestions.length === 0) {
+    html += `<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无题目</p></div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  adminQuestions.forEach((q, idx) => {
+    html += `<div class="stats-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:16px;margin-bottom:8px;">Q${idx + 1}. ${q.title} <span style="color:var(--gray-400);font-size:13px;font-weight:400;">[${q.id}]</span></div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">类型：${typeLabels[q.type] || q.type} ${q.part ? ' | 部分：' + q.part : ''}</div>
+          ${q.description ? `<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">描述：${q.description}</div>` : ''}
+          ${(q.options && q.options.length > 0) ? `<div style="font-size:13px;color:var(--text-secondary);">选项：${q.options.map(o => `<span style="display:inline-block;background:var(--bg-secondary);padding:2px 8px;border-radius:4px;margin:2px;">${o}</span>`).join('')}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;" onclick='showQuestionForm(${JSON.stringify(q)})'>编辑</button>
+          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;background:#fef2f2;color:#dc2626;border-color:#fecaca;" onclick="confirmDeleteQuestion('${q.id}')">删除</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function showQuestionForm(question) {
+  const isEdit = !!question;
+  const q = question || {
+    id: '',
+    title: '',
+    type: 'radio',
+    part: 1,
+    description: '',
+    options: [],
+    max_select: 2
+  };
+
+  const typeLabels = {
+    radio: '单选题',
+    checkbox: '多选题',
+    checkbox_limit: '限选多选',
+    text: '文本题',
+    likert: '量表题'
+  };
+
+  const modal = document.createElement('div');
+  modal.id = 'questionModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+  modal.innerHTML = `
+    <div style="background:var(--bg-primary);border-radius:12px;padding:24px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">
+      <h3 style="margin:0 0 20px 0;">${isEdit ? '编辑题目' : '新增题目'}</h3>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目ID (如 q17)</label>
+        <input type="text" id="qf_id" value="${q.id}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;" ${isEdit ? 'readonly style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background:var(--bg-secondary);"' : ''}>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目内容</label>
+        <input type="text" id="qf_title" value="${q.title}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目类型</label>
+        <select id="qf_type" onchange="onQfTypeChange()" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+          ${Object.entries(typeLabels).map(([k, v]) => `<option value="${k}" ${q.type === k ? 'selected' : ''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">所属部分 (1或2)</label>
+        <input type="number" id="qf_part" value="${q.part || 1}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目描述 (可选)</label>
+        <input type="text" id="qf_desc" value="${q.description || ''}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div id="qf_options_wrap" style="margin-bottom:16px;display:${['radio', 'checkbox', 'checkbox_limit'].includes(q.type) ? 'block' : 'none'};">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">选项 (每行一个)</label>
+        <textarea id="qf_options" rows="5" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;font-family:inherit;">${(q.options || []).join('\n')}</textarea>
+      </div>
+      <div id="qf_max_wrap" style="margin-bottom:16px;display:${q.type === 'checkbox_limit' ? 'block' : 'none'};">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">最多可选几项</label>
+        <input type="number" id="qf_max" value="${q.max_select || 2}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div id="qf_labels_wrap" style="margin-bottom:16px;display:${q.type === 'likert' ? 'block' : 'none'};">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">量表标签 (每行一个)</label>
+        <textarea id="qf_labels" rows="3" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;font-family:inherit;">${(q.labels || []).join('\n')}</textarea>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+        <button class="btn-secondary" onclick="closeQuestionModal()">取消</button>
+        <button class="btn-primary" onclick="${isEdit ? `updateQuestion('${q.id}')` : 'createQuestion()'}">${isEdit ? '保存' : '创建'}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function onQfTypeChange() {
+  const type = document.getElementById('qf_type').value;
+  const optionsWrap = document.getElementById('qf_options_wrap');
+  const maxWrap = document.getElementById('qf_max_wrap');
+  const labelsWrap = document.getElementById('qf_labels_wrap');
+
+  optionsWrap.style.display = ['radio', 'checkbox', 'checkbox_limit'].includes(type) ? 'block' : 'none';
+  maxWrap.style.display = type === 'checkbox_limit' ? 'block' : 'none';
+  labelsWrap.style.display = type === 'likert' ? 'block' : 'none';
+}
+
+function closeQuestionModal() {
+  const modal = document.getElementById('questionModal');
+  if (modal) modal.remove();
+}
+
+function collectFormData() {
+  const type = document.getElementById('qf_type').value;
+  const data = {
+    id: document.getElementById('qf_id').value.trim(),
+    title: document.getElementById('qf_title').value.trim(),
+    type: type,
+    part: parseInt(document.getElementById('qf_part').value) || 1,
+    description: document.getElementById('qf_desc').value.trim(),
+  };
+  if (['radio', 'checkbox', 'checkbox_limit'].includes(type)) {
+    const optionsText = document.getElementById('qf_options').value;
+    data.options = optionsText.split('\n').map(s => s.trim()).filter(Boolean);
+  }
+  if (type === 'checkbox_limit') {
+    data.max_select = parseInt(document.getElementById('qf_max').value) || 2;
+  }
+  if (type === 'likert') {
+    const labelsText = document.getElementById('qf_labels').value;
+    data.labels = labelsText.split('\n').map(s => s.trim()).filter(Boolean);
+  }
+  return data;
+}
+
+async function createQuestion() {
+  const data = collectFormData();
+  if (!data.id || !data.title) {
+    showToast('请填写题目ID和题目内容');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Token': adminToken
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('创建成功');
+      closeQuestionModal();
+      loadAdminQuestions();
+    } else {
+      showToast('创建失败：' + (result.message || '未知错误'));
+    }
+  } catch (err) {
+    showToast('创建失败：' + err.message);
+  }
+}
+
+async function updateQuestion(originalId) {
+  const data = collectFormData();
+  if (!data.title) {
+    showToast('请填写题目内容');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions/${encodeURIComponent(originalId)}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Token': adminToken
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('保存成功');
+      closeQuestionModal();
+      loadAdminQuestions();
+    } else {
+      showToast('保存失败：' + (result.message || '未知错误'));
+    }
+  } catch (err) {
+    showToast('保存失败：' + err.message);
+  }
+}
+
+async function confirmDeleteQuestion(qId) {
+  if (!confirm(`确定要删除题目 "${qId}" 吗？此操作不可撤销。`)) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions/${encodeURIComponent(qId)}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('删除成功');
+      loadAdminQuestions();
+    } else {
+      showToast('删除失败：' + (result.message || '未知错误'));
+    }
+  } catch (err) {
+    showToast('删除失败：' + err.message);
+  }
+}
+
 // ====== TEST DATA FILTER ======
 function toggleTestFilter() {
   filterTestData = !filterTestData;
@@ -2028,7 +2330,7 @@ async function exportJSON() {
 document.addEventListener('DOMContentLoaded', () => {
   // Show test banner if in test mode
   if (isTestMode) document.getElementById('testBanner').style.display = 'block';
-  fetch('questions.json')
+  fetch(`${API_BASE}/questions`)
     .then(response => {
       if (!response.ok) throw new Error('Network response was not ok');
       return response.json();
