@@ -223,6 +223,47 @@ body {
   line-height: 1.8;
 }
 
+/* Report Page */
+.report-page { text-align: left; padding: 0 0 60px; }
+.report-header { text-align: center; padding: 32px 0 24px; }
+.report-header h2 { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.report-header .report-meta { font-size: 13px; color: var(--gray-500); }
+.report-header .report-actions { margin-top: 16px; display: flex; gap: 10px; justify-content: center; }
+.report-section { margin-top: 32px; }
+.report-section-title { font-size: 16px; font-weight: 700; color: var(--primary); padding-bottom: 10px; border-bottom: 2px solid var(--primary); margin-bottom: 20px; }
+.report-subsection { margin-bottom: 24px; }
+.report-subsection h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; }
+.report-summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+.report-summary-card { background: var(--white); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); }
+.report-summary-card .num { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+.report-summary-card .num.accent { color: var(--accent); }
+.report-summary-card .label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+.report-dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.report-feq-card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.report-feq-card h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-100); }
+.report-index-card { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--white); margin-bottom: 24px; }
+.report-index-card .score { font-size: 48px; font-weight: 700; line-height: 1.2; }
+.report-index-card .score-label { font-size: 14px; opacity: 0.8; margin-top: 4px; }
+.report-index-card .score-conclusion { font-size: 18px; font-weight: 600; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.3); }
+.report-dimensions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+.report-dim-item { background: var(--white); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.report-dim-item .dim-label { font-size: 13px; color: var(--gray-500); margin-bottom: 8px; display: flex; justify-content: space-between; }
+.report-dim-item .dim-bar { height: 8px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
+.report-dim-item .dim-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+.report-dim-item .dim-score { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 8px; }
+.report-keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.report-keyword { display: inline-block; padding: 4px 12px; background: var(--gray-100); border-radius: 16px; font-size: 13px; color: var(--gray-700); }
+.report-keyword.hot { background: rgba(230,126,34,0.1); color: var(--accent); font-weight: 500; }
+.report-text-list { max-height: 400px; overflow-y: auto; }
+.report-text-item { padding: 12px 16px; background: var(--gray-50); border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 14px; color: var(--gray-700); line-height: 1.6; border-left: 3px solid var(--primary); }
+
+@media (max-width: 640px) {
+  .report-summary-cards { grid-template-columns: 1fr; }
+  .report-dual-col { grid-template-columns: 1fr; }
+  .report-dimensions { grid-template-columns: 1fr; }
+  .report-header h2 { font-size: 18px; }
+}
+
 /* Name Input Page */
 .name-input-page {
   text-align: center;
@@ -899,6 +940,7 @@ textarea.question-textarea:focus {
   <div class="header-inner">
     <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研</div>
     <div class="header-right">
+      <button class="header-admin-btn" onclick="showReport()">调研结果</button>
       <button class="header-admin-btn" onclick="showAdminLogin()">查看统计结果</button>
     </div>
   </div>
@@ -975,6 +1017,13 @@ textarea.question-textarea:focus {
     <h2>感谢您的关注</h2>
     <p>本调研主要针对在广州居住或工作的人群，您的反馈同样宝贵。欢迎您分享给身边符合条件的朋友参与。</p>
     <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
+  </div>
+</div>
+
+<!-- Page: Report -->
+<div class="page" id="pageReport">
+  <div class="report-page">
+    <div id="reportContent"></div>
   </div>
 </div>
 
@@ -1514,6 +1563,313 @@ function renderStatsWithData(data) {
       bar.style.width = bar.dataset.width;
     });
   }, 100);
+}
+
+// ====== REPORT FUNCTIONS ======
+function showReport() {
+  showPage('pageReport');
+  document.getElementById('progressContainer').style.display = 'none';
+  loadAndRenderReport();
+}
+
+async function loadAndRenderReport() {
+  const container = document.getElementById('reportContent');
+  container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">正在加载调研报告...</p></div>';
+  try {
+    const headers = {};
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
+    const res = await fetch(`${API_BASE}/stats`, { headers });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success) { renderReportWithData(data.data); return; }
+    }
+  } catch(e) {}
+  const local = localStorage.getItem('gz_ebike_survey_data');
+  renderReportWithData(local ? [JSON.parse(local)] : []);
+}
+
+function renderReportWithData(data) {
+  const container = document.getElementById('reportContent');
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无提交数据，无法生成报告</p></div>';
+    return;
+  }
+  let html = '';
+  // 报告头部
+  const latestTime = data[data.length - 1] ? data[data.length - 1].timestamp : '未知';
+  html += `<div class="report-header">
+    <h2>广州市电动自行车管理现状及"解禁"可行性调研报告</h2>
+    <div class="report-meta">有效样本：${data.length}份 | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}</div>
+    <div class="report-actions">
+      <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
+    </div>
+  </div>`;
+
+  // 第一章到第七章，调用各子函数
+  html += renderChapter1(data);
+  html += renderChapter2(data);
+  html += renderChapter3(data);
+  html += renderChapter4(data);
+  html += renderChapter5(data);
+  html += renderChapter6(data);
+  html += renderChapter7(data);
+
+  container.innerHTML = html;
+
+  // 动画
+  setTimeout(() => {
+    document.querySelectorAll('.report-page .bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+    document.querySelectorAll('.report-page .dim-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 100);
+}
+
+function renderChapter1(data) {
+  const total = data.length;
+  const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用').length;
+  const nonOwners = total - owners;
+  return `<div class="report-section">
+    <div class="report-section-title">第一章 调研概述</div>
+    <div class="report-summary-cards">
+      <div class="report-summary-card"><div class="num">${total}</div><div class="label">有效问卷数</div></div>
+      <div class="report-summary-card"><div class="num accent">${owners} (${(owners/total*100).toFixed(1)}%)</div><div class="label">电动车车主</div></div>
+      <div class="report-summary-card"><div class="num">${nonOwners} (${(nonOwners/total*100).toFixed(1)}%)</div><div class="label">非车主</div></div>
+    </div>
+  </div>`;
+}
+
+function renderChapter2(data) {
+  let html = '<div class="report-section"><div class="report-section-title">第二章 受访者画像</div>';
+  // 2.1 年龄分布 Q3
+  const q3 = questions.find(q => q.id === 'q3');
+  html += '<div class="report-subsection"><h4>2.1 年龄分布</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q3.options, 'q3', data), countValid('q3', data), false) + '</div></div>';
+  // 2.2 区域分布 Q5
+  const q5 = questions.find(q => q.id === 'q5');
+  html += '<div class="report-subsection"><h4>2.2 区域分布</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q5.options, 'q5', data), countValid('q5', data), false) + '</div></div>';
+  // 2.3 电动车使用情况 Q2 + Q4
+  const q2 = questions.find(q => q.id === 'q2');
+  const q4 = questions.find(q => q.id === 'q4');
+  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>2.3a 电动车拥有情况</h4>';
+  html += renderBarChart(countOptions(q2.options, 'q2', data), countValid('q2', data), false);
+  html += '</div><div class="report-feq-card"><h4>2.3b 主要用途</h4>';
+  html += renderBarChart(countOptions(q4.options, 'q4', data), data.length, false);
+  html += '</div></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderChapter3(data) {
+  let html = '<div class="report-section"><div class="report-section-title">第三章 核心发现一：现状与问题感知</div>';
+  // 3.1 Q6 满意度
+  const q6 = questions.find(q => q.id === 'q6');
+  html += '<div class="report-subsection"><h4>3.1 管理满意度评分</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q6.labels, 'q6', data), countValid('q6', data), false) + '</div></div>';
+  // 3.2 Q7 突出问题（降序排列）
+  const q7 = questions.find(q => q.id === 'q7');
+  const q7counts = countOptions(q7.options, 'q7', data).sort((a,b) => b.count - a.count);
+  html += '<div class="report-subsection"><h4>3.2 最突出问题排序（限选3项）</h4>';
+  html += '<div class="stats-card">' + renderBarChart(q7counts, data.length, false) + '</div></div>';
+  // 3.3 Q8
+  const q8 = questions.find(q => q.id === 'q8');
+  html += '<div class="report-subsection"><h4>3.3 安全威胁感知</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q8.labels, 'q8', data), countValid('q8', data), false) + '</div></div>';
+  // 3.4 Q9
+  const q9 = questions.find(q => q.id === 'q9');
+  html += '<div class="report-subsection"><h4>3.4 停放充电满意度</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q9.labels, 'q9', data), countValid('q9', data), false) + '</div></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderChapter4(data) {
+  let html = '<div class="report-section"><div class="report-section-title">第四章 核心发现二：政策认知与评价</div>';
+  const q10 = questions.find(q => q.id === 'q10');
+  // 计算知晓率（非常了解 + 比较了解 + 略有了解）
+  const q10counts = countOptions(q10.labels, 'q10', data);
+  const q10total = countValid('q10', data);
+  const awareCount = q10counts.slice(0, 3).reduce((a,b) => a+b.count, 0);
+  const awarePct = q10total > 0 ? (awareCount / q10total * 100).toFixed(1) : 0;
+  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + awarePct + '%</div><div class="label">新规知晓率</div></div></div>';
+  html += '<div class="report-subsection"><h4>4.1 新规了解程度</h4>';
+  html += '<div class="stats-card">' + renderBarChart(q10counts, q10total, false) + '</div></div>';
+  const q11 = questions.find(q => q.id === 'q11');
+  html += '<div class="report-subsection"><h4>4.2 执法力度评价</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q11.labels, 'q11', data), countValid('q11', data), false) + '</div></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderChapter5(data) {
+  let html = '<div class="report-section"><div class="report-section-title">第五章 核心发现三："解禁"态度与条件</div>';
+  // 5.1 Q12
+  const q12 = questions.find(q => q.id === 'q12');
+  html += '<div class="report-subsection"><h4>5.1 政策松紧感知</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q12.options, 'q12', data), countValid('q12', data), false) + '</div></div>';
+  // 5.2 Q13b + Q13c 双栏
+  const q13b = questions.find(q => q.id === 'q13b');
+  const q13c = questions.find(q => q.id === 'q13c');
+  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>5.2a 希望放宽的方面</h4>';
+  const q13bcounts = countOptions(q13b.options, 'q13b', data).sort((a,b) => b.count - a.count);
+  html += renderBarChart(q13bcounts, data.length, false);
+  html += '</div><div class="report-feq-card"><h4>5.2b 希望加强管控的方面</h4>';
+  const q13ccounts = countOptions(q13c.options, 'q13c', data).sort((a,b) => b.count - a.count);
+  html += renderBarChart(q13ccounts, data.length, false);
+  html += '</div></div>';
+  // 5.3 Q14
+  const q14 = questions.find(q => q.id === 'q14');
+  html += '<div class="report-subsection"><h4>5.3 公共交通能否替代电动车</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q14.labels, 'q14', data), countValid('q14', data), false) + '</div></div>';
+  // 5.4 Q15
+  const q15 = questions.find(q => q.id === 'q15');
+  html += '<div class="report-subsection"><h4>5.4 放宽是否增加安全风险</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q15.labels, 'q15', data), countValid('q15', data), false) + '</div></div>';
+  // 5.5 Q16 核心结论题 - Featured
+  const q16 = questions.find(q => q.id === 'q16');
+  const q16counts = countOptions(q16.options, 'q16', data);
+  const q16total = countValid('q16', data);
+  // 找到最高选项
+  const topChoice = q16counts.reduce((a,b) => a.count > b.count ? a : b);
+  const topPct = q16total > 0 ? (topChoice.count / q16total * 100).toFixed(1) : 0;
+  html += '<div class="report-subsection"><h4>5.5 理想管理模式选择（核心结论）</h4>';
+  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + topPct + '%</div><div class="label">最多人选择：' + escapeHtml(topChoice.label) + '</div></div></div>';
+  html += '<div class="stats-card featured">' + renderBarChart(q16counts, q16total, true) + '</div></div>';
+  // 5.6 Q17
+  const q17 = questions.find(q => q.id === 'q17');
+  html += '<div class="report-subsection"><h4>5.6 可接受的解禁条件</h4>';
+  const q17counts = countOptions(q17.options, 'q17', data).sort((a,b) => b.count - a.count);
+  html += '<div class="stats-card">' + renderBarChart(q17counts, data.length, false) + '</div>';
+  html += '<div class="report-subsection"><p style="font-size:12px;color:var(--gray-400);">注：Q17中"以上都满足才支持"与"无论如何都不支持"互斥</p></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderChapter6(data) {
+  let html = '<div class="report-section"><div class="report-section-title">第六章 核心结论与建议</div>';
+
+  // 6.1 解禁可行性指数计算
+  const total = data.length;
+  // 维度1：市民需求紧迫性 30%
+  const q12counts = countOptions(questions.find(q=>q.id==='q12').options, 'q12', data);
+  const q16counts = countOptions(questions.find(q=>q.id==='q16').options, 'q16', data);
+  const q12total = countValid('q12', data);
+  const q16total = countValid('q16', data);
+  const strictPct = q12total > 0 ? (q12counts.find(c=>c.label.includes('过于严格')).count || 0) / q12total : 0;
+  const relaxPct = q16total > 0 ? (q16counts.find(c=>c.label.includes('解禁') || c.label.includes('放宽')).count || 0) / q16total : 0;
+  const dim1 = Math.min(100, Math.round((strictPct * 0.5 + relaxPct * 0.5) * 100));
+
+  // 维度2：政策放宽意愿 30%
+  const q13bcounts = countOptions(questions.find(q=>q.id==='q13b').options, 'q13b', data);
+  const hasQ13b = data.filter(d => d.answers.q13b && d.answers.q13b.length > 0).length;
+  const dim2 = total > 0 ? Math.min(100, Math.round(hasQ13b / total * 100 * 1.2)) : 0;
+
+  // 维度3：安全风险可控性 25%
+  const q15counts = countOptions(questions.find(q=>q.id==='q15').labels, 'q15', data);
+  const q15total = countValid('q15', data);
+  const safeIdx = questions.find(q=>q.id==='q15').labels.length - 1;
+  const safeCount = q15total > 0 ? (q15counts[q15counts.length-2] ? q15counts[q15counts.length-2].count : 0) + (q15counts[q15counts.length-1] ? q15counts[q15counts.length-1].count : 0) : 0;
+  const dim3 = q15total > 0 ? Math.min(100, Math.round(safeCount / q15total * 100)) : 0;
+
+  // 维度4：管理配套成熟度 15%
+  const q9counts = countOptions(questions.find(q=>q.id==='q9').labels, 'q9', data);
+  const q11counts = countOptions(questions.find(q=>q.id==='q11').labels, 'q11', data);
+  const q9total = countValid('q9', data);
+  const q11total = countValid('q11', data);
+  // 满意+比较满意
+  const satScore = q9total > 0 ? ((q9counts[0]||{count:0}).count + (q9counts[1]||{count:0}).count) / q9total : 0;
+  const enforceScore = q11total > 0 ? ((q11counts[0]||{count:0}).count + (q11counts[1]||{count:0}).count) / q11total : 0;
+  const dim4 = Math.min(100, Math.round((satScore * 0.5 + enforceScore * 0.5) * 100));
+
+  const overallScore = Math.round(dim1 * 0.3 + dim2 * 0.3 + dim3 * 0.25 + dim4 * 0.15);
+  let conclusion = '';
+  if (overallScore >= 80) conclusion = '建议适度放宽/解禁，条件成熟';
+  else if (overallScore >= 60) conclusion = '建议适度放宽，需配套管理措施';
+  else if (overallScore >= 40) conclusion = '建议维持现状，先完善管理';
+  else conclusion = '建议加强管控，暂不具备解禁条件';
+
+  const dimColors = ['var(--accent)', 'var(--primary)', '#10b981', '#8b5cf6'];
+  html += '<div class="report-subsection"><h4>6.1 解禁可行性指数</h4>';
+  html += '<div class="report-index-card"><div class="score">' + overallScore + '</div><div class="score-label">综合得分（满分100）</div><div class="score-conclusion">' + conclusion + '</div></div>';
+  html += '<div class="report-dimensions">';
+  const dims = [
+    {name: '市民需求紧迫性 (30%)', score: dim1},
+    {name: '政策放宽意愿 (30%)', score: dim2},
+    {name: '安全风险可控性 (25%)', score: dim3},
+    {name: '管理配套成熟度 (15%)', score: dim4}
+  ];
+  dims.forEach((dim, i) => {
+    html += '<div class="report-dim-item"><div class="dim-label"><span>' + dim.name + '</span><span>' + dim.score + '/100</span></div><div class="dim-bar"><div class="dim-fill" data-width="' + dim.score + '%" style="width:0%;background:' + dimColors[i] + ';"></div></div><div class="dim-score">' + dim.score + '分</div></div>';
+  });
+  html += '</div></div>';
+
+  // 6.2 分群体差异
+  html += '<div class="report-subsection"><h4>6.2 车主 vs 非车主态度差异</h4>';
+  const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
+  const nonOwners = data.filter(d => !owners.includes(d));
+  html += '<div class="report-dual-col">';
+  html += '<div class="report-feq-card"><h4>车主对管理模式的偏好</h4>';
+  html += renderBarChart(countOptions(questions.find(q=>q.id==='q16').options, 'q16', owners), owners.length, false);
+  html += '</div><div class="report-feq-card"><h4>非车主对管理模式的偏好</h4>';
+  html += renderBarChart(countOptions(questions.find(q=>q.id==='q16').options, 'q16', nonOwners), nonOwners.length, false);
+  html += '</div></div></div>';
+
+  // 6.3 政策建议（基于数据自动生成）
+  html += '<div class="report-subsection"><h4>6.3 政策建议</h4>';
+  html += '<div class="stats-card">';
+  const suggestions = [];
+  // 基于最突出问题
+  const q7 = questions.find(q => q.id === 'q7');
+  const topProblem = countOptions(q7.options, 'q7', data).sort((a,b)=>b.count-a.count)[0];
+  if (topProblem) suggestions.push('重点关注"' + topProblem.label + '"问题，该问题被最多市民（' + (data.length>0?(topProblem.count/data.length*100).toFixed(1):0) + '%）选为突出痛点');
+  // 基于管理模式
+  const q16opts = questions.find(q=>q.id==='q16').options;
+  const q16c = countOptions(q16opts, 'q16', data);
+  const topC = q16c.reduce((a,b) => a.count > b.count ? a : b);
+  if (topC) suggestions.push('市民最倾向"' + topC.label + '"作为理想管理模式，建议据此制定政策方向');
+  // 基于可行性指数
+  suggestions.push('当前解禁可行性指数为' + overallScore + '分，' + conclusion);
+  suggestions.forEach(s => { html += '<div class="report-text-item">' + s + '</div>'; });
+  html += '</div></div>';
+
+  html += '</div>';
+  return html;
+}
+
+function renderChapter7(data) {
+  let html = '<div class="report-section"><div class="report-section-title">第七章 市民声音</div>';
+  const responses = data.filter(d => d.answers.q18 && d.answers.q18.trim()).map(d => d.answers.q18.trim());
+  if (responses.length === 0) {
+    html += '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:20px;">暂无文字回答</p></div>';
+  } else {
+    html += '<div class="report-subsection"><h4>精选市民留言（' + Math.min(responses.length, 20) + '/' + responses.length + '条）</h4>';
+    html += '<div class="report-text-list">';
+    responses.slice(0, 20).forEach((r, i) => {
+      html += '<div class="report-text-item"><strong>#' + (i+1) + '</strong> ' + escapeHtml(r) + '</div>';
+    });
+    html += '</div></div>';
+    // 关键词统计（简单版：按2字切分统计高频词）
+    html += '<div class="report-subsection"><h4>高频关键词</h4>';
+    const wordCount = {};
+    const stopWords = new Set(['的','了','是','在','我','有','和','就','不','人','都','一','一个','上','也','很','到','说','要','去','你','会','着','没有','看','好','自己','这','他','她','它','那','被','从','把','让','用','对','可以','应该','希望','需要','能','能够','更','还','比','这个','那个','什么','怎么','为什么','应该','可能','但是','因为','所以','如果','虽然','不过','然后','或者','以及','关于','通过','进行','目前','已经','问题','方面','管理','电动','自行车','广州','市民','建议','政策','安全','出行','道路','交通','设施']);
+    responses.forEach(r => {
+      for (let i = 0; i < r.length - 1; i++) {
+        const w = r.substring(i, i+2);
+        if (!stopWords.has(w)) wordCount[w] = (wordCount[w] || 0) + 1;
+      }
+    });
+    const topWords = Object.entries(wordCount).sort((a,b) => b[1]-a[1]).slice(0, 15);
+    html += '<div class="report-keywords">';
+    topWords.forEach((w, i) => {
+      html += '<span class="report-keyword' + (i < 3 ? ' hot' : '') + '">' + escapeHtml(w[0]) + ' (' + w[1] + ')</span>';
+    });
+    html += '</div></div>';
+  }
+  html += '</div>';
+  return html;
 }
 
 function countValid(qid, data) {
