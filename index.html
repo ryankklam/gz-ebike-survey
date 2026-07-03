@@ -940,8 +940,7 @@ textarea.question-textarea:focus {
   <div class="header-inner">
     <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研</div>
     <div class="header-right">
-      <button class="header-admin-btn" onclick="showReport()">调研结果</button>
-      <button class="header-admin-btn" onclick="showAdminLogin()">查看统计结果</button>
+      <button class="header-admin-btn" onclick="showAdminLoginReport()">查看调研结果</button>
     </div>
   </div>
   <div class="progress-bar-container" id="progressContainer">
@@ -1006,7 +1005,7 @@ textarea.question-textarea:focus {
       <p>请点击下方按钮。</p>
     </div>
     <br>
-    <button class="btn-primary" onclick="showAdminLogin()">查看统计结果</button>
+    <button class="btn-primary" onclick="showReport()">查看统计结果</button>
   </div>
 </div>
 
@@ -1452,8 +1451,13 @@ async function checkAdminPassword() {
     if (data.success && data.token) {
       adminToken = data.token;
       localStorage.setItem('gz_ebike_admin_token', adminToken);
-      showPage('pageStats');
-      loadAndRenderStats();
+      if (window._adminLoginCallback) {
+        window._adminLoginCallback();
+        window._adminLoginCallback = null;
+      } else {
+        showPage('pageStats');
+        loadAndRenderStats();
+      }
     } else {
       document.getElementById('adminError').style.display = 'block';
       document.getElementById('adminPassword').value = '';
@@ -1570,6 +1574,15 @@ function showReport() {
   showPage('pageReport');
   document.getElementById('progressContainer').style.display = 'none';
   loadAndRenderReport();
+}
+
+function showAdminLoginReport() {
+  showPage('pageAdminLogin');
+  document.getElementById('progressContainer').style.display = 'none';
+  // 替换验证成功后的回调为显示报告
+  window._adminLoginCallback = function() {
+    showReport();
+  };
 }
 
 async function loadAndRenderReport() {
