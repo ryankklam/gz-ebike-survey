@@ -2350,7 +2350,15 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Failed to load questions:', error);
       showToast('加载题目失败，请刷新页面重试');
     });
-  showPage('pageLanding');
+  if (window.location.hash === '#report') {
+    if (adminToken) {
+      showReport();
+    } else {
+      showAdminLoginReport();
+    }
+  } else {
+    showPage('pageLanding');
+  }
 });
 </script>
 </body>

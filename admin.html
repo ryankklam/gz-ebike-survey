@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 - 广州市电动自行车管理现状调研</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #1a365d;
+  --primary-light: #2a4a7f;
+  --primary-dark: #0f2440;
+  --accent: #e67e22;
+  --accent-hover: #cf6d17;
+  --accent-light: #f5a623;
+  --bg: #f7f8fc;
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --danger: #ef4444;
+  --success: #10b981;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Login Page ===== */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.login-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+.login-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  box-shadow: 0 8px 24px rgba(26,54,93,0.3);
+}
+.login-card h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.login-card .login-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+.login-card input[type="password"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-family: inherit;
+  margin-bottom: 16px;
+  transition: var(--transition);
+}
+.login-card input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26,54,93,0.1);
+}
+.login-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: var(--white);
+  border: none;
+  padding: 14px 48px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(230,126,34,0.35);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(230,126,34,0.45);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Dashboard ===== */
+.dashboard {
+  display: none;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.dashboard.active { display: block; }
+
+.dashboard-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+}
+.dashboard-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.dashboard-header .btn-logout {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.dashboard-header .btn-logout:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* Action Cards Grid */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.action-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  border: 2px solid transparent;
+}
+.action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+.action-card:active { transform: translateY(-2px); }
+.action-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 26px;
+}
+.action-card-icon.blue { background: rgba(26,54,93,0.1); }
+.action-card-icon.orange { background: rgba(230,126,34,0.1); }
+.action-card-icon.purple { background: rgba(139,92,246,0.1); }
+.action-card-icon.green { background: rgba(16,185,129,0.1); }
+.action-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.action-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.action-card .card-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.btn-secondary {
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-200);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.btn-secondary:hover {
+  background: var(--gray-200);
+}
+.btn-secondary.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+/* Loading spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Result Area */
+.result-area {
+  display: none;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.result-area.active { display: block; }
+.result-area h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+.result-box {
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.8;
+  border-left: 3px solid var(--primary);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.result-box.success { border-left-color: var(--success); }
+.result-box.error { border-left-color: var(--danger); }
+.result-box .result-label {
+  font-weight: 600;
+  color: var(--gray-700);
+}
+.result-box .result-value {
+  color: var(--gray-600);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--gray-800);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  z-index: 300;
+  transition: transform 0.3s ease;
+  box-shadow: var(--shadow-lg);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .action-grid { grid-template-columns: 1fr; }
+  .dashboard-header { flex-direction: column; gap: 12px; text-align: center; }
+  .dashboard-header h1 { font-size: 17px; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gray-100); }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- Login Page -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-icon">🔒</div>
+    <h1>管理后台</h1>
+    <p class="login-subtitle">广州市电动自行车管理现状调研</p>
+    <div class="login-error" id="loginError">密码错误，请重试</div>
+    <input type="password" id="passwordInput" placeholder="请输入管理员密码" onkeydown="if(event.key==='Enter')login()">
+    <br><br>
+    <button class="btn-primary" id="loginBtn" onclick="login()">验证登录</button>
+    <br><br>
+    <a href="index.html" style="font-size:13px;color:var(--gray-400);text-decoration:none;">← 返回问卷首页</a>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+  <div class="dashboard-header">
+    <h1>📋 管理控制面板</h1>
+    <button class="btn-logout" onclick="logout()">退出登录</button>
+  </div>
+
+  <div class="action-grid">
+    <!-- 调研结果 -->
+    <div class="action-card" onclick="viewReport()">
+      <div class="action-card-icon blue">📊</div>
+      <h3>调研结果</h3>
+      <p>查看统计分析与调研报告</p>
+    </div>
+
+    <!-- 导入题目 -->
+    <div class="action-card" onclick="seedQuestions()">
+      <div class="action-card-icon orange">📥</div>
+      <h3>导入题目</h3>
+      <p>从 questions.json 导入题目到数据库</p>
+    </div>
+
+    <!-- 历史数据迁移 -->
+    <div class="action-card" onclick="migrateData()">
+      <div class="action-card-icon purple">📦</div>
+      <h3>历史数据迁移</h3>
+      <p>从 JSONBin 迁移历史答卷数据</p>
+    </div>
+
+    <!-- 导出数据 -->
+    <div class="action-card">
+      <div class="action-card-icon green">📤</div>
+      <h3>导出数据</h3>
+      <p>下载答卷数据文件</p>
+      <div class="card-actions">
+        <button class="btn-secondary" onclick="exportData('json')">JSON</button>
+        <button class="btn-secondary" onclick="exportData('csv')">CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Display -->
+  <div class="result-area" id="resultArea">
+    <h3 id="resultTitle">操作结果</h3>
+    <div class="result-box" id="resultBox"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE = '/api';
+let adminToken = localStorage.getItem('gz_ebike_admin_token') || '';
+
+// ===== Init =====
+if (adminToken) {
+  showDashboard();
+}
+
+// ===== Login =====
+async function login() {
+  const pwd = document.getElementById('passwordInput').value;
+  const errorEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errorEl.style.display = 'none';
+
+  if (!pwd) {
+    errorEl.textContent = '请输入密码';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 验证中...';
+
+  try {
+    const res = await fetch(`${API_BASE}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    const data = await res.json();
+
+    if (data.success && data.token) {
+      adminToken = data.token;
+      localStorage.setItem('gz_ebike_admin_token', adminToken);
+      showDashboard();
+    } else {
+      errorEl.textContent = data.message || '密码错误，请重试';
+      errorEl.style.display = 'block';
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('passwordInput').focus();
+    }
+  } catch (err) {
+    errorEl.textContent = '网络错误，请重试';
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '验证登录';
+  }
+}
+
+function showDashboard() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+}
+
+function logout() {
+  adminToken = '';
+  localStorage.removeItem('gz_ebike_admin_token');
+  location.reload();
+}
+
+// ===== 调研结果 =====
+function viewReport() {
+  window.location.href = 'index.html#report';
+}
+
+// ===== 导入题目 =====
+async function seedQuestions() {
+  showResult('导入题目', '正在导入...', false);
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed`, {
+      method: 'POST',
+      headers: { 'x-admin-token': adminToken }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      if (data.skipped) {
+        showResult('导入题目 - 已跳过', `✅ 问卷版本 ${data.version} 已存在，无需重复导入`, true);
+      } else {
+        showResult('导入题目 - 成功', `✅ 导入成功！\n\n版本：${data.version}\n问卷ID：${data.surveyId}\n部分数：${data.partCount}\n题目数：${data.questionCount}`, true);
+      }
+    } else {
+      showResult('导入题目 - 失败', `❌ ${data.message || '未知错误'}`, false, true);
+    }
+  } catch (err) {
+    showResult('导入题目 - 失败', `❌ 网络错误：${err.message}`, false, true);
+  }
+}
+
+// ===== 历史数据迁移 =====
+async function migrateData() {
+  if (!confirm('确定要从 JSONBin 迁移历史答卷数据吗？\n\n注意：\n1. 需要已配置 JSONBIN_BIN_ID 和 JSONBIN_ACCESS_KEY 环境变量\n2. 迁移前请先完成"导入题目"\n3. 重复执行会产生重复数据')) {
+    return;
+  }
+
+  showResult('历史数据迁移', '正在从 JSONBin 拉取并迁移数据，请稍候...', false);
+  try {
+    const res = await fetch(`${API_BASE}/admin/migrate`, {
+      method: 'POST',
+      headers: { 'x-admin-token': adminToken }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showResult('历史数据迁移 - 成功', `✅ 迁移完成！\n\n总记录数：${data.totalRecords}\n成功迁移：${data.migrated}\n跳过：${data.skipped}`, true);
+    } else {
+      showResult('历史数据迁移 - 失败', `❌ ${data.message || '未知错误'}`, false, true);
+    }
+  } catch (err) {
+    showResult('历史数据迁移 - 失败', `❌ 网络错误：${err.message}`, false, true);
+  }
+}
+
+// ===== 导出数据 =====
+async function exportData(format) {
+  showToast(`正在导出 ${format.toUpperCase()} 数据...`);
+  try {
+    const res = await fetch(`${API_BASE}/export?format=${format}`, {
+      headers: { 'x-admin-token': adminToken }
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      showToast(`导出失败：${errData.message || res.statusText}`);
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const date = new Date().toISOString().slice(0, 10);
+    a.download = `survey_data_${date}.${format}`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`已导出 ${format.toUpperCase()} 文件`);
+  } catch (err) {
+    showToast(`导出失败：${err.message}`);
+  }
+}
+
+// ===== UI Helpers =====
+function showResult(title, message, success, isError) {
+  const area = document.getElementById('resultArea');
+  const titleEl = document.getElementById('resultTitle');
+  const box = document.getElementById('resultBox');
+
+  titleEl.textContent = title;
+  box.textContent = message;
+  box.className = 'result-box';
+  if (success) box.classList.add('success');
+  if (isError) box.classList.add('error');
+
+  area.classList.add('active');
+  area.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
