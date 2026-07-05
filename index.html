@@ -977,7 +977,6 @@ textarea.question-textarea:focus {
     <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研</div>
     <div class="header-right">
       <button class="header-admin-btn" onclick="showAdminLoginReport()">查看调研结果</button>
-      <button class="header-admin-btn" onclick="window.location.href='admin.html'">管理后台</button>
     </div>
   </div>
   <div class="progress-bar-container" id="progressContainer">
@@ -993,8 +992,7 @@ textarea.question-textarea:focus {
   <div class="landing">
     <div class="landing-icon">&#128680;</div>
     <h1>广州市电动自行车<br>管理现状调研 <span id="surveyVersion" class="version-badge"></span></h1>
-    <p class="subtitle">我们希望了解您对广州市电动自行车管理现状的看法与建议</p>
-    <p class="subtitle">您的参与对完善城市交通管理具有重要参考价值</p>
+    <p class="subtitle">我们希望了解您对广州市电动自行车管理现状的看法与建议，您的参与对完善城市交通管理具有重要参考价值。</p>
     <div class="landing-info">
       <div class="info-item">
         <div class="info-icon">⏱</div>
@@ -1604,7 +1602,7 @@ function renderStatsWithData(data) {
     } else if (q.type === 'likert') {
       const counts = countOptions(q.labels, q.id, displayData);
       const total = counts.reduce((a, b) => a + b.count, 0);
-      if (isFeatured || q.id === 'q13') {
+      if (isFeatured) {
         html += renderBarChart(counts, total, isFeatured);
       } else {
         html += renderBarChart(counts, total, false);
@@ -1699,7 +1697,7 @@ function renderAdminQuestions() {
           ${(q.options && q.options.length > 0) ? `<div style="font-size:13px;color:var(--text-secondary);">选项：${q.options.map(o => `<span style="display:inline-block;background:var(--bg-secondary);padding:2px 8px;border-radius:4px;margin:2px;">${o}</span>`).join('')}</div>` : ''}
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0;">
-          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;" onclick="showQuestionForm(${JSON.stringify(q).replace(/"/g, '&quot;')})">编辑</button>
+          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;" onclick='showQuestionForm(${JSON.stringify(q)})'>编辑</button>
           <button class="btn-secondary" style="padding:6px 12px;font-size:13px;background:#fef2f2;color:#dc2626;border-color:#fecaca;" onclick="confirmDeleteQuestion('${q.id}')">删除</button>
         </div>
       </div>
@@ -2045,7 +2043,7 @@ function renderChapter2(data) {
 }
 
 function renderChapter3(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第三章 核心发现一：现状与问题感知</div>';
+  let html = '<div class="report-section"><div class="report-section-title">第三章 现状与问题感知</div>';
   // 3.1 Q6 满意度
   const q6 = questions.find(q => q.id === 'q6');
   html += '<div class="report-subsection"><h4>3.1 管理满意度评分</h4>';
@@ -2055,38 +2053,33 @@ function renderChapter3(data) {
   const q7counts = countOptions(q7.options, 'q7', data).sort((a,b) => b.count - a.count);
   html += '<div class="report-subsection"><h4>3.2 最突出问题排序（限选3项）</h4>';
   html += '<div class="stats-card">' + renderBarChart(q7counts, data.length, false) + '</div></div>';
-  // 3.3 Q8
-  const q8 = questions.find(q => q.id === 'q8');
-  html += '<div class="report-subsection"><h4>3.3 安全威胁感知</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q8.labels, 'q8', data), countValid('q8', data), false) + '</div></div>';
-  // 3.4 Q9
-  const q9 = questions.find(q => q.id === 'q9');
-  html += '<div class="report-subsection"><h4>3.4 停放充电满意度</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q9.labels, 'q9', data), countValid('q9', data), false) + '</div></div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter4(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第四章 核心发现二：政策认知与评价</div>';
+  let html = '<div class="report-section"><div class="report-section-title">第四章 管理目标与优先级</div>';
+
+  // 4.1 管理目标优先级 (Q10, checkbox_limit)
   const q10 = questions.find(q => q.id === 'q10');
-  // 计算知晓率（非常了解 + 比较了解 + 略有了解）
-  const q10counts = countOptions(q10.labels, 'q10', data);
-  const q10total = countValid('q10', data);
-  const awareCount = q10counts.slice(0, 3).reduce((a,b) => a+b.count, 0);
-  const awarePct = q10total > 0 ? (awareCount / q10total * 100).toFixed(1) : 0;
-  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + awarePct + '%</div><div class="label">新规知晓率</div></div></div>';
-  html += '<div class="report-subsection"><h4>4.1 新规了解程度</h4>';
-  html += '<div class="stats-card">' + renderBarChart(q10counts, q10total, false) + '</div></div>';
+  const q10counts = countOptions(q10.options, 'q10', data).sort((a,b) => b.count - a.count);
+  const topGoal = q10counts[0];
+  const topGoalPct = data.length > 0 ? (topGoal.count / data.length * 100).toFixed(1) : 0;
+  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + topGoalPct + '%</div><div class="label">最高优先级目标：' + escapeHtml(topGoal.label) + '</div></div></div>';
+  html += '<div class="report-subsection"><h4>4.1 管理目标优先级排序（限选3项）</h4>';
+  html += '<div class="stats-card">' + renderBarChart(q10counts, data.length, false) + '</div></div>';
+
+  // 4.2 改革实施路径偏好 (Q11, radio)
   const q11 = questions.find(q => q.id === 'q11');
-  html += '<div class="report-subsection"><h4>4.2 执法力度评价</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q11.labels, 'q11', data), countValid('q11', data), false) + '</div></div>';
+  html += '<div class="report-subsection"><h4>4.2 改革实施路径偏好</h4>';
+  html += '<div class="stats-card">' + renderBarChart(countOptions(q11.options, 'q11', data), countValid('q11', data), false) + '</div></div>';
+
   html += '</div>';
   return html;
 }
 
 function renderChapter5(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第五章 核心发现三："解禁"态度与条件</div>';
+  let html = '<div class="report-section"><div class="report-section-title">第五章 管理措施与态度</div>';
   // 5.1 Q12
   const q12 = questions.find(q => q.id === 'q12');
   html += '<div class="report-subsection"><h4>5.1 政策松紧感知</h4>';
@@ -2094,7 +2087,7 @@ function renderChapter5(data) {
   // 5.2 Q13b + Q13c 双栏
   const q13b = questions.find(q => q.id === 'q13b');
   const q13c = questions.find(q => q.id === 'q13c');
-  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>5.2a 希望放宽的方面</h4>';
+  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>5.2a 希望放宽/优化的方面</h4>';
   const q13bcounts = countOptions(q13b.options, 'q13b', data).sort((a,b) => b.count - a.count);
   html += renderBarChart(q13bcounts, data.length, false);
   html += '</div><div class="report-feq-card"><h4>5.2b 希望加强管控的方面</h4>';
@@ -2121,7 +2114,7 @@ function renderChapter5(data) {
   html += '<div class="stats-card featured">' + renderBarChart(q16counts, q16total, true) + '</div></div>';
   // 5.6 Q17
   const q17 = questions.find(q => q.id === 'q17');
-  html += '<div class="report-subsection"><h4>5.6 可接受的解禁条件</h4>';
+  html += '<div class="report-subsection"><h4>5.7 可接受的放宽条件</h4>';
   const q17counts = countOptions(q17.options, 'q17', data).sort((a,b) => b.count - a.count);
   html += '<div class="stats-card">' + renderBarChart(q17counts, data.length, false) + '</div>';
   html += '<div class="report-subsection"><p style="font-size:12px;color:var(--gray-400);">注：Q17中"以上都满足才支持"与"无论如何都不支持"互斥</p></div>';
@@ -2134,38 +2127,36 @@ function renderChapter6(data) {
 
   // 6.1 解禁可行性指数计算
   const total = data.length;
-  // 维度1：市民需求紧迫性 30%
+  // 维度1：放宽需求 30%
   const q12counts = countOptions(questions.find(q=>q.id==='q12').options, 'q12', data);
   const q16counts = countOptions(questions.find(q=>q.id==='q16').options, 'q16', data);
   const q12total = countValid('q12', data);
   const q16total = countValid('q16', data);
   const strictPct = q12total > 0 ? (q12counts.find(c=>c.label.includes('过于严格')).count || 0) / q12total : 0;
-  const relaxPct = q16total > 0 ? (q16counts.find(c=>c.label.includes('解禁') || c.label.includes('放宽')).count || 0) / q16total : 0;
+  const relaxPct = q16total > 0 ? (q16counts.find(c=>c.label.includes('放开') || c.label.includes('多开路') || c.label.includes('分类管')).count || 0) / q16total : 0;
   const dim1 = Math.min(100, Math.round((strictPct * 0.5 + relaxPct * 0.5) * 100));
 
-  // 维度2：政策放宽意愿 30%
-  const q13bcounts = countOptions(questions.find(q=>q.id==='q13b').options, 'q13b', data);
-  const hasQ13b = data.filter(d => d.answers.q13b && d.answers.q13b.length > 0).length;
-  const dim2 = total > 0 ? Math.min(100, Math.round(hasQ13b / total * 100 * 1.2)) : 0;
+  // 维度2：主动优化意愿 25% — 基于Q10选择"方便市民出行"+"促进就业民生"的比例
+  const q10counts = countOptions(questions.find(q=>q.id==='q10').options, 'q10', data);
+  const reformWant = q10counts.find(c => c.label.includes('出行') || c.label.includes('就业'));
+  const dim2 = Math.min(100, reformWant ? Math.round(reformWant.count / data.length * 100) : 0);
 
-  // 维度3：安全风险可控性 25%
+  // 维度3：安全风险可控 25% — Q15最后两项（可能不会+一定不会）
   const q15counts = countOptions(questions.find(q=>q.id==='q15').labels, 'q15', data);
   const q15total = countValid('q15', data);
-  const safeIdx = questions.find(q=>q.id==='q15').labels.length - 1;
   const safeCount = q15total > 0 ? (q15counts[q15counts.length-2] ? q15counts[q15counts.length-2].count : 0) + (q15counts[q15counts.length-1] ? q15counts[q15counts.length-1].count : 0) : 0;
   const dim3 = q15total > 0 ? Math.min(100, Math.round(safeCount / q15total * 100)) : 0;
 
-  // 维度4：管理配套成熟度 15%
-  const q9counts = countOptions(questions.find(q=>q.id==='q9').labels, 'q9', data);
-  const q11counts = countOptions(questions.find(q=>q.id==='q11').labels, 'q11', data);
-  const q9total = countValid('q9', data);
+  // 维度4：实施条件成熟度 20% — Q11选"先试点/分步/小步快跑" + Q13c选"电子号牌""考牌"
+  const q11counts = countOptions(questions.find(q=>q.id==='q11').options, 'q11', data);
   const q11total = countValid('q11', data);
-  // 满意+比较满意
-  const satScore = q9total > 0 ? ((q9counts[0]||{count:0}).count + (q9counts[1]||{count:0}).count) / q9total : 0;
-  const enforceScore = q11total > 0 ? ((q11counts[0]||{count:0}).count + (q11counts[1]||{count:0}).count) / q11total : 0;
-  const dim4 = Math.min(100, Math.round((satScore * 0.5 + enforceScore * 0.5) * 100));
+  const pilotPct = q11total > 0 ? (q11counts.find(c => c.label.includes('试点') || c.label.includes('分步') || c.label.includes('小步快跑')).count || 0) / q11total : 0;
+  const q13ccounts = countOptions(questions.find(q=>q.id==='q13c').options, 'q13c', data);
+  const techCount = (q13ccounts.find(c => c.label.includes('电子号牌')) || {count:0}).count + (q13ccounts.find(c => c.label.includes('考交规')) || {count:0}).count;
+  const techPct = data.length > 0 ? Math.min(1, techCount / data.length) : 0;
+  const dim4 = Math.min(100, Math.round((pilotPct * 0.5 + techPct * 0.5) * 100));
 
-  const overallScore = Math.round(dim1 * 0.3 + dim2 * 0.3 + dim3 * 0.25 + dim4 * 0.15);
+  const overallScore = Math.round(dim1 * 0.30 + dim2 * 0.25 + dim3 * 0.25 + dim4 * 0.20);
   let conclusion = '';
   if (overallScore >= 80) conclusion = '建议适度放宽/解禁，条件成熟';
   else if (overallScore >= 60) conclusion = '建议适度放宽，需配套管理措施';
@@ -2177,10 +2168,10 @@ function renderChapter6(data) {
   html += '<div class="report-index-card"><div class="score">' + overallScore + '</div><div class="score-label">综合得分（满分100）</div><div class="score-conclusion">' + conclusion + '</div></div>';
   html += '<div class="report-dimensions">';
   const dims = [
-    {name: '市民需求紧迫性 (30%)', score: dim1},
-    {name: '政策放宽意愿 (30%)', score: dim2},
-    {name: '安全风险可控性 (25%)', score: dim3},
-    {name: '管理配套成熟度 (15%)', score: dim4}
+    {name: '放宽需求 (30%)', score: dim1},
+    {name: '主动优化意愿 (25%)', score: dim2},
+    {name: '安全风险可控 (25%)', score: dim3},
+    {name: '实施条件成熟度 (20%)', score: dim4}
   ];
   dims.forEach((dim, i) => {
     html += '<div class="report-dim-item"><div class="dim-label"><span>' + dim.name + '</span><span>' + dim.score + '/100</span></div><div class="dim-bar"><div class="dim-fill" data-width="' + dim.score + '%" style="width:0%;background:' + dimColors[i] + ';"></div></div><div class="dim-score">' + dim.score + '分</div></div>';
@@ -2350,15 +2341,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Failed to load questions:', error);
       showToast('加载题目失败，请刷新页面重试');
     });
-  if (window.location.hash === '#report') {
-    if (adminToken) {
-      showReport();
-    } else {
-      showAdminLoginReport();
-    }
-  } else {
-    showPage('pageLanding');
-  }
+  showPage('pageLanding');
 });
 </script>
 </body>
