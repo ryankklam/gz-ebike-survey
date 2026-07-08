@@ -1651,7 +1651,7 @@ async function loadAdminQuestions() {
     const data = await res.json();
 
     if (data.success) {
-      adminQuestions = data.data;
+      adminQuestions = data.questions || [];
       renderAdminQuestions();
     } else {
       container.innerHTML = `<div class="stats-card"><p style="text-align:center;color:#ef4444;padding:20px;">加载失败：${data.message || '未知错误'}</p></div>`;
@@ -1689,17 +1689,18 @@ function renderAdminQuestions() {
   }
 
   adminQuestions.forEach((q, idx) => {
+    const qid = q.question_key || q.id;
     html += `<div class="stats-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
         <div style="flex:1;">
-          <div style="font-weight:600;font-size:16px;margin-bottom:8px;">Q${idx + 1}. ${q.title} <span style="color:var(--gray-400);font-size:13px;font-weight:400;">[${q.id}]</span></div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">类型：${typeLabels[q.type] || q.type} ${q.part ? ' | 部分：' + q.part : ''}</div>
-          ${q.description ? `<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">描述：${q.description}</div>` : ''}
-          ${(q.options && q.options.length > 0) ? `<div style="font-size:13px;color:var(--text-secondary);">选项：${q.options.map(o => `<span style="display:inline-block;background:var(--bg-secondary);padding:2px 8px;border-radius:4px;margin:2px;">${o}</span>`).join('')}</div>` : ''}
+          <div style="font-weight:600;font-size:16px;margin-bottom:8px;">Q${idx + 1}. ${q.title} <span style="color:var(--gray-400);font-size:13px;font-weight:400;">[${qid}]</span></div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">类型：${typeLabels[q.type] || q.type} ${q.part_name ? ' | 部分：' + q.part_name : ''}</div>
+          ${q.subtitle ? `<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">描述：${q.subtitle}</div>` : ''}
+          ${(q.options && q.options.length > 0) ? `<div style="font-size:13px;color:var(--text-secondary);">选项：${q.options.map(o => `<span style="display:inline-block;background:var(--bg-secondary);padding:2px 8px;border-radius:4px;margin:2px;">${typeof o === 'string' ? o : (o.label || '')}</span>`).join('')}</div>` : ''}
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0;">
           <button class="btn-secondary" style="padding:6px 12px;font-size:13px;" onclick='showQuestionForm(${JSON.stringify(q)})'>编辑</button>
-          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;background:#fef2f2;color:#dc2626;border-color:#fecaca;" onclick="confirmDeleteQuestion('${q.id}')">删除</button>
+          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;background:#fef2f2;color:#dc2626;border-color:#fecaca;" onclick="confirmDeleteQuestion('${qid}')">删除</button>
         </div>
       </div>
     </div>`;
