@@ -1645,8 +1645,20 @@ function renderToolsPanel() {
   <div class="stats-card" style="margin-bottom:16px;">
     <h4>📥 导入题目到数据库</h4>
     <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从 questions.json 文件导入题目结构到数据库。如果该版本已存在则跳过。</p>
-    <button class="btn-primary" id="btnSeed" onclick="runSeed()">运行导入</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn-primary" id="btnSeed" onclick="runSeed()">运行导入</button>
+      <button class="btn-secondary" id="btnForceSeed" onclick="runForceSeed()">🔄 强制重新导入</button>
+    </div>
     <div id="seedResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>🗑️ 删除版本数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">删除指定版本的所有数据（题目、答卷、选项等全部清除）。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <input type="text" id="deleteVersionInput" placeholder="输入版本号，如 v0.1" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;flex:1;min-width:120px;">
+      <button class="btn-secondary" id="btnDeleteVersion" onclick="deleteSurveyVersion()" style="background:#fef2f2;color:#dc2626;border-color:#fecaca;">删除版本</button>
+    </div>
+    <div id="deleteVersionResult" style="margin-top:8px;"></div>
   </div>
   <div class="stats-card" style="margin-bottom:16px;">
     <h4>🔄 迁移历史数据</h4>
@@ -1683,7 +1695,7 @@ async function runSeed() {
       if (data.skipped) {
         result.innerHTML = '<span style="color:#f59e0b;">已跳过：该版本题目已在数据库中存在</span>';
       } else {
-        result.innerHTML = '<span style="color:#22c55e;">导入成功！题目已写入数据库。</span>';
+        result.innerHTML = `<span style="color:#22c55e;">导入成功！共 ${data.questionCount || 0} 题，版本 ${data.version}</span>`;
       }
     } else {
       result.innerHTML = `<span style="color:#ef4444;">导入失败：${data.message || '未知错误'}</span>`;
@@ -1693,6 +1705,65 @@ async function runSeed() {
   }
   btn.disabled = false;
   btn.textContent = '运行导入';
+}
+
+async function runForceSeed() {
+  const version = surveyVersion && surveyVersion !== 'unknown' ? surveyVersion : 'v0.2';
+  if (!confirm(`⚠️ 警告：这将删除数据库中 ${version} 版本的所有数据（包括题目、答卷、选项等），然后从 questions.json 重新导入。\n\n此操作不可恢复，确定继续？`)) return;
+  const btn = document.getElementById('btnForceSeed');
+  const result = document.getElementById('seedResult');
+  btn.disabled = true;
+  btn.textContent = '正在重新导入...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+      body: JSON.stringify({ force: true })
+    });
+    const data = await res.json();
+    if (data.success) {
+      result.innerHTML = `<span style="color:#22c55e;">✅ 重新导入成功！共 ${data.questionCount || 0} 题，版本 ${data.version}</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">重新导入失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '🔄 强制重新导入';
+}
+
+async function deleteSurveyVersion() {
+  const input = document.getElementById('deleteVersionInput');
+  const version = input.value.trim();
+  const result = document.getElementById('deleteVersionResult');
+  if (!version) {
+    result.innerHTML = '<span style="color:#f59e0b;">请输入版本号</span>';
+    return;
+  }
+  if (!confirm(`⚠️ 警告：这将永久删除 ${version} 版本的所有数据（题目、答卷、选项等）。\n\n此操作不可恢复，确定继续？`)) return;
+  const btn = document.getElementById('btnDeleteVersion');
+  btn.disabled = true;
+  btn.textContent = '正在删除...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed?version=${encodeURIComponent(version)}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      result.innerHTML = `<span style="color:#22c55e;">✅ ${version} 版本已删除</span>`;
+      input.value = '';
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">删除失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '删除版本';
 }
 
 async function runMigrate() {
