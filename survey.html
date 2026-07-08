@@ -1082,9 +1082,11 @@ textarea.question-textarea:focus {
   <div class="stats-tabs">
     <button class="stats-tab active" data-tab="stats" onclick="switchAdminTab('stats')">📊 统计结果</button>
     <button class="stats-tab" data-tab="questions" onclick="switchAdminTab('questions')">📝 题目管理</button>
+    <button class="stats-tab" data-tab="tools" onclick="switchAdminTab('tools')">🔧 系统工具</button>
   </div>
   <div class="stats-panel" id="statsContent"></div>
   <div class="stats-panel" id="questionsContent" style="display:none;"></div>
+  <div class="stats-panel" id="toolsContent" style="display:none;"></div>
 </div>
 
 <!-- Toast -->
@@ -1627,14 +1629,130 @@ function renderStatsWithData(data) {
 function switchAdminTab(tab) {
   document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
   document.querySelector(`.stats-tab[data-tab="${tab}"]`).classList.add('active');
-  if (tab === 'stats') {
-    document.getElementById('statsContent').style.display = 'block';
-    document.getElementById('questionsContent').style.display = 'none';
-  } else {
-    document.getElementById('statsContent').style.display = 'none';
-    document.getElementById('questionsContent').style.display = 'block';
-    loadAdminQuestions();
+  document.getElementById('statsContent').style.display = (tab === 'stats') ? 'block' : 'none';
+  document.getElementById('questionsContent').style.display = (tab === 'questions') ? 'block' : 'none';
+  document.getElementById('toolsContent').style.display = (tab === 'tools') ? 'block' : 'none';
+  if (tab === 'questions') loadAdminQuestions();
+  if (tab === 'tools') renderToolsPanel();
+}
+
+// ====== SYSTEM TOOLS ======
+function renderToolsPanel() {
+  const container = document.getElementById('toolsContent');
+  container.innerHTML = `<div class="stats-header">
+    <h2>系统工具</h2>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>📥 导入题目到数据库</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从 questions.json 文件导入题目结构到数据库。如果该版本已存在则跳过。</p>
+    <button class="btn-primary" id="btnSeed" onclick="runSeed()">运行导入</button>
+    <div id="seedResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>🔄 迁移历史数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从 JSONBin 拉取旧版答卷数据并写入数据库（按 version 匹配 survey）。</p>
+    <button class="btn-primary" id="btnMigrate" onclick="runMigrate()">运行迁移</button>
+    <div id="migrateResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>📊 刷新统计数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从数据库重新加载统计数据并刷新统计面板。</p>
+    <button class="btn-primary" onclick="refreshStats()">刷新统计</button>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>📤 导出数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">导出所有答卷数据为 JSON 格式并下载。</p>
+    <button class="btn-primary" id="btnExport" onclick="runExport()">导出并下载</button>
+    <div id="exportResult" style="margin-top:8px;"></div>
+  </div>`;
+}
+
+async function runSeed() {
+  const btn = document.getElementById('btnSeed');
+  const result = document.getElementById('seedResult');
+  btn.disabled = true;
+  btn.textContent = '正在导入...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      if (data.skipped) {
+        result.innerHTML = '<span style="color:#f59e0b;">已跳过：该版本题目已在数据库中存在</span>';
+      } else {
+        result.innerHTML = '<span style="color:#22c55e;">导入成功！题目已写入数据库。</span>';
+      }
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">导入失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
   }
+  btn.disabled = false;
+  btn.textContent = '运行导入';
+}
+
+async function runMigrate() {
+  const btn = document.getElementById('btnMigrate');
+  const result = document.getElementById('migrateResult');
+  btn.disabled = true;
+  btn.textContent = '正在迁移...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/migrate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      result.innerHTML = `<span style="color:#22c55e;">迁移完成：成功 ${data.successCount || 0} 条，跳过 ${data.skippedCount || 0} 条，失败 ${data.failedCount || 0} 条</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">迁移失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '运行迁移';
+}
+
+async function refreshStats() {
+  await loadAndRenderStats();
+  switchAdminTab('stats');
+  showToast('统计数据已刷新');
+}
+
+async function runExport() {
+  const btn = document.getElementById('btnExport');
+  const result = document.getElementById('exportResult');
+  btn.disabled = true;
+  btn.textContent = '正在导出...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/export?version=${surveyVersion}&includeTest=true`, {
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `survey-data-${surveyVersion}-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      result.innerHTML = `<span style="color:#22c55e;">导出成功：${data.data.length} 条记录</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">导出失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '导出并下载';
 }
 
 // ====== QUESTION MANAGEMENT ======
