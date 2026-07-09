@@ -985,7 +985,6 @@ textarea.question-textarea:focus {
   <div class="header-inner">
     <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研</div>
     <div class="header-right">
-      <button class="header-admin-btn" onclick="showReport()">调研报告</button>
       <button class="header-admin-btn" onclick="showAdminLogin()">管理员后台</button>
     </div>
   </div>
@@ -1089,10 +1088,12 @@ textarea.question-textarea:focus {
 <!-- Page: Admin Stats -->
 <div class="page" id="pageStats">
   <div class="stats-tabs" id="statsTabsBar">
-    <button class="stats-tab active" data-tab="stats" onclick="switchAdminTab('stats')">📊 统计结果</button>
+    <button class="stats-tab" data-tab="report" onclick="switchAdminTab('report')">📄 调研报告</button>
+    <button class="stats-tab" data-tab="stats" onclick="switchAdminTab('stats')">📊 统计结果</button>
     <button class="stats-tab" data-tab="questions" onclick="switchAdminTab('questions')">📝 题目管理</button>
     <button class="stats-tab" data-tab="tools" onclick="switchAdminTab('tools')">🔧 系统工具</button>
   </div>
+  <div class="stats-panel" id="adminReportContent" style="display:none;"></div>
   <div class="stats-panel" id="statsContent"></div>
   <div class="stats-panel" id="questionsContent" style="display:none;"></div>
   <div class="stats-panel" id="toolsContent" style="display:none;"></div>
@@ -1648,9 +1649,11 @@ function renderStatsWithData(data) {
 function switchAdminTab(tab) {
   document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
   document.querySelector(`.stats-tab[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById('adminReportContent').style.display = (tab === 'report') ? 'block' : 'none';
   document.getElementById('statsContent').style.display = (tab === 'stats') ? 'block' : 'none';
   document.getElementById('questionsContent').style.display = (tab === 'questions') ? 'block' : 'none';
   document.getElementById('toolsContent').style.display = (tab === 'tools') ? 'block' : 'none';
+  if (tab === 'report') loadAdminReport();
   if (tab === 'questions') loadAdminQuestions();
   if (tab === 'tools') renderToolsPanel();
 }
@@ -2108,10 +2111,6 @@ function toggleTestFilter() {
   filterTestData = !filterTestData;
   if (window._rawStatsData) renderStatsWithData(window._rawStatsData);
 }
-function toggleReportTestFilter() {
-  filterTestData = !filterTestData;
-  if (window._rawReportData) renderReportWithData(window._rawReportData);
-}
 
 // ====== MY ANSWERS REVIEW ======
 function showMyAnswers() {
@@ -2135,43 +2134,28 @@ function showMyAnswers() {
   }
 }
 
-// ====== REPORT FUNCTIONS ======
-function showReport() {
-  showPage('pageReport');
-  document.getElementById('progressContainer').style.display = 'none';
-  loadAndRenderReport();
-}
-
-function showAdminLoginReport() {
-  showPage('pageAdminLogin');
-  document.getElementById('progressContainer').style.display = 'none';
-  // 替换验证成功后的回调为显示报告
-  window._adminLoginCallback = function() {
-    showReport();
-  };
-}
-
-async function loadAndRenderReport() {
-  const container = document.getElementById('reportContent');
+async function loadAdminReport() {
+  const container = document.getElementById('adminReportContent');
   container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">正在加载调研报告...</p></div>';
   try {
-    const res = await fetch(`${API_BASE}/stats?public=1`);
+    const headers = { 'X-Admin-Token': adminToken };
+    const res = await fetch(`${API_BASE}/stats?includeTest=true`, { headers });
     if (res.ok) {
       const data = await res.json();
-      if (data.success) { renderReportWithData(data.data); return; }
+      if (data.success) {
+        renderAdminReport(container, data.data);
+        return;
+      }
     }
   } catch(e) {}
-  const local = localStorage.getItem('gz_ebike_survey_data');
-  renderReportWithData(local ? [JSON.parse(local)] : []);
+  container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">加载失败，请稍后重试</p></div>';
 }
 
-function renderReportWithData(data) {
-  const container = document.getElementById('reportContent');
+function renderAdminReport(container, data) {
   if (!data || data.length === 0) {
     container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无提交数据，无法生成报告</p></div>';
     return;
   }
-  // 保存原始数据供切换时重渲染
   window._rawReportData = data;
   const testCount = data.filter(d => d.isTest).length;
   const displayData = filterTestData ? data.filter(d => !d.isTest) : data;
@@ -2181,7 +2165,6 @@ function renderReportWithData(data) {
   }
 
   let html = '';
-  // 报告头部
   const latestTime = displayData[displayData.length - 1] ? displayData[displayData.length - 1].timestamp : '未知';
   const metaInfo = filterTestData && testCount > 0
     ? `有效样本：${displayData.length}份（已排除 ${testCount} 份测试数据） | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`
@@ -2190,12 +2173,10 @@ function renderReportWithData(data) {
     <h2>广州市电动自行车管理现状及"解禁"可行性调研报告</h2>
     <div class="report-meta">${metaInfo}</div>
     <div class="report-actions">
-      <button class="btn-secondary" onclick="toggleReportTestFilter()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
-      <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
+      <button class="btn-secondary" onclick="toggleReportTestFilterAdmin()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
     </div>
   </div>`;
 
-  // 第一章到第七章，调用各子函数
   html += renderChapter1(displayData);
   html += renderChapter2(displayData);
   html += renderChapter3(displayData);
@@ -2206,15 +2187,19 @@ function renderReportWithData(data) {
 
   container.innerHTML = html;
 
-  // 动画
   setTimeout(() => {
     document.querySelectorAll('.report-page .bar-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
+      const pct = bar.getAttribute('data-pct');
+      if (pct) bar.style.width = pct;
     });
-    document.querySelectorAll('.report-page .dim-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-  }, 100);
+  }, 50);
+}
+
+function toggleReportTestFilterAdmin() {
+  filterTestData = !filterTestData;
+  if (window._rawReportData) {
+    renderAdminReport(document.getElementById('adminReportContent'), window._rawReportData);
+  }
 }
 
 function renderChapter1(data) {
