@@ -993,6 +993,7 @@ textarea.question-textarea:focus {
       <label for="userNameInput">您的称呼</label>
       <input type="text" id="userNameInput" class="name-input" maxlength="10" placeholder="请输入您的称呼" oninput="if(this.classList.contains('prefilled')) this.classList.remove('prefilled')" onkeydown="if(event.key==='Enter') confirmNameAndStart()">
       <div class="name-hint">最长10个字，可修改系统生成的随机名</div>
+      <button class="btn-secondary" style="margin-top:8px;font-size:13px;" onclick="refreshRandomName()">换个随机名字</button>
       <div class="name-error" id="nameError">请输入有效的称呼（2-10个字）</div>
     </div>
     <div class="name-input-actions">
@@ -1131,6 +1132,14 @@ function initNameInput() {
     input.classList.add('prefilled');
   }
   document.getElementById('nameError').style.display = 'none';
+}
+
+function refreshRandomName() {
+  const input = document.getElementById('userNameInput');
+  const randomName = generateRandomChineseName();
+  input.value = randomName;
+  input.classList.add('prefilled');
+  input.focus();
 }
 
 function confirmNameAndStart() {
