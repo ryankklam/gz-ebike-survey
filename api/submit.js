@@ -79,7 +79,6 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-<<<<<<< HEAD
     let survey;
     if (version) {
       survey = await getSurveyByVersion(version);
