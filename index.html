@@ -1088,7 +1088,7 @@ textarea.question-textarea:focus {
 
 <!-- Page: Admin Stats -->
 <div class="page" id="pageStats">
-  <div class="stats-tabs">
+  <div class="stats-tabs" id="statsTabsBar">
     <button class="stats-tab active" data-tab="stats" onclick="switchAdminTab('stats')">📊 统计结果</button>
     <button class="stats-tab" data-tab="questions" onclick="switchAdminTab('questions')">📝 题目管理</button>
     <button class="stats-tab" data-tab="tools" onclick="switchAdminTab('tools')">🔧 系统工具</button>
@@ -1522,6 +1522,8 @@ async function checkAdminPassword() {
         window._adminLoginCallback = null;
       } else {
         showPage('pageStats');
+        document.getElementById('statsTabsBar').style.display = 'flex';
+        switchAdminTab('stats');
         loadAndRenderStats();
       }
     } else {
@@ -2116,13 +2118,16 @@ function showMyAnswers() {
   const container = document.getElementById('statsContent');
   showPage('pageStats');
   document.getElementById('progressContainer').style.display = 'none';
+  document.getElementById('statsTabsBar').style.display = 'none';
+  document.getElementById('questionsContent').style.display = 'none';
+  document.getElementById('toolsContent').style.display = 'none';
+  document.getElementById('statsContent').style.display = 'block';
   try {
     const myAnswers = JSON.parse(localStorage.getItem('gz_ebike_my_answers'));
     if (!myAnswers) {
       container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">未找到您的回答记录</p></div>';
       return;
     }
-    // 用用户自己的答案构造单条记录
     const myData = [{ answers: myAnswers }];
     renderStatsWithData(myData);
   } catch(e) {
