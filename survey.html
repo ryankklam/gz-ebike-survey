@@ -327,6 +327,15 @@ body {
   color: var(--gray-400);
   margin-top: 6px;
 }
+.name-input-wrapper .name-hint .refresh-name-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 4px;
+}
+.name-input-wrapper .name-hint .refresh-name-link:hover {
+  text-decoration: underline;
+}
 .name-input-wrapper .name-error {
   font-size: 13px;
   color: var(--danger);
@@ -1017,8 +1026,7 @@ textarea.question-textarea:focus {
     <div class="name-input-wrapper">
       <label for="userNameInput">您的称呼</label>
       <input type="text" id="userNameInput" class="name-input" maxlength="10" placeholder="请输入您的称呼" oninput="if(this.classList.contains('prefilled')) this.classList.remove('prefilled')" onkeydown="if(event.key==='Enter') confirmNameAndStart()">
-      <div class="name-hint">最长10个字，可修改系统生成的随机名</div>
-      <button class="btn-secondary" style="margin-top:8px;font-size:13px;" onclick="refreshRandomName()">换个随机名字</button>
+      <div class="name-hint">最长10个字，可修改系统生成的随机名 <a href="javascript:void(0)" class="refresh-name-link" onclick="refreshRandomName()">换个名字</a></div>
       <div class="name-error" id="nameError">请输入有效的称呼（2-10个字）</div>
     </div>
     <div class="name-input-actions">
