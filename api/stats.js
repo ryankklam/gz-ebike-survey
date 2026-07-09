@@ -15,7 +15,9 @@ export default async function handler(req, res) {
   }
 
   const token = req.headers['x-admin-token'];
-  if (!verifyToken(token)) {
+  const isPublicReport = req.query.public === '1';
+
+  if (!verifyToken(token) && !isPublicReport) {
     res.status(401).json({ success: false, message: 'Unauthorized' });
     return;
   }

@@ -2133,9 +2133,7 @@ async function loadAndRenderReport() {
   const container = document.getElementById('reportContent');
   container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">正在加载调研报告...</p></div>';
   try {
-    const headers = {};
-    if (adminToken) headers['X-Admin-Token'] = adminToken;
-    const res = await fetch(`${API_BASE}/stats`, { headers });
+    const res = await fetch(`${API_BASE}/stats?public=1`);
     if (res.ok) {
       const data = await res.json();
       if (data.success) { renderReportWithData(data.data); return; }
