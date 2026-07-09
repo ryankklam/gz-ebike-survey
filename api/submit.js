@@ -152,8 +152,8 @@ export default async function handler(req, res) {
     res.status(200).json({ success: true });
   } catch (err) {
     await client.query('ROLLBACK');
-    console.error('Submit error:', err.message);
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Submit error:', err.code, err.message, err.stack);
+    res.status(500).json({ success: false, message: 'Server error', detail: err.message });
   } finally {
     client.release();
   }
