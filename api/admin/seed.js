@@ -118,7 +118,7 @@ async function doSeed(client) {
   return { version, surveyId, partCount: partsMap.size, questionCount: questions.length };
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   setCors(res);
 
   if (req.method === 'OPTIONS') {

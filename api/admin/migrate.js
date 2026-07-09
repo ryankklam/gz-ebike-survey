@@ -54,7 +54,7 @@ async function getOptionsMap(client, surveyId) {
   return map;
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   setCors(res);
 
   if (req.method === 'OPTIONS') {

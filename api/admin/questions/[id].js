@@ -1,7 +1,7 @@
 const { query, getClient } = require('../../_db');
 const { verifyToken, setCors } = require('../../_utils');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   setCors(res);
 
   if (req.method === 'OPTIONS') {
