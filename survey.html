@@ -1268,7 +1268,9 @@ function renderQuestion(index) {
     html += `<div class="options-list">`;
     q.options.forEach((opt, i) => {
       const sel = selectedArr.includes(opt) ? ' selected' : '';
-      const disabled = q.maxSelect && selectedArr.length >= q.maxSelect && !sel ? ' disabled-selected' : '';
+      const disabled = (q.maxSelect && selectedArr.length >= q.maxSelect && !sel)
+        || getMutuallyExclusiveDisabledState(q, selectedArr, i)
+        ? ' disabled-selected' : '';
       html += `<div class="option-item${sel}${disabled}" onclick="selectCheckbox('${q.id}','${escapeAttr(opt)}',${!!q.maxSelect ? q.maxSelect : 0},this)">
         <div class="option-checkbox"></div>
         <div class="option-label">${opt}</div>
@@ -1323,6 +1325,43 @@ function updateProgress(index) {
   document.getElementById('progressText').textContent = `${globalIndex} / ${TOTAL_QUESTIONS}`;
 }
 
+// ====== MUTUALLY EXCLUSIVE MODULE (generic) ======
+function resolveMutualExclusive(q, value, selectedValues) {
+  const exclusiveIndexes = q.mutuallyExclusive || [];
+  if (exclusiveIndexes.length === 0) return selectedValues;
+  // value is null: sanitize mode — if both exclusive and non-exclusive exist, keep non-exclusive
+  if (value === null) {
+    const hasExclusive = selectedValues.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
+    const hasNonExclusive = selectedValues.some(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+    if (hasExclusive && hasNonExclusive) {
+      return selectedValues.filter(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+    }
+    return selectedValues;
+  }
+  const valueIdx = q.options.indexOf(value);
+  if (exclusiveIndexes.includes(valueIdx)) {
+    // Selecting an exclusive option → keep only this one
+    return [value];
+  } else {
+    // Selecting a non-exclusive option → remove all exclusive options
+    return selectedValues.filter(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+  }
+}
+
+function getMutuallyExclusiveDisabledState(q, selectedArr, optionIndex) {
+  const exclusiveIndexes = q.mutuallyExclusive || [];
+  if (exclusiveIndexes.length === 0 || selectedArr.length === 0) return false;
+  const hasExclusive = selectedArr.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
+  const hasNonExclusive = selectedArr.some(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+  const isThisExclusive = exclusiveIndexes.includes(optionIndex);
+  const isThisSelected = selectedArr.includes(q.options[optionIndex]);
+  // If non-exclusive items are selected, disable all exclusive items
+  if (hasNonExclusive && isThisExclusive && !isThisSelected) return true;
+  // If exclusive items are selected, disable all non-exclusive items
+  if (hasExclusive && !isThisExclusive && !isThisSelected) return true;
+  return false;
+}
+
 function selectRadio(qid, value, el) {
   answers[qid] = value;
   el.parentElement.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
@@ -1334,64 +1373,64 @@ function selectCheckbox(qid, value, maxSel, el) {
   if (!answers[qid]) answers[qid] = [];
   const arr = answers[qid];
   const idx = arr.indexOf(value);
-
-  // Find current question definition for mutual exclusive logic
   const q = visibleQuestions[currentPage];
-  const exclusiveIndexes = q.mutuallyExclusive || [];
-  const valueIdx = q.options ? q.options.indexOf(value) : -1;
 
   if (idx >= 0) {
+    // Deselect
     arr.splice(idx, 1);
     el.classList.remove('selected');
   } else {
+    // Check maxSelect limit
     if (maxSel && arr.length >= maxSel) {
       showToast(`最多只能选择 ${maxSel} 项`);
       return;
     }
-    // Mutual exclusive: if selecting an exclusive option, clear others
-    if (exclusiveIndexes.includes(valueIdx)) {
-      answers[qid] = [value];
-      el.parentElement.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
-      updateNextBtn();
-      refreshDisabledState(q, answers[qid]);
-      return;
-    }
     arr.push(value);
-    el.classList.add('selected');
+    // Resolve mutual exclusive conflicts via generic module
+    answers[qid] = resolveMutualExclusive(q, value, arr);
+    // Re-render selected state
+    el.parentElement.querySelectorAll('.option-item').forEach(o => {
+      const optLabel = o.querySelector('.option-label');
+      if (optLabel && answers[qid] && answers[qid].includes(optLabel.textContent)) {
+        o.classList.add('selected');
+      } else {
+        o.classList.remove('selected');
+      }
+    });
   }
   if (arr.length === 0) delete answers[qid];
   updateNextBtn();
-  // Refresh disabled state for checkbox_limit and mutual exclusive
   refreshDisabledState(q, answers[qid] || []);
+}
 }
 
 function refreshDisabledState(q, selectedValues) {
-  const maxSel = q.maxSelect;
-  const exclusiveIndexes = q.mutuallyExclusive || [];
   const items = document.querySelectorAll('.question-container .option-item');
-  const selectedExclusive = selectedValues.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
-
   items.forEach((item, i) => {
-    if (maxSel && !item.classList.contains('selected') && selectedValues.length >= maxSel) {
+    let disabled = false;
+    // maxSelect check
+    if (q.maxSelect && !item.classList.contains('selected') && selectedValues.length >= q.maxSelect) {
+      disabled = true;
+    }
+    // mutuallyExclusive check (generic)
+    if (getMutuallyExclusiveDisabledState(q, selectedValues, i)) {
+      disabled = true;
+    }
+    if (disabled) {
       item.classList.add('disabled-selected');
     } else {
       item.classList.remove('disabled-selected');
     }
-    // Mutual exclusive: disable all non-selected when an exclusive option is selected
-    if (exclusiveIndexes.length > 0) {
-      if (selectedExclusive && !item.classList.contains('selected')) {
-        item.classList.add('disabled-selected');
-      } else if (!selectedExclusive) {
-        // Disable exclusive options if any non-exclusive is selected
-        if (exclusiveIndexes.includes(i) && selectedValues.length > 0) {
-          item.classList.add('disabled-selected');
-        } else {
-          item.classList.remove('disabled-selected');
-        }
-      }
-    }
   });
+}
+
+// ====== MUTUALLY EXCLUSIVE SANITIZE (generic) ======
+function sanitizeMutualExclusive(q) {
+  if (!q.mutuallyExclusive || !answers[q.id] || !Array.isArray(answers[q.id])) return;
+  const resolved = resolveMutualExclusive(q, null, answers[q.id]);
+  if (resolved.length !== answers[q.id].length) {
+    answers[q.id] = resolved;
+  }
 }
 
 function selectLikert(qid, value, el) {
@@ -1418,6 +1457,9 @@ function nextQuestion() {
     showToast('请先回答本题');
     return;
   }
+
+  // Sanitize mutual exclusive conflicts before moving on
+  sanitizeMutualExclusive(q);
 
   // Check if Q1=否, end survey
   if (q.id === 'q1' && answers['q1'] === '否') {
@@ -1447,6 +1489,9 @@ async function submitSurvey() {
     showToast('请先回答本题');
     return;
   }
+
+  // Sanitize mutual exclusive conflicts before submitting
+  sanitizeMutualExclusive(q);
 
   const userName = getUserName();
   const entry = {
