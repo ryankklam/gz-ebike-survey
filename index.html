@@ -2284,11 +2284,6 @@ function renderChapter3(data) {
   const q6 = questions.find(q => q.id === 'q6');
   html += '<div class="report-subsection"><h4>3.1 管理满意度评分</h4>';
   html += '<div class="stats-card">' + renderBarChart(countOptions(q6.labels, 'q6', data), countValid('q6', data), false) + '</div></div>';
-  // 3.2 Q7 突出问题（降序排列）
-  const q7 = questions.find(q => q.id === 'q7');
-  const q7counts = countOptions(q7.options, 'q7', data).sort((a,b) => b.count - a.count);
-  html += '<div class="report-subsection"><h4>3.2 最突出问题排序（限选3项）</h4>';
-  html += '<div class="stats-card">' + renderBarChart(q7counts, data.length, false) + '</div></div>';
   html += '</div>';
   return html;
 }
@@ -2420,10 +2415,10 @@ function renderChapter6(data) {
   html += '<div class="report-subsection"><h4>6.3 政策建议</h4>';
   html += '<div class="stats-card">';
   const suggestions = [];
-  // 基于最突出问题
-  const q7 = questions.find(q => q.id === 'q7');
-  const topProblem = countOptions(q7.options, 'q7', data).sort((a,b)=>b.count-a.count)[0];
-  if (topProblem) suggestions.push('重点关注"' + topProblem.label + '"问题，该问题被最多市民（' + (data.length>0?(topProblem.count/data.length*100).toFixed(1):0) + '%）选为突出痛点');
+  // 基于最希望放宽的方面
+  const q13b = questions.find(q => q.id === 'q13b');
+  const topRelax = countOptions(q13b.options, 'q13b', data).sort((a,b)=>b.count-a.count)[0];
+  if (topRelax) suggestions.push('市民最希望放宽"' + topRelax.label + '"，建议优先推进该方向改革');
   // 基于管理模式
   const q16opts = questions.find(q=>q.id==='q16').options;
   const q16c = countOptions(q16opts, 'q16', data);
