@@ -1405,7 +1405,7 @@ function selectCheckbox(qid, value, maxSel, el) {
 }
 
 function refreshDisabledState(q, selectedValues) {
-  const items = document.querySelectorAll('.question-container .option-item');
+  const items = document.querySelectorAll('.question-card .option-item');
   items.forEach((item, i) => {
     let disabled = false;
     // maxSelect check
