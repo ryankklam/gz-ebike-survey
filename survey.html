@@ -1270,7 +1270,6 @@ function renderQuestion(index) {
     q.options.forEach((opt, i) => {
       const sel = selectedArr.includes(opt) ? ' selected' : '';
       const disabled = (q.maxSelect && selectedArr.length >= q.maxSelect && !sel)
-        || getMutuallyExclusiveDisabledState(q, selectedArr, i)
         ? ' disabled-selected' : '';
       html += `<div class="option-item${sel}${disabled}" onclick="selectCheckbox('${q.id}','${escapeAttr(opt)}',${!!q.maxSelect ? q.maxSelect : 0},this)">
         <div class="option-checkbox"></div>
@@ -1408,12 +1407,8 @@ function refreshDisabledState(q, selectedValues) {
   const items = document.querySelectorAll('.question-card .option-item');
   items.forEach((item, i) => {
     let disabled = false;
-    // maxSelect check
+    // maxSelect check only — mutuallyExclusive uses auto-clear, not visual disable
     if (q.maxSelect && !item.classList.contains('selected') && selectedValues.length >= q.maxSelect) {
-      disabled = true;
-    }
-    // mutuallyExclusive check (generic)
-    if (getMutuallyExclusiveDisabledState(q, selectedValues, i)) {
       disabled = true;
     }
     if (disabled) {
