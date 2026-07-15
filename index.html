@@ -2301,18 +2301,9 @@ function renderChapter3(data) {
 function renderChapter4(data) {
   let html = '<div class="report-section"><div class="report-section-title">第四章 管理目标与优先级</div>';
 
-  // 4.1 管理目标优先级 (Q10, checkbox_limit)
-  const q10 = questions.find(q => q.id === 'q10');
-  const q10counts = countOptions(q10.options, 'q10', data).sort((a,b) => b.count - a.count);
-  const topGoal = q10counts[0];
-  const topGoalPct = data.length > 0 ? (topGoal.count / data.length * 100).toFixed(1) : 0;
-  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + topGoalPct + '%</div><div class="label">最高优先级目标：' + escapeHtml(topGoal.label) + '</div></div></div>';
-  html += '<div class="report-subsection"><h4>4.1 管理目标优先级排序（限选3项）</h4>';
-  html += '<div class="stats-card">' + renderBarChart(q10counts, data.length, false) + '</div></div>';
-
-  // 4.2 改革实施路径偏好 (Q11, radio)
+  // 4.1 改革实施路径偏好 (Q11, radio)
   const q11 = questions.find(q => q.id === 'q11');
-  html += '<div class="report-subsection"><h4>4.2 改革实施路径偏好</h4>';
+  html += '<div class="report-subsection"><h4>4.1 改革实施路径偏好</h4>';
   html += '<div class="stats-card">' + renderBarChart(countOptions(q11.options, 'q11', data), countValid('q11', data), false) + '</div></div>';
 
   html += '</div>';
@@ -2377,10 +2368,10 @@ function renderChapter6(data) {
   const relaxPct = q16total > 0 ? (q16counts.find(c=>c.label.includes('放开') || c.label.includes('多开路') || c.label.includes('分类管')).count || 0) / q16total : 0;
   const dim1 = Math.min(100, Math.round((strictPct * 0.5 + relaxPct * 0.5) * 100));
 
-  // 维度2：主动优化意愿 25% — 基于Q10选择"方便市民出行"+"促进就业民生"的比例
-  const q10counts = countOptions(questions.find(q=>q.id==='q10').options, 'q10', data);
-  const reformWant = q10counts.find(c => c.label.includes('出行') || c.label.includes('就业'));
-  const dim2 = Math.min(100, reformWant ? Math.round(reformWant.count / data.length * 100) : 0);
+  // 维度2：路权优化意愿 25% — 基于Q13b选择"允许通行"+"保障路权"的比例
+  const q13bcounts = countOptions(questions.find(q=>q.id==='q13b').options, 'q13b', data);
+  const roadWant = q13bcounts.find(c => c.label.includes('通行') || c.label.includes('路权'));
+  const dim2 = Math.min(100, roadWant ? Math.round(roadWant.count / data.length * 100) : 0);
 
   // 维度3：安全风险可控 25% — Q15最后两项（可能不会+一定不会）
   const q15counts = countOptions(questions.find(q=>q.id==='q15').labels, 'q15', data);
