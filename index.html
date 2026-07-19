@@ -2720,36 +2720,39 @@ document.addEventListener('DOMContentLoaded', () => {
       const versionEl = document.getElementById('surveyVersion');
       if (versionEl) versionEl.textContent = surveyVersion;
       const info = document.getElementById('landingSurveyInfo');
-      if (info) info.textContent = `只需5分钟，${TOTAL_QUESTIONS}道选择题，你的选择代表广州市民的心声`;
-      // Refresh from server in background (cache next visit)
-      fetch(`${API_BASE}/questions`).then(r => r.ok && r.json()).then(data => {
-        if (data && data.questions) sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
-      }).catch(() => {});
+      if (info) info.textContent = `只需5分钟，你的选择代表广州市民的心声`;
     } catch(e) { sessionStorage.removeItem(CACHE_KEY); }
   }
 
-  // Always fetch from server (use cache as immediate display, server as source of truth)
-  fetch(`${API_BASE}/questions`)
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
-    .then(data => {
-      surveyVersion = data.version || 'unknown';
-      questions = data.questions || [];
-      TOTAL_QUESTIONS = questions.length;
-      questionsLoaded = true;
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
-      // Display version badge
-      const versionEl = document.getElementById('surveyVersion');
-      if (versionEl) versionEl.textContent = surveyVersion;
-      const info = document.getElementById('landingSurveyInfo');
-      if (info) info.textContent = `只需5分钟，你的选择代表广州市民的心声`;
-    })
-    .catch(error => {
-      console.error('Failed to load questions:', error);
-      if (!questionsLoaded) showToast('加载题目失败，请刷新页面重试');
-    });
+  // Fetch from server (skip if cache already loaded successfully)
+  if (questionsLoaded) {
+    // Silent background refresh for next visit
+    fetch(`${API_BASE}/questions`).then(r => r.ok && r.json()).then(data => {
+      if (data && data.questions) sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    }).catch(() => {});
+  } else {
+    fetch(`${API_BASE}/questions`)
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(data => {
+        surveyVersion = data.version || 'unknown';
+        questions = data.questions || [];
+        TOTAL_QUESTIONS = questions.length;
+        questionsLoaded = true;
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        // Display version badge
+        const versionEl = document.getElementById('surveyVersion');
+        if (versionEl) versionEl.textContent = surveyVersion;
+        const info = document.getElementById('landingSurveyInfo');
+        if (info) info.textContent = `只需5分钟，你的选择代表广州市民的心声`;
+      })
+      .catch(error => {
+        console.error('Failed to load questions:', error);
+        showToast('加载题目失败，请刷新页面重试');
+      });
+  }
   showPage('pageLanding');
 });
 </script>
