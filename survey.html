@@ -2722,27 +2722,41 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isTestMode) document.getElementById('testBanner').style.display = 'block';
 
   // Try sessionStorage cache first for faster page load
-  const CACHE_KEY = 'survey_questions_v';
-  const cachedRaw = sessionStorage.getItem(CACHE_KEY);
+  const CACHE_KEY_PREFIX = 'survey_questions_v';
+  const cachedRaw = sessionStorage.getItem(CACHE_KEY_PREFIX);
+  let cacheVersion = null;
   if (cachedRaw) {
     try {
       const cached = JSON.parse(cachedRaw);
-      surveyVersion = cached.version || 'unknown';
-      questions = cached.questions || [];
-      TOTAL_QUESTIONS = questions.length;
-      questionsLoaded = true;
-      const versionEl = document.getElementById('surveyVersion');
-      if (versionEl) versionEl.textContent = surveyVersion;
-      const info = document.getElementById('landingSurveyInfo');
-      if (info) info.textContent = `只需5分钟，你的选择代表广州市民的心声`;
-    } catch(e) { sessionStorage.removeItem(CACHE_KEY); }
+      cacheVersion = cached.version || null;
+      if (cacheVersion) {
+        surveyVersion = cached.version || 'unknown';
+        questions = cached.questions || [];
+        TOTAL_QUESTIONS = questions.length;
+        questionsLoaded = true;
+        const versionEl = document.getElementById('surveyVersion');
+        if (versionEl) versionEl.textContent = surveyVersion;
+        const info = document.getElementById('landingSurveyInfo');
+        if (info) info.textContent = `只需5分钟，你的选择代表广州市民的心声`;
+      }
+    } catch(e) { sessionStorage.removeItem(CACHE_KEY_PREFIX); }
   }
 
-  // Fetch from server (skip if cache already loaded successfully)
+  // Always fetch from server to check version, use cache only if version matches
   if (questionsLoaded) {
-    // Silent background refresh for next visit
+    // Background fetch — update if server version differs
     fetch(`${API_BASE}/questions`).then(r => r.ok && r.json()).then(data => {
-      if (data && data.questions) sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      if (data && data.questions) {
+        if (data.version !== cacheVersion) {
+          // Server has newer version — update everything
+          surveyVersion = data.version || 'unknown';
+          questions = data.questions || [];
+          TOTAL_QUESTIONS = questions.length;
+          sessionStorage.setItem(CACHE_KEY_PREFIX, JSON.stringify(data));
+          const versionEl = document.getElementById('surveyVersion');
+          if (versionEl) versionEl.textContent = surveyVersion;
+        }
+      }
     }).catch(() => {});
   } else {
     fetch(`${API_BASE}/questions`)
@@ -2755,7 +2769,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questions = data.questions || [];
         TOTAL_QUESTIONS = questions.length;
         questionsLoaded = true;
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        sessionStorage.setItem(CACHE_KEY_PREFIX, JSON.stringify(data));
         // Display version badge
         const versionEl = document.getElementById('surveyVersion');
         if (versionEl) versionEl.textContent = surveyVersion;
