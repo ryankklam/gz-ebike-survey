@@ -2690,9 +2690,11 @@ function renderBarChart(counts, total, featured) {
 
   counts.forEach((item, i) => {
     const pct = total > 0 ? ((item.count / total) * 100).toFixed(1) : 0;
-    const barPct = maxCount > 0 ? ((item.count / maxCount) * 100).toFixed(1) : 0;
+    // bar宽度直接对应真实占比（相对总数），让视觉与数字一致
+    const barPct = pct;
     const color = featured && colors[i] ? `background:${colors[i]};` : '';
-    const pctLabel = parseFloat(barPct) >= 15
+    const pctNum = parseFloat(pct);
+    const pctLabel = pctNum >= 15
       ? `<span class="bar-pct">${pct}%</span>`
       : `<span class="bar-pct outside">${pct}%</span>`;
 
