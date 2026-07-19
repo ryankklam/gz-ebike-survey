@@ -238,15 +238,15 @@ body {
 .report-header .report-actions { margin-top: 16px; display: flex; gap: 10px; justify-content: center; }
 .report-section { margin-top: 32px; }
 .report-section-title { font-size: 16px; font-weight: 700; color: var(--primary); padding-bottom: 10px; border-bottom: 2px solid var(--primary); margin-bottom: 20px; }
-.report-subsection { margin-bottom: 24px; }
+.report-subsection { margin-bottom: 24px; margin-top: 8px; }
 .report-subsection h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; }
 .report-summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
 .report-summary-card { background: var(--white); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); }
 .report-summary-card .num { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; }
 .report-summary-card .num.accent { color: var(--accent); }
 .report-summary-card .label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
-.report-dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.report-feq-card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.report-dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.report-feq-card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border-top: 3px solid var(--primary); }
 .report-feq-card h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-100); }
 .report-index-card { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--white); margin-bottom: 24px; }
 .report-index-card .score { font-size: 48px; font-weight: 700; line-height: 1.2; }
@@ -263,6 +263,9 @@ body {
 .report-keyword.hot { background: rgba(230,126,34,0.1); color: var(--accent); font-weight: 500; }
 .report-text-list { max-height: 400px; overflow-y: auto; }
 .report-text-item { padding: 12px 16px; background: var(--gray-50); border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 14px; color: var(--gray-700); line-height: 1.6; border-left: 3px solid var(--primary); }
+.report-insight-card { background: #f0f7ff; border-left: 4px solid var(--primary); border-radius: var(--radius); padding: 16px 20px; margin: 20px 0; }
+.report-insight-card h5 { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+.report-insight-card p { font-size: 13px; color: var(--gray-700); line-height: 1.6; margin-bottom: 4px; }
 
 @media (max-width: 640px) {
   .report-summary-cards { grid-template-columns: 1fr; }
@@ -764,6 +767,8 @@ textarea.question-textarea:focus {
 .stats-card.featured {
   border: 2px solid var(--accent);
   background: linear-gradient(135deg, #fffaf5, #ffffff);
+  margin-bottom: 24px;
+  padding: 24px;
 }
 .stats-card.featured h3 {
   color: var(--accent);
@@ -812,8 +817,26 @@ textarea.question-textarea:focus {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), var(--primary-light));
   border-radius: 6px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 0;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 2px;
+  position: relative;
+}
+.bar-fill .bar-pct {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.bar-fill .bar-pct.outside {
+  right: auto;
+  left: calc(100% + 6px);
+  color: var(--gray-600);
+  text-shadow: none;
 }
 .bar-count {
   width: 60px;
@@ -1678,11 +1701,14 @@ function renderStatsWithData(data) {
   container.innerHTML = html;
 
   // Animate bars
-  setTimeout(() => {
-    document.querySelectorAll('.bar-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.bar-fill').forEach(bar => {
+        const w = bar.dataset.width || bar.getAttribute('data-width');
+        if (w) bar.style.width = w;
+      });
     });
-  }, 100);
+  });
 }
 
 // ====== ADMIN TABS ======
@@ -2227,12 +2253,18 @@ function renderAdminReport(container, data) {
 
   container.innerHTML = html;
 
-  setTimeout(() => {
-    document.querySelectorAll('.report-page .bar-fill').forEach(bar => {
-      const pct = bar.getAttribute('data-pct');
-      if (pct) bar.style.width = pct;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.report-page .bar-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        if (w) bar.style.width = w;
+      });
+      document.querySelectorAll('.report-page .dim-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        if (w) bar.style.width = w;
+      });
     });
-  }, 50);
+  });
 }
 
 function toggleReportTestFilterAdmin() {
@@ -2660,13 +2692,16 @@ function renderBarChart(counts, total, featured) {
     const pct = total > 0 ? ((item.count / total) * 100).toFixed(1) : 0;
     const barPct = maxCount > 0 ? ((item.count / maxCount) * 100).toFixed(1) : 0;
     const color = featured && colors[i] ? `background:${colors[i]};` : '';
+    const pctLabel = parseFloat(barPct) >= 15
+      ? `<span class="bar-pct">${pct}%</span>`
+      : `<span class="bar-pct outside">${pct}%</span>`;
 
     html += `<div class="bar-row">
       <div class="bar-label" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div>
       <div class="bar-track">
-        <div class="bar-fill" data-width="${barPct}%" style="width:0%;${color}"></div>
+        <div class="bar-fill" data-width="${barPct}%" style="width:0%;${color}">${pctLabel}</div>
       </div>
-      <div class="bar-count">${item.count} (${pct}%)</div>
+      <div class="bar-count">${item.count}</div>
     </div>`;
   });
   html += `</div>`;
