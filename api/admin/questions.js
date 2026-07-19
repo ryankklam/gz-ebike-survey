@@ -1,5 +1,6 @@
 const { query, getClient, getSurveyByVersion, getLatestSurvey } = require('../_db');
 const { verifyToken, setCors } = require('../_utils');
+const { invalidateQuestionsCache } = require('../_question-cache');
 
 module.exports = async function handler(req, res) {
   setCors(res);
@@ -157,6 +158,7 @@ async function handlePost(req, res) {
     }
 
     await client.query('COMMIT');
+    invalidateQuestionsCache();
     res.status(201).json({ success: true, id: questionId });
   } catch (err) {
     await client.query('ROLLBACK');
