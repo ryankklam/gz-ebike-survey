@@ -1,5 +1,4 @@
 const { getSurveyByVersion, getLatestSurvey, getQuestionsWithOptions } = require('./_db');
-const { getCachedQuestions, setCachedQuestions } = require('./_question-cache');
 const { setCors } = require('./_utils');
 
 function formatQuestionForFrontend(q) {
@@ -51,25 +50,11 @@ module.exports = async function handler(req, res) {
   try {
     const version = req.query.version || null;
 
-    // Try memory cache first
     let survey;
     if (version) {
-      const cached = getCachedQuestions(version);
-      if (cached) {
-        res.status(200).json(cached);
-        return;
-      }
       survey = await getSurveyByVersion(version);
     } else {
-      // No version specified — try cache for any version (latest)
       survey = await getLatestSurvey();
-      if (survey) {
-        const cached = getCachedQuestions(survey.version);
-        if (cached) {
-          res.status(200).json(cached);
-          return;
-        }
-      }
     }
 
     if (!survey) {
@@ -77,15 +62,15 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    // Cache miss — query database and cache result
     const questions = await getQuestionsWithOptions(survey.id);
     const formattedQuestions = questions.map(formatQuestionForFrontend);
-    const payload = { version: survey.version, questions: formattedQuestions };
-    setCachedQuestions(survey.version, payload);
 
-    res.status(200).json(payload);
+    res.status(200).json({
+      version: survey.version,
+      questions: formattedQuestions
+    });
   } catch (err) {
     console.error('Questions API error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }
-};
+}
