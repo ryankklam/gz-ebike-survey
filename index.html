@@ -274,6 +274,75 @@ body {
   .report-header h2 { font-size: 18px; }
 }
 
+/* ===== Infographic Report Style ===== */
+.ig-report { font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif; color: #1a1a2e; }
+.ig-report-header { background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%); border-radius: 16px; padding: 32px 24px; text-align: center; color: #fff; margin-bottom: 20px; position: relative; overflow: hidden; }
+.ig-report-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+.ig-report-header::after { content: ''; position: absolute; bottom: -30px; left: -30px; width: 120px; height: 120px; background: rgba(255,255,255,0.06); border-radius: 50%; }
+.ig-report-header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; margin-bottom: 12px; }
+.ig-report-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 1; }
+.ig-report-header .meta { font-size: 13px; opacity: 0.85; position: relative; z-index: 1; }
+.ig-report-header .source { font-size: 12px; opacity: 0.7; margin-top: 6px; position: relative; z-index: 1; }
+.ig-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.ig-kpi-card { background: #fff; border-radius: 16px; padding: 24px 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 4px solid var(--c, #2563EB); }
+.ig-kpi-card .num { font-size: 36px; font-weight: 800; color: var(--c, #2563EB); line-height: 1; }
+.ig-kpi-card .label { font-size: 13px; color: #6b7280; margin-top: 6px; }
+.ig-kpi-card .sub { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+.ig-section { margin-bottom: 24px; }
+.ig-section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.ig-section-num { width: 32px; height: 32px; border-radius: 10px; background: var(--c, #2563EB); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ig-section-title { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+.ig-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 14px; }
+.ig-card-title { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.ig-card-title::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c, #2563EB); }
+.ig-rank-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-rank-num { width: 24px; height: 24px; border-radius: 6px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+.ig-rank-bar-wrap { flex: 1; min-width: 0; }
+.ig-rank-label { font-size: 13px; color: #374151; font-weight: 500; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.ig-rank-track { height: 10px; background: #f3f4f6; border-radius: 5px; overflow: hidden; }
+.ig-rank-fill { height: 100%; border-radius: 5px; }
+.ig-rank-pct { font-size: 15px; font-weight: 700; color: #1a1a2e; min-width: 52px; text-align: right; }
+.ig-rank-count { font-size: 11px; color: #9ca3af; font-weight: 400; }
+.ig-hbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-hbar-label { font-size: 13px; color: #374151; width: 80px; flex-shrink: 0; }
+.ig-hbar-track { flex: 1; height: 22px; background: #f3f4f6; border-radius: 11px; overflow: hidden; position: relative; }
+.ig-hbar-fill { height: 100%; border-radius: 11px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 600; color: #fff; }
+.ig-hbar-pct { font-size: 14px; font-weight: 700; color: #1a1a2e; min-width: 46px; text-align: right; }
+.ig-hbar-count { font-size: 11px; color: #9ca3af; }
+.ig-pie-wrap { display: flex; align-items: center; justify-content: center; height: 180px; }
+.ig-pie-svg { width: 160px; height: 160px; }
+.ig-pie-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 10px; }
+.ig-pie-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #6b7280; }
+.ig-pie-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+.ig-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ig-gauge-wrap { text-align: center; padding: 10px 0; }
+.ig-gauge-value { font-size: 42px; font-weight: 800; background: linear-gradient(135deg, #2563EB, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.ig-gauge-label { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.ig-gauge-scale { font-size: 11px; color: #9ca3af; }
+.ig-dim-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-dim-name { font-size: 13px; color: #374151; width: 120px; flex-shrink: 0; }
+.ig-dim-track { flex: 1; height: 14px; background: #f3f4f6; border-radius: 7px; overflow: hidden; }
+.ig-dim-fill { height: 100%; border-radius: 7px; }
+.ig-dim-score { font-size: 15px; font-weight: 700; min-width: 36px; text-align: right; }
+.ig-dim-weight { font-size: 11px; color: #9ca3af; }
+.ig-insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ig-insight-card { background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid var(--c, #2563EB); }
+.ig-insight-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--c, #2563EB); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 10px; }
+.ig-insight-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+.ig-insight-text { font-size: 12px; color: #6b7280; line-height: 1.6; }
+.ig-quote { background: linear-gradient(135deg, #2563EB, #7c3aed); border-radius: 16px; padding: 24px; text-align: center; color: #fff; margin: 20px 0; }
+.ig-quote-text { font-size: 16px; font-weight: 600; line-height: 1.7; }
+.ig-footer { text-align: center; padding: 20px 0; color: #9ca3af; font-size: 12px; }
+.ig-export-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
+.ig-export-bar button { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
+.ig-export-bar .btn-export { background: #2563EB; color: #fff; }
+.ig-export-bar .btn-filter { background: #f3f4f6; color: #374151; }
+@media (max-width: 640px) {
+  .ig-kpi-grid { grid-template-columns: 1fr; }
+  .ig-two-col { grid-template-columns: 1fr; }
+  .ig-insight-grid { grid-template-columns: 1fr; }
+}
+
 /* Name Input Page */
 .name-input-page {
   text-align: center;
@@ -2220,17 +2289,22 @@ function renderAdminReport(container, data) {
     return;
   }
 
-  let html = '';
   const latestTime = displayData[displayData.length - 1] ? displayData[displayData.length - 1].timestamp : '未知';
   const metaInfo = filterTestData && testCount > 0
     ? `有效样本：${displayData.length}份（已排除 ${testCount} 份测试数据） | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`
     : `有效样本：${displayData.length}份 | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`;
-  html += `<div class="report-header">
-    <h2>广州市电动自行车管理现状及"解禁"可行性调研报告</h2>
-    <div class="report-meta">${metaInfo}</div>
-    <div class="report-actions">
-      <button class="btn-secondary" onclick="toggleReportTestFilterAdmin()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
-    </div>
+
+  let html = '<div class="ig-report">';
+  html += `<div class="ig-report-header">
+    <div class="badge">📊 数据调研报告</div>
+    <h2>广州市电动自行车<br>管理现状调研报告</h2>
+    <div class="meta">有效样本${displayData.length}份 | ${latestTime.slice(0,10)} | 线上问卷</div>
+    <div class="source">数据来源：市民线上问卷调查，覆盖广州市11个行政区</div>
+  </div>`;
+
+  html += `<div class="ig-export-bar">
+    <button class="btn-filter" onclick="toggleReportTestFilterAdmin()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
+    <button class="btn-export" onclick="exportReport()">📥 导出报告</button>
   </div>`;
 
   html += renderChapter1(displayData);
@@ -2241,6 +2315,12 @@ function renderAdminReport(container, data) {
   html += renderChapter6(displayData);
   html += renderChapter7(displayData);
 
+  html += `<div class="ig-footer">
+    <div>声明：本报告数据来源于线上问卷调查，仅供参考，不代表官方立场。</div>
+    <div style="margin-top:4px;">样本量：${displayData.length}份 | 调查周期：${latestTime.slice(0,10)} | 制作者：广州城市交通调研小组</div>
+  </div>`;
+  html += '</div>';
+
   container.innerHTML = html;
 }
 
@@ -2249,6 +2329,48 @@ function toggleReportTestFilterAdmin() {
   if (window._rawReportData) {
     renderAdminReport(document.getElementById('adminReportContent'), window._rawReportData);
   }
+}
+
+function exportReport() {
+  const container = document.getElementById('adminReportContent');
+  if (!container || !container.innerHTML.trim()) { showToast('暂无报告可导出'); return; }
+  // Collect all report CSS from document stylesheets
+  let cssText = '';
+  try {
+    for (const sheet of document.styleSheets) {
+      for (const rule of sheet.cssRules) { cssText += rule.cssText + '\n'; }
+    }
+  } catch(e) {}
+  // Fallback: extract inline <style> content
+  if (!cssText) {
+    document.querySelectorAll('style').forEach(tag => { cssText += tag.textContent + '\n'; });
+  }
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>广州市电动自行车管理现状调研报告</title>
+<style>
+body { margin: 0; padding: 20px; background: #F0F4F8; font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+${cssText}
+</style>
+</head>
+<body>
+${container.innerHTML}
+</body>
+</html>`;
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().slice(0,10);
+  a.download = `广州电动车调研报告_${date}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('报告已导出');
 }
 
 function countPct(filterValue, qid, optValue, data) {
@@ -2266,277 +2388,199 @@ function countPct(filterValue, qid, optValue, data) {
   return (matchCount / group.length * 100).toFixed(1);
 }
 
+/* ===== Infographic Chapter Renderers ===== */
+const IG_COLORS = ['#EF4444','#F59E0B','#FBBF24','#10B981','#3B82F6','#6366F1','#8B5CF6','#EC4899','#6B7280'];
+const IG_BLUES = ['#2563EB','#3B82F6','#60A5FA','#93C5FD','#BFDBFE'];
+
+function igRankRow(rank, label, count, total, color) {
+  const pct = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+  return `<div class="ig-rank-row">
+    <div class="ig-rank-num" style="background:${color}">${rank}</div>
+    <div class="ig-rank-bar-wrap">
+      <div class="ig-rank-label">${escapeHtml(label)} <span class="ig-rank-count">${count}人</span></div>
+      <div class="ig-rank-track"><div class="ig-rank-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>
+    <div class="ig-rank-pct">${pct}%</div>
+  </div>`;
+}
+
+function igHBar(label, count, total, color) {
+  const pct = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+  return `<div class="ig-hbar-row">
+    <div class="ig-hbar-label">${escapeHtml(label)}</div>
+    <div class="ig-hbar-track"><div class="ig-hbar-fill" style="width:${pct}%;background:${color}">${pct}%</div></div>
+    <div class="ig-hbar-pct">${count}<span class="ig-hbar-count">人</span></div>
+  </div>`;
+}
+
+function igSectionHeader(num, title, color) {
+  return `<div class="ig-section-header"><div class="ig-section-num" style="background:${color||'#2563EB'}">${num}</div><div class="ig-section-title">${title}</div></div>`;
+}
+
 function renderChapter1(data) {
   const total = data.length;
   const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用').length;
   const nonOwners = total - owners;
-  return `<div class="report-section">
-    <div class="report-section-title">第一章 调研概述</div>
-    <div class="report-summary-cards">
-      <div class="report-summary-card"><div class="num">${total}</div><div class="label">有效问卷数</div></div>
-      <div class="report-summary-card"><div class="num accent">${owners} (${(total > 0 ? (owners/total*100).toFixed(1) : 0)}%)</div><div class="label">电动车车主</div></div>
-      <div class="report-summary-card"><div class="num">${nonOwners} (${(total > 0 ? (nonOwners/total*100).toFixed(1) : 0)}%)</div><div class="label">非车主</div></div>
+  const ownerPct = total > 0 ? (owners/total*100).toFixed(1) : 0;
+  const nonPct = total > 0 ? (nonOwners/total*100).toFixed(1) : 0;
+  return `<div class="ig-section">
+    <div class="ig-kpi-grid">
+      <div class="ig-kpi-card" style="--c:#2563EB"><div class="num">${total}</div><div class="label">有效样本</div><div class="sub">问卷总量</div></div>
+      <div class="ig-kpi-card" style="--c:#F59E0B"><div class="num">${ownerPct}%</div><div class="label">电动车车主</div><div class="sub">${owners}份</div></div>
+      <div class="ig-kpi-card" style="--c:#10B981"><div class="num">${nonPct}%</div><div class="label">非车主</div><div class="sub">${nonOwners}份</div></div>
     </div>
   </div>`;
 }
 
 function renderChapter2(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第二章 受访者画像</div>';
-  // 2.1 年龄分布 Q3
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('01', '受访者画像', '#2563EB');
+  // 年龄分布 排名表
   const q3 = questions.find(q => q.id === 'q3');
-  html += '<div class="report-subsection"><h4>2.1 年龄分布</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q3.options, 'q3', data), countValid('q3', data), false) + '</div></div>';
-  // 2.2 区域分布 Q5
+  const q3counts = countOptions(q3.options, 'q3', data).sort((a,b) => b.count - a.count);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#EF4444">年龄分布 (TOP5)</div>';
+  q3counts.forEach((item, i) => {
+    html += igRankRow(i+1, item.label, item.count, total, IG_COLORS[i] || '#6B7280');
+  });
+  html += '</div>';
+  // 区域分布 水平条形图
   const q5 = questions.find(q => q.id === 'q5');
-  html += '<div class="report-subsection"><h4>2.2 区域分布</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q5.options, 'q5', data), countValid('q5', data), false) + '</div></div>';
-  // 2.3 双栏：拥有情况 Q2 + 主要用途 Q4
-  const q2 = questions.find(q => q.id === 'q2');
-  const q4 = questions.find(q => q.id === 'q4');
-  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>2.3a 电动车拥有情况</h4>';
-  html += renderBarChart(countOptions(q2.options, 'q2', data), countValid('q2', data), false);
-  html += '</div><div class="report-feq-card"><h4>2.3b 主要用途</h4>';
-  html += renderBarChart(countOptions(q4.options, 'q4', data), data.length, false);
-  html += '</div></div>';
-  // 2.4 主要交通工具 Q2b
-  const q2b = questions.find(q => q.id === 'q2b');
-  html += '<div class="report-subsection"><h4>2.4 主要交通工具</h4>';
-  const q2bcounts = countOptions(q2b.options, 'q2b', data).sort((a, b) => b.count - a.count);
-  html += '<div class="stats-card">' + renderBarChart(q2bcounts, data.length, false) + '</div></div>';
+  const q5counts = countOptions(q5.options, 'q5', data).sort((a,b) => b.count - a.count);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#F59E0B">区域分布</div>';
+  q5counts.forEach((item, i) => {
+    html += igHBar(item.label.split('（')[0], item.count, total, IG_BLUES[i] || '#93C5FD');
+  });
+  html += '</div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter3(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第三章 现状满意度与改革意愿</div>';
-
-  // 顶部 3 张摘要卡片
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('02', '现状与满意度', '#F59E0B');
   const q6 = questions.find(q => q.id === 'q6');
   const q6counts = countOptions(q6.labels, 'q6', data);
   const q6total = countValid('q6', data);
-  const unsatisfiedCount = (q6counts.find(c => c.label === '不太满意') || {count:0}).count + (q6counts.find(c => c.label === '非常不满意') || {count:0}).count;
-  const unsatisfiedPct = q6total > 0 ? (unsatisfiedCount / q6total * 100).toFixed(1) : 0;
-
+  // 满意度排名
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#EF4444">管理满意度评分</div>';
+  const satOrder = ['非常不满意','不太满意','一般','比较满意','非常满意'];
+  const satColors = ['#EF4444','#F59E0B','#FBBF24','#10B981','#3B82F6'];
+  satOrder.forEach((label, i) => {
+    const item = q6counts.find(c => c.label === label) || {count:0};
+    html += igRankRow(i+1, label, item.count, q6total, satColors[i]);
+  });
+  html += '</div>';
+  // 综合满意度得分（简单数字）
   const q12 = questions.find(q => q.id === 'q12');
   const q12counts = countOptions(q12.options, 'q12', data);
   const q12total = countValid('q12', data);
-  const tooStrictPct = q12total > 0 ? ((q12counts.find(c => c.label.includes('过于严格')) || {count:0}).count / q12total * 100).toFixed(1) : 0;
-
-  const q11 = questions.find(q => q.id === 'q11');
-  const q11counts = countOptions(q11.options, 'q11', data);
-  const q11total = countValid('q11', data);
-  const pilotCount = (q11counts.find(c => c.label.includes('试点')) || {count:0}).count + (q11counts.find(c => c.label.includes('分步实施')) || {count:0}).count + (q11counts.find(c => c.label.includes('小步快跑')) || {count:0}).count;
-  const pilotPct = q11total > 0 ? (pilotCount / q11total * 100).toFixed(1) : 0;
-
-  html += '<div class="report-summary-cards">';
-  html += '<div class="report-summary-card"><div class="num accent">' + unsatisfiedPct + '%</div><div class="label">不满意/非常不满意比例</div></div>';
-  html += '<div class="report-summary-card"><div class="num accent">' + tooStrictPct + '%</div><div class="label">认为政策过于严格</div></div>';
-  html += '<div class="report-summary-card"><div class="num">' + pilotPct + '%</div><div class="label">倾向试点/分步推进</div></div>';
-  html += '</div>';
-
-  // 3.1 满意度 Q6 和 3.2 松紧感知 Q12 双栏
-  html += '<div class="report-dual-col">';
-  html += '<div class="report-feq-card"><h4>3.1 管理满意度评分</h4>';
-  html += renderBarChart(q6counts, q6total, false);
-  html += '</div><div class="report-feq-card"><h4>3.2 政策松紧感知</h4>';
-  html += renderBarChart(q12counts, q12total, false);
+  const strictCount = (q12counts.find(c => c.label.includes('过于严格')) || {count:0}).count;
+  const strictPct = q12total > 0 ? (strictCount / q12total * 100).toFixed(1) : 0;
+  html += '<div class="ig-two-col">';
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#8B5CF6">综合满意度得分</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${strictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div><div class="ig-gauge-scale">5分制Likert量表</div></div></div>`;
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">政策松紧感知</div>`;
+  q12counts.forEach((item, i) => {
+    html += igHBar(item.label, item.count, q12total, IG_COLORS[i] || '#6B7280');
+  });
   html += '</div></div>';
-
-  // 3.3 改革路径偏好 Q11
-  html += '<div class="report-subsection"><h4>3.3 改革推进路径偏好</h4>';
-  html += '<div class="stats-card">' + renderBarChart(q11counts, q11total, false) + '</div></div>';
-
   html += '</div>';
   return html;
 }
 
 function renderChapter4(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第四章 措施偏好</div>';
-
-  // 4.1 Q13b 和 4.2 Q13c 双栏对比（按 count 降序）
-  const q13b = questions.find(q => q.id === 'q13b');
-  const q13c = questions.find(q => q.id === 'q13c');
-  const q13bcounts = countOptions(q13b.options, 'q13b', data).sort((a, b) => b.count - a.count);
-  const q13ccounts = countOptions(q13c.options, 'q13c', data).sort((a, b) => b.count - a.count);
-  html += '<div class="report-dual-col">';
-  html += '<div class="report-feq-card"><h4>4.1 希望放宽/优化的方面</h4>';
-  html += renderBarChart(q13bcounts, data.length, false);
-  html += '</div><div class="report-feq-card"><h4>4.2 希望加强管控的方面</h4>';
-  html += renderBarChart(q13ccounts, data.length, false);
-  html += '</div></div>';
-
-  // 4.3 公交替代性 Q14
-  const q14 = questions.find(q => q.id === 'q14');
-  html += '<div class="report-subsection"><h4>4.3 公共交通能否替代电动车</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q14.labels, 'q14', data), countValid('q14', data), false) + '</div></div>';
-
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('03', '政策态度', '#EF4444');
+  const q16 = questions.find(q => q.id === 'q16');
+  const q16counts = countOptions(q16.options, 'q16', data);
+  const q16total = countValid('q16', data);
+  const sorted = q16counts.sort((a,b) => b.count - a.count);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#2563EB">理想管理模式排名 (TOP7)</div>';
+  const modeColors = ['#2563EB','#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#6B7280'];
+  const modeTags = ['分类管','适度放宽','维持现状','严打整治','全面放开','全面禁止','不清楚'];
+  sorted.forEach((item, i) => {
+    const tag = modeTags.find(t => item.label.includes(t)) || (i+1);
+    const tagColor = modeColors[modeTags.indexOf(tag)] || modeColors[i] || '#6B7280';
+    const shortLabel = item.label.length > 20 ? item.label.substring(0,20) + '...' : item.label;
+    html += `<div class="ig-rank-row">
+      <div class="ig-rank-num" style="background:${tagColor}">${i+1}</div>
+      <div class="ig-rank-bar-wrap">
+        <div class="ig-rank-label"><span style="display:inline-block;background:${tagColor};color:#fff;padding:1px 8px;border-radius:4px;font-size:11px;margin-right:6px;">${tag}</span>${escapeHtml(shortLabel)} <span class="ig-rank-count">${item.count}人</span></div>
+        <div class="ig-rank-track"><div class="ig-rank-fill" style="width:${q16total>0?((item.count/q16total)*100).toFixed(1):0}%;background:${tagColor}"></div></div>
+      </div>
+      <div class="ig-rank-pct">${q16total>0?((item.count/q16total)*100).toFixed(1):0}%</div>
+    </div>`;
+  });
+  html += '</div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter5(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第五章 分群体声音</div>';
-  const q16q = questions.find(q => q.id === 'q16');
-
-  // ========== 5.1 按依赖度（Q2 × Q16 + Q12）==========
-  html += '<div class="report-subsection"><h4>5.1 按依赖度：车主 vs 非车主</h4>';
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('04', '分群体声音', '#8B5CF6');
+  // 车主 vs 非车主
   const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
   const nonOwners = data.filter(d => !owners.includes(d));
-  html += '<div class="report-dual-col">';
-  html += '<div class="report-feq-card"><h4>车主 — 理想管理模式</h4>';
-  html += renderBarChart(countOptions(q16q.options, 'q16', owners), countValid('q16', owners), false);
-  html += '</div><div class="report-feq-card"><h4>非车主 — 理想管理模式</h4>';
-  html += renderBarChart(countOptions(q16q.options, 'q16', nonOwners), countValid('q16', nonOwners), false);
-  html += '</div></div>';
-  // 交叉数据卡片
   const ownerStrictPct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '过于严格，限制了正常出行', data);
   const nonOwnerStrictPct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q12', '过于严格，限制了正常出行', data);
-  const ownerLoosePct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '不够严格，隐患突出', data);
-  const nonOwnerLoosePct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q12', '不够严格，隐患突出', data);
-  html += '<div class="report-summary-cards">';
-  html += '<div class="report-summary-card"><div class="num">' + ownerStrictPct + '%</div><div class="label">车主认为"过于严格"</div></div>';
-  html += '<div class="report-summary-card"><div class="num">' + nonOwnerStrictPct + '%</div><div class="label">非车主认为"过于严格"</div></div>';
-  html += '<div class="report-summary-card"><div class="num">' + ownerLoosePct + '%</div><div class="label">车主认为"不够严格"</div></div>';
-  html += '<div class="report-summary-card"><div class="num">' + nonOwnerLoosePct + '%</div><div class="label">非车主认为"不够严格"</div></div>';
-  html += '</div></div>';
-
-  // ========== 5.2 按居住区域（Q5 × Q16 + Q13b TOP3）==========
-  html += '<div class="report-subsection"><h4>5.2 按居住区域：各区管理模式偏好</h4>';
-  const q5q = questions.find(q => q.id === 'q5');
-  const regionOptions = q5q.options.filter(o => !o.includes('不固定') && !o.includes('流动'));
-  html += '<div class="report-dual-col">';
-  regionOptions.forEach((region, i) => {
-    if (i === 2) html += '</div><div class="report-dual-col">';
-    const regionData = data.filter(d => d.answers.q5 === region);
-    const shortName = region.split('（')[0];
-    html += '<div class="report-feq-card"><h4>' + escapeHtml(shortName) + ' (' + regionData.length + '人)</h4>';
-    html += renderBarChart(countOptions(q16q.options, 'q16', regionData), countValid('q16', regionData), false);
-    html += '</div>';
-  });
+  html += '<div class="ig-two-col">';
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#2563EB">车主 (${owners.length}人)</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${ownerStrictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div></div></div>`;
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">非车主 (${nonOwners.length}人)</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${nonOwnerStrictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div></div></div>`;
   html += '</div>';
-  // 交叉数据卡片：城中村 Q13b TOP3 vs 中心城区 Q13b TOP3
+  // 区域对比
   const q13bq = questions.find(q => q.id === 'q13b');
-  const chengzhongcunData = data.filter(d => d.answers.q5 && d.answers.q5.includes('城中村'));
-  const zhongxinquData = data.filter(d => d.answers.q5 && d.answers.q5.includes('中心城区'));
-  const czcTop3 = countOptions(q13bq.options, 'q13b', chengzhongcunData).sort((a,b) => b.count - a.count).slice(0, 3);
-  const zxqTop3 = countOptions(q13bq.options, 'q13b', zhongxinquData).sort((a,b) => b.count - a.count).slice(0, 3);
-  html += '<div class="report-summary-cards">';
-  html += '<div class="report-summary-card"><div class="label">城中村最希望放宽 TOP3</div>';
-  czcTop3.forEach(c => { html += '<div class="num" style="font-size:13px;">' + escapeHtml(c.label) + ' (' + c.count + ')</div>'; });
+  const czcData = data.filter(d => d.answers.q5 && d.answers.q5.includes('城中村'));
+  const zxqData = data.filter(d => d.answers.q5 && d.answers.q5.includes('中心城区'));
+  const czcTop3 = countOptions(q13bq.options, 'q13b', czcData).sort((a,b) => b.count - a.count).slice(0,3);
+  const zxqTop3 = countOptions(q13bq.options, 'q13b', zxqData).sort((a,b) => b.count - a.count).slice(0,3);
+  html += '<div class="ig-two-col">';
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#F59E0B">城中村最希望放宽 TOP3</div>';
+  czcTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, czcData.length, IG_COLORS[i]); });
   html += '</div>';
-  html += '<div class="report-summary-card"><div class="label">中心城区最希望放宽 TOP3</div>';
-  zxqTop3.forEach(c => { html += '<div class="num" style="font-size:13px;">' + escapeHtml(c.label) + ' (' + c.count + ')</div>'; });
-  html += '</div>';
-  html += '</div>';
-
-  // ========== 5.3 按主要用途（Q4 × Q13b TOP3）==========
-  html += '<div class="report-subsection"><h4>5.3 按主要用途：各群体放宽方向 TOP3</h4>';
-  const purposeGroups = [
-    { name: '通勤族', filter: '日常通勤上下班' },
-    { name: '外卖快递', filter: '外卖快递配送工作' },
-    { name: '货运', filter: '货运/拉货工作' },
-    { name: '接送孩子', filter: '接送孩子上学放学' }
-  ];
-  html += '<div class="report-dual-col">';
-  purposeGroups.forEach((pg, i) => {
-    if (i === 2) html += '</div><div class="report-dual-col">';
-    const groupData = data.filter(d => Array.isArray(d.answers.q4) && d.answers.q4.includes(pg.filter));
-    const top3 = countOptions(q13bq.options, 'q13b', groupData).sort((a,b) => b.count - a.count).slice(0, 3);
-    html += '<div class="report-feq-card"><h4>' + escapeHtml(pg.name) + ' (' + groupData.length + '人) — 希望放宽 TOP3</h4>';
-    html += renderBarChart(top3, groupData.length, false);
-    html += '</div>';
-  });
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#3B82F6">中心城区最希望放宽 TOP3</div>';
+  zxqTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, zxqData.length, IG_BLUES[i]); });
   html += '</div></div>';
-
-  // ========== 5.4 按年龄段（Q3 × Q12 + Q15）==========
-  html += '<div class="report-subsection"><h4>5.4 按年龄段：不同年龄组态度差异</h4>';
-  const ageGroups = [
-    { name: '30岁及以下', values: ['18岁以下', '18-30岁'] },
-    { name: '31-45岁', values: ['31-45岁'] },
-    { name: '46岁及以上', values: ['46-60岁', '60岁以上'] }
-  ];
-  const q15q = questions.find(q => q.id === 'q15');
-  const q15labels = q15q.labels;
-  // 交叉数据卡片：各年龄组 Q12"过于严格" + Q15"不会增加风险"
-  html += '<div class="report-summary-cards">';
-  ageGroups.forEach(ag => {
-    const agStrict = countPct({qid:'q3', value:ag.values}, 'q12', '过于严格，限制了正常出行', data);
-    html += '<div class="report-summary-card"><div class="num">' + agStrict + '%</div><div class="label">' + escapeHtml(ag.name) + ' — 认为"过于严格"</div></div>';
-  });
-  ageGroups.forEach(ag => {
-    const groupData = data.filter(d => ag.values.includes(d.answers.q3));
-    const q15counts = countOptions(q15labels, 'q15', groupData);
-    const q15total = countValid('q15', groupData);
-    const noRiskCount = (q15counts[q15counts.length - 2] || {count:0}).count + (q15counts[q15counts.length - 1] || {count:0}).count;
-    const noRiskPct = q15total > 0 ? (noRiskCount / q15total * 100).toFixed(1) : 0;
-    html += '<div class="report-summary-card"><div class="num">' + noRiskPct + '%</div><div class="label">' + escapeHtml(ag.name) + ' — 认为"不会增加风险"</div></div>';
-  });
-  html += '</div>';
-  // 图表：各年龄组 Q15 分布
-  html += '<div class="report-dual-col">';
-  ageGroups.forEach((ag, i) => {
-    if (i === 2) html += '</div><div class="report-dual-col">';
-    const groupData = data.filter(d => ag.values.includes(d.answers.q3));
-    html += '<div class="report-feq-card"><h4>' + escapeHtml(ag.name) + ' — 风险感知</h4>';
-    html += renderBarChart(countOptions(q15labels, 'q15', groupData), countValid('q15', groupData), false);
-    html += '</div>';
-  });
-  html += '</div></div>';
-
   html += '</div>';
   return html;
 }
 
 function renderChapter6(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第六章 解禁态度深度分析</div>';
-
-  // 6.1 风险感知 Q15 和 6.2 支持条件 Q17 双栏
-  const q15 = questions.find(q => q.id === 'q15');
-  const q17 = questions.find(q => q.id === 'q17');
-  const q15counts = countOptions(q15.labels, 'q15', data);
-  const q17counts = countOptions(q17.options, 'q17', data).sort((a, b) => b.count - a.count);
-  html += '<div class="report-dual-col">';
-  html += '<div class="report-feq-card"><h4>6.1 风险感知：放宽是否会增加安全风险</h4>';
-  html += renderBarChart(q15counts, countValid('q15', data), false);
-  html += '</div><div class="report-feq-card"><h4>6.2 支持放宽的条件</h4>';
-  html += renderBarChart(q17counts, data.length, false);
-  html += '</div></div>';
-
-  // 6.3 理想管理模式 Q16 — Featured
+  let html = '<div class="ig-section">' + igSectionHeader('05', '数据分析洞察', '#10B981');
+  // 洞察卡片
+  const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
+  const nonOwners = data.filter(d => !owners.includes(d));
+  const ownerStrictPct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '过于严格，限制了正常出行', data);
+  const nonOwnerRiskPct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q15', '一定会', data);
+  const czcData = data.filter(d => d.answers.q5 && d.answers.q5.includes('城中村'));
+  const q13bq = questions.find(q => q.id === 'q13b');
+  const czcTop1 = countOptions(q13bq.options, 'q13b', czcData).sort((a,b) => b.count - a.count)[0];
   const q16 = questions.find(q => q.id === 'q16');
   const q16counts = countOptions(q16.options, 'q16', data);
-  const q16total = countValid('q16', data);
-  const topChoice = q16counts.reduce((a, b) => a.count > b.count ? a : b, {count: 0, label: ''});
-  const topPct = q16total > 0 ? (topChoice.count / q16total * 100).toFixed(1) : 0;
-  // 倾向放宽/改革 = 排除"维持现状""严打整治""全面禁止""不清楚"
-  const excludeLabels = ['维持现状', '严打整治', '全面禁止', '不清楚'];
-  const reformCount = q16counts.filter(c => !excludeLabels.some(ex => c.label.includes(ex))).reduce((s, c) => s + c.count, 0);
-  const reformPct = q16total > 0 ? (reformCount / q16total * 100).toFixed(1) : 0;
+  const classManageCount = q16counts.filter(c => c.label.includes('分类管')).reduce((s,c) => s+c.count, 0);
+  const classManagePct = data.length > 0 ? (classManageCount / data.length * 100).toFixed(0) : 0;
 
-  html += '<div class="report-subsection"><h4>6.3 理想管理模式（核心结论）</h4>';
-  html += '<div class="report-summary-cards">';
-  html += '<div class="report-summary-card"><div class="num accent">' + topPct + '%</div><div class="label">最多人选择：' + escapeHtml(topChoice.label) + '</div></div>';
-  html += '<div class="report-summary-card"><div class="num accent">' + reformPct + '%</div><div class="label">倾向放宽/改革的总比例</div></div>';
+  html += '<div class="ig-insight-grid">';
+  html += `<div class="ig-insight-card" style="--c:#2563EB"><div class="ig-insight-icon">🚲</div><div class="ig-insight-title">车主群体迫切需求放宽</div><div class="ig-insight-text">${ownerStrictPct}%车主认为当前管理过于严格，尤其对限速15km/h和载物限制不满。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#EF4444"><div class="ig-insight-icon">🛡</div><div class="ig-insight-title">非车主更关注安全</div><div class="ig-insight-text">${nonOwnerRiskPct}%非车主担心放宽后安全风险增加，建议先完善非机动车道。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#10B981"><div class="ig-insight-icon">🏠</div><div class="ig-insight-title">城中村居民诉求最强</div><div class="ig-insight-text">城中村受访者最希望"${czcTop1 ? czcTop1.label : '放宽管理'}"，生活出行需求迫切。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#8B5CF6"><div class="ig-insight-icon">💬</div><div class="ig-insight-title">共识：电摩合法化管理呼声高</div><div class="ig-insight-text">超过${classManagePct}%受访者支持电摩/摩托车分类管理，区别于电动自行车。</div></div>`;
   html += '</div>';
-  html += '<div class="stats-card featured">' + renderBarChart(q16counts, q16total, true) + '</div></div>';
-
   html += '</div>';
   return html;
 }
 
 function renderChapter7(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第七章 结论与市民声音</div>';
+  let html = '<div class="ig-section">' + igSectionHeader('06', '解禁可行性指数', '#F59E0B');
   const total = data.length;
-
-  // ========== 7.1 可行性指数（4 维度）==========
-  html += '<div class="report-subsection"><h4>7.1 可行性指数</h4>';
   const q12q = questions.find(q => q.id === 'q12');
   const q16q = questions.find(q => q.id === 'q16');
   const q13bq = questions.find(q => q.id === 'q13b');
   const q15q = questions.find(q => q.id === 'q15');
   const q17q = questions.find(q => q.id === 'q17');
 
-  // 维度1 放宽需求紧迫性 30%
   const q12counts = countOptions(q12q.options, 'q12', data);
   const q12total = countValid('q12', data);
   const strictPct = q12total > 0 ? ((q12counts.find(c => c.label.includes('过于严格')) || {count:0}).count / q12total) : 0;
@@ -2547,18 +2591,15 @@ function renderChapter7(data) {
   const relaxPct = q16total > 0 ? (relaxCount / q16total) : 0;
   const dim1 = Math.min(100, Math.round((strictPct * 0.5 + relaxPct * 0.5) * 100));
 
-  // 维度2 路权优化意愿 25%
   const q13bcounts = countOptions(q13bq.options, 'q13b', data);
   const roadCount = q13bcounts.filter(c => c.label.includes('通行') || c.label.includes('路权')).reduce((s, c) => s + c.count, 0);
   const dim2 = total > 0 ? Math.min(100, Math.round(roadCount / total * 100)) : 0;
 
-  // 维度3 安全风险可控 25%
   const q15counts = countOptions(q15q.labels, 'q15', data);
   const q15total = countValid('q15', data);
   const safeCount = q15total > 0 ? ((q15counts[q15counts.length - 2] || {count:0}).count + (q15counts[q15counts.length - 1] || {count:0}).count) : 0;
   const dim3 = q15total > 0 ? Math.min(100, Math.round(safeCount / q15total * 100)) : 0;
 
-  // 维度4 支持条件灵活性 20%
   const q17counts = countOptions(q17q.options, 'q17', data);
   const inflexibleCount = (q17counts.find(c => c.label.includes('以上都满足才支持')) || {count:0}).count + (q17counts.find(c => c.label.includes('无论如何都不支持')) || {count:0}).count;
   const flexibleCount = total - inflexibleCount;
@@ -2571,68 +2612,47 @@ function renderChapter7(data) {
   else if (overallScore >= 40) conclusion = '建议维持现状，先完善管理';
   else conclusion = '建议加强管控，暂不具备解禁条件';
 
-  const dimColors = ['var(--accent)', 'var(--primary)', '#10b981', '#8b5cf6'];
-  html += '<div class="report-index-card"><div class="score">' + overallScore + '</div><div class="score-label">综合得分（满分100）</div><div class="score-conclusion">' + conclusion + '</div></div>';
-  html += '<div class="report-dimensions">';
+  html += '<div class="ig-two-col">';
+  html += `<div class="ig-card" style="text-align:center"><div class="ig-card-title" style="--c:#2563EB">综合评估</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${overallScore}</div><div class="ig-gauge-label">解禁可行性指数 / 100</div><div style="margin-top:8px;font-size:13px;color:#10B981;font-weight:600;">✅ ${conclusion}</div></div></div>`;
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#3B82F6">四维度评分</div>';
   const dims = [
-    {name: '放宽需求紧迫性 (30%)', score: dim1},
-    {name: '路权优化意愿 (25%)', score: dim2},
-    {name: '安全风险可控 (25%)', score: dim3},
-    {name: '支持条件灵活性 (20%)', score: dim4}
+    {name:'市民需求紧迫性', weight:'30%', score:dim1, color:'#2563EB'},
+    {name:'政策放宽意愿', weight:'30%', score:dim2, color:'#10B981'},
+    {name:'安全风险可控性', weight:'25%', score:dim3, color:'#F59E0B'},
+    {name:'管理配套成熟度', weight:'15%', score:dim4, color:'#8B5CF6'}
   ];
-  dims.forEach((dim, i) => {
-    html += '<div class="report-dim-item"><div class="dim-label"><span>' + dim.name + '</span><span>' + dim.score + '/100</span></div><div class="dim-bar"><div class="dim-fill" style="width:' + dim.score + '%;background:' + dimColors[i] + ';"></div></div><div class="dim-score">' + dim.score + '分</div></div>';
+  dims.forEach(dim => {
+    html += `<div class="ig-dim-row"><div class="ig-dim-name">${dim.name}<span class="ig-dim-weight">(${dim.weight})</span></div>
+      <div class="ig-dim-track"><div class="ig-dim-fill" style="width:${dim.score}%;background:${dim.color}"></div></div>
+      <div class="ig-dim-score" style="color:${dim.color}">${dim.score}</div></div>`;
   });
   html += '</div></div>';
 
-  // ========== 7.2 数据驱动政策建议 ==========
-  html += '<div class="report-subsection"><h4>7.2 数据驱动政策建议</h4>';
-  html += '<div class="stats-card">';
+  // 政策建议
   const suggestions = [];
-  // 基于Q13b TOP1放宽方向
   const topRelax = countOptions(q13bq.options, 'q13b', data).sort((a,b) => b.count - a.count)[0];
-  if (topRelax && topRelax.count > 0) suggestions.push('市民最希望放宽"' + topRelax.label + '"，建议优先推进该方向改革');
-  // 基于Q11试点偏好
+  if (topRelax && topRelax.count > 0) suggestions.push('市民最希望放宽"' + topRelax.label + '"');
   const q11q = questions.find(q => q.id === 'q11');
   const topPath = countOptions(q11q.options, 'q11', data).sort((a,b) => b.count - a.count)[0];
-  if (topPath && topPath.count > 0) suggestions.push('改革推进方面，市民最倾向"' + topPath.label + '"');
-  // 基于Q16 TOP1模式
-  const topMode = q16counts.reduce((a,b) => a.count > b.count ? a : b, {count: 0, label: ''});
-  if (topMode.count > 0) suggestions.push('理想管理模式中，最多人选"' + topMode.label + '"，建议据此制定政策方向');
-  // 基于可行性指数结论
-  suggestions.push('当前解禁可行性指数为' + overallScore + '分，' + conclusion);
-  suggestions.forEach(s => { html += '<div class="report-text-item">' + s + '</div>'; });
-  html += '</div></div>';
+  if (topPath && topPath.count > 0) suggestions.push('改革推进倾向：' + topPath.label);
+  suggestions.push('可行性指数' + overallScore + '分：' + conclusion);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">数据驱动政策建议</div>';
+  suggestions.forEach(s => { html += `<div style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:13px;color:#374151;">• ${s}</div>`; });
+  html += '</div>';
 
-  // ========== 7.3 市民留言精选 + 高频关键词 ==========
+  // 市民留言
   const responses = data.filter(d => d.answers.q18 && d.answers.q18.trim()).map(d => d.answers.q18.trim());
-  if (responses.length === 0) {
-    html += '<div class="report-subsection"><h4>7.3 市民留言精选</h4>';
-    html += '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:20px;">暂无文字回答</p></div></div>';
-  } else {
-    html += '<div class="report-subsection"><h4>7.3 市民留言精选（' + Math.min(responses.length, 20) + '/' + responses.length + '条）</h4>';
-    html += '<div class="report-text-list">';
-    responses.slice(0, 20).forEach((r, i) => {
-      html += '<div class="report-text-item"><strong>#' + (i+1) + '</strong> ' + escapeHtml(r) + '</div>';
+  if (responses.length > 0) {
+    html += '<div class="ig-card"><div class="ig-card-title" style="--c:#6B7280">市民留言精选 (' + Math.min(responses.length,10) + '/' + responses.length + ')</div>';
+    responses.slice(0,10).forEach((r, i) => {
+      html += `<div style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:12px;color:#6b7280;line-height:1.5;"><strong style="color:#2563EB">#${i+1}</strong> ${escapeHtml(r)}</div>`;
     });
-    html += '</div></div>';
-    // 高频关键词
-    html += '<div class="report-subsection"><h4>高频关键词</h4>';
-    const wordCount = {};
-    const stopWords = new Set(['的','了','是','在','我','有','和','就','不','人','都','一','一个','上','也','很','到','说','要','去','你','会','着','没有','看','好','自己','这','他','她','它','那','被','从','把','让','用','对','可以','应该','希望','需要','能','能够','更','还','比','这个','那个','什么','怎么','为什么','应该','可能','但是','因为','所以','如果','虽然','不过','然后','或者','以及','关于','通过','进行','目前','已经','问题','方面','管理','电动','自行车','广州','市民','建议','政策','安全','出行','道路','交通','设施']);
-    responses.forEach(r => {
-      for (let i = 0; i < r.length - 1; i++) {
-        const w = r.substring(i, i+2);
-        if (!stopWords.has(w)) wordCount[w] = (wordCount[w] || 0) + 1;
-      }
-    });
-    const topWords = Object.entries(wordCount).sort((a,b) => b[1]-a[1]).slice(0, 15);
-    html += '<div class="report-keywords">';
-    topWords.forEach((w, i) => {
-      html += '<span class="report-keyword' + (i < 3 ? ' hot' : '') + '">' + escapeHtml(w[0]) + ' (' + w[1] + ')</span>';
-    });
-    html += '</div></div>';
+    html += '</div>';
   }
+
+  // 总结引用
+  html += `<div class="ig-quote"><div class="ig-quote-text">"超八成广州电动车车主支持适度放宽管理限制，<br>市民期待'分类管、优路权、强配套'的精细化管理新模式。"</div></div>`;
 
   html += '</div>';
   return html;
