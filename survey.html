@@ -2576,16 +2576,24 @@ function renderChapter4(data) {
 function renderChapter5(data) {
   const total = data.length;
   let html = '<div class="ig-section">' + igSectionHeader('04', '分群体声音', '#8B5CF6');
-  // 车主 vs 非车主
+  // 车主 vs 非车主：展示各组在 q12 中选得最多的选项及比例
   const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
   const nonOwners = data.filter(d => !owners.includes(d));
-  const ownerStrictPct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '过于严格，限制了正常出行', data);
-  const nonOwnerStrictPct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q12', '过于严格，限制了正常出行', data);
+  const q12q = questions.find(q => q.id === 'q12');
+  function topOpinion(group) {
+    if (group.length === 0) return null;
+    const counts = countOptions(q12q.options, 'q12', group).sort((a,b) => b.count - a.count);
+    const top = counts[0];
+    if (!top || top.count === 0) return null;
+    return { label: top.label, pct: (top.count / group.length * 100).toFixed(1) };
+  }
+  const ownerTop = topOpinion(owners);
+  const nonOwnerTop = topOpinion(nonOwners);
   html += '<div class="ig-two-col">';
   html += `<div class="ig-card"><div class="ig-card-title" style="--c:#2563EB">车主 (${owners.length}人)</div>
-    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${ownerStrictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div></div></div>`;
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${ownerTop ? ownerTop.pct + '%' : '—'}</div><div class="ig-gauge-label">${ownerTop ? '认为' + escapeHtml(ownerTop.label) : '暂无数据'}</div></div></div>`;
   html += `<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">非车主 (${nonOwners.length}人)</div>
-    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${nonOwnerStrictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div></div></div>`;
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${nonOwnerTop ? nonOwnerTop.pct + '%' : '—'}</div><div class="ig-gauge-label">${nonOwnerTop ? '认为' + escapeHtml(nonOwnerTop.label) : '暂无数据'}</div></div></div>`;
   html += '</div>';
   // 区域对比
   const q13bq = questions.find(q => q.id === 'q13b');
@@ -2595,10 +2603,18 @@ function renderChapter5(data) {
   const zxqTop3 = countOptions(q13bq.options, 'q13b', zxqData).sort((a,b) => b.count - a.count).slice(0,3);
   html += '<div class="ig-two-col">';
   html += '<div class="ig-card"><div class="ig-card-title" style="--c:#F59E0B">城中村最希望放宽 TOP3</div>';
-  czcTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, czcData.length, IG_COLORS[i]); });
+  if (czcData.length === 0) {
+    html += '<div style="padding:16px 0;text-align:center;color:var(--text-secondary);font-size:13px;">暂无数据</div>';
+  } else {
+    czcTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, czcData.length, IG_COLORS[i]); });
+  }
   html += '</div>';
   html += '<div class="ig-card"><div class="ig-card-title" style="--c:#3B82F6">中心城区最希望放宽 TOP3</div>';
-  zxqTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, zxqData.length, IG_BLUES[i]); });
+  if (zxqData.length === 0) {
+    html += '<div style="padding:16px 0;text-align:center;color:var(--text-secondary);font-size:13px;">暂无数据</div>';
+  } else {
+    zxqTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, zxqData.length, IG_BLUES[i]); });
+  }
   html += '</div></div>';
   html += '</div>';
   return html;
