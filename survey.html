@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>广州市电动自行车管理现状调研</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1814,6 +1815,12 @@ function renderToolsPanel() {
     <h2>系统工具</h2>
   </div>
   <div class="stats-card" style="margin-bottom:16px;">
+    <h4>🏗️ 初始化数据库</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">执行 db/init.sql 创建全部数据库表结构（7张表+索引）。使用 CREATE TABLE IF NOT EXISTS，已有表不会被重建，安全可重复执行。</p>
+    <button class="btn-primary" id="btnInitDb" onclick="runInitDb()">初始化数据库</button>
+    <div id="initDbResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
     <h4>📥 导入题目到数据库</h4>
     <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从 questions.json 文件导入题目结构到数据库。如果该版本已存在则跳过。</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -1848,6 +1855,32 @@ function renderToolsPanel() {
     <button class="btn-primary" id="btnExport" onclick="runExport()">导出并下载</button>
     <div id="exportResult" style="margin-top:8px;"></div>
   </div>`;
+}
+
+async function runInitDb() {
+  if (!confirm('即将执行 db/init.sql 创建数据库表结构。\n\n使用 CREATE TABLE IF NOT EXISTS，已有表不受影响，安全可重复执行。\n\n确定继续？')) return;
+  const btn = document.getElementById('btnInitDb');
+  const result = document.getElementById('initDbResult');
+  btn.disabled = true;
+  btn.textContent = '正在初始化...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/init`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      const tables = (data.tables || []).join('、');
+      result.innerHTML = `<span style="color:#22c55e;">✅ 初始化成功！执行 ${data.statementsExecuted} 条语句，现有表：${tables}</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">初始化失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '初始化数据库';
 }
 
 async function runSeed() {
