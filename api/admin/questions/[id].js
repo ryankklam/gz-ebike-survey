@@ -1,6 +1,5 @@
 const { query, getClient } = require('../../_db');
 const { verifyToken, setCors } = require('../../_utils');
-const { invalidateQuestionsCache } = require('../../_question-cache');
 
 module.exports = async function handler(req, res) {
   setCors(res);
@@ -147,7 +146,6 @@ async function handlePut(req, res, questionId) {
     }
 
     await client.query('COMMIT');
-    invalidateQuestionsCache();
     res.status(200).json({ success: true });
   } catch (err) {
     await client.query('ROLLBACK');
@@ -187,7 +185,6 @@ async function handleDelete(req, res, questionId) {
     );
 
     await client.query('COMMIT');
-    invalidateQuestionsCache();
     res.status(200).json({ success: true });
   } catch (err) {
     await client.query('ROLLBACK');

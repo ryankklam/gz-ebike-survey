@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const { getClient, getSurveyByVersion } = require('../_db');
 const { verifyToken, setCors } = require('../_utils');
-const { invalidateQuestionsCache } = require('../_question-cache');
 
 async function deleteSurveyByVersion(client, version) {
   const survey = await getSurveyByVersion(version);
@@ -148,7 +147,6 @@ module.exports = async function handler(req, res) {
         return;
       }
       res.status(200).json({ success: true, message: `Survey version ${version} deleted`, surveyId: deletedId });
-      invalidateQuestionsCache(version);
     } catch (err) {
       console.error('Seed DELETE error:', err.message);
       res.status(500).json({ success: false, message: err.message || 'Server error' });
@@ -189,8 +187,6 @@ module.exports = async function handler(req, res) {
       }
 
       const result = await doSeed(client);
-      // Invalidate memory cache so next /api/questions reads fresh data
-      invalidateQuestionsCache(version);
       res.status(200).json({
         success: true,
         message: force ? `Survey version ${version} re-imported (old data deleted)` : 'Seed completed successfully',
