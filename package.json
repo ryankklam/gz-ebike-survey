@@ -6,6 +6,14 @@
     "node": ">=18.x"
   },
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "vercel dev",
+    "db:init": "psql $POSTGRES_URL -f db/init.sql",
+    "db:seed": "node db/seed.js",
+    "db:migrate": "node db/migrate-data.js",
+    "test": "node test-precommit.js",
+    "precommit": "node test-precommit.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
   }
 }

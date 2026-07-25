@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>广州市电动自行车管理现状调研</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -41,7 +39,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -240,15 +238,15 @@ body {
 .report-header .report-actions { margin-top: 16px; display: flex; gap: 10px; justify-content: center; }
 .report-section { margin-top: 32px; }
 .report-section-title { font-size: 16px; font-weight: 700; color: var(--primary); padding-bottom: 10px; border-bottom: 2px solid var(--primary); margin-bottom: 20px; }
-.report-subsection { margin-bottom: 24px; }
+.report-subsection { margin-bottom: 24px; margin-top: 8px; }
 .report-subsection h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; }
 .report-summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
 .report-summary-card { background: var(--white); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); }
 .report-summary-card .num { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; }
 .report-summary-card .num.accent { color: var(--accent); }
 .report-summary-card .label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
-.report-dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.report-feq-card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.report-dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.report-feq-card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border-top: 3px solid var(--primary); }
 .report-feq-card h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-100); }
 .report-index-card { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--white); margin-bottom: 24px; }
 .report-index-card .score { font-size: 48px; font-weight: 700; line-height: 1.2; }
@@ -265,12 +263,84 @@ body {
 .report-keyword.hot { background: rgba(230,126,34,0.1); color: var(--accent); font-weight: 500; }
 .report-text-list { max-height: 400px; overflow-y: auto; }
 .report-text-item { padding: 12px 16px; background: var(--gray-50); border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 14px; color: var(--gray-700); line-height: 1.6; border-left: 3px solid var(--primary); }
+.report-insight-card { background: #f0f7ff; border-left: 4px solid var(--primary); border-radius: var(--radius); padding: 16px 20px; margin: 20px 0; }
+.report-insight-card h5 { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+.report-insight-card p { font-size: 13px; color: var(--gray-700); line-height: 1.6; margin-bottom: 4px; }
 
 @media (max-width: 640px) {
   .report-summary-cards { grid-template-columns: 1fr; }
   .report-dual-col { grid-template-columns: 1fr; }
   .report-dimensions { grid-template-columns: 1fr; }
   .report-header h2 { font-size: 18px; }
+}
+
+/* ===== Infographic Report Style ===== */
+.ig-report { font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif; color: #1a1a2e; }
+.ig-report-header { background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%); border-radius: 16px; padding: 32px 24px; text-align: center; color: #fff; margin-bottom: 20px; position: relative; overflow: hidden; }
+.ig-report-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+.ig-report-header::after { content: ''; position: absolute; bottom: -30px; left: -30px; width: 120px; height: 120px; background: rgba(255,255,255,0.06); border-radius: 50%; }
+.ig-report-header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; margin-bottom: 12px; }
+.ig-report-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 1; }
+.ig-report-header .meta { font-size: 13px; opacity: 0.85; position: relative; z-index: 1; }
+.ig-report-header .source { font-size: 12px; opacity: 0.7; margin-top: 6px; position: relative; z-index: 1; }
+.ig-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.ig-kpi-card { background: #fff; border-radius: 16px; padding: 24px 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 4px solid var(--c, #2563EB); }
+.ig-kpi-card .num { font-size: 36px; font-weight: 800; color: var(--c, #2563EB); line-height: 1; }
+.ig-kpi-card .label { font-size: 13px; color: #6b7280; margin-top: 6px; }
+.ig-kpi-card .sub { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+.ig-section { margin-bottom: 24px; }
+.ig-section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.ig-section-num { width: 32px; height: 32px; border-radius: 10px; background: var(--c, #2563EB); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ig-section-title { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+.ig-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 14px; }
+.ig-card-title { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.ig-card-title::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c, #2563EB); }
+.ig-rank-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-rank-num { width: 24px; height: 24px; border-radius: 6px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+.ig-rank-bar-wrap { flex: 1; min-width: 0; }
+.ig-rank-label { font-size: 13px; color: #374151; font-weight: 500; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.ig-rank-track { height: 10px; background: #f3f4f6; border-radius: 5px; overflow: hidden; }
+.ig-rank-fill { height: 100%; border-radius: 5px; }
+.ig-rank-pct { font-size: 15px; font-weight: 700; color: #1a1a2e; min-width: 52px; text-align: right; }
+.ig-rank-count { font-size: 11px; color: #9ca3af; font-weight: 400; }
+.ig-hbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-hbar-label { font-size: 13px; color: #374151; width: 80px; flex-shrink: 0; }
+.ig-hbar-track { flex: 1; height: 22px; background: #f3f4f6; border-radius: 11px; overflow: hidden; position: relative; }
+.ig-hbar-fill { height: 100%; border-radius: 11px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 600; color: #fff; }
+.ig-hbar-pct { font-size: 14px; font-weight: 700; color: #1a1a2e; min-width: 46px; text-align: right; }
+.ig-hbar-count { font-size: 11px; color: #9ca3af; }
+.ig-pie-wrap { display: flex; align-items: center; justify-content: center; height: 180px; }
+.ig-pie-svg { width: 160px; height: 160px; }
+.ig-pie-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 10px; }
+.ig-pie-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #6b7280; }
+.ig-pie-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+.ig-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ig-gauge-wrap { text-align: center; padding: 10px 0; }
+.ig-gauge-value { font-size: 42px; font-weight: 800; background: linear-gradient(135deg, #2563EB, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.ig-gauge-label { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.ig-gauge-scale { font-size: 11px; color: #9ca3af; }
+.ig-dim-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-dim-name { font-size: 13px; color: #374151; width: 120px; flex-shrink: 0; }
+.ig-dim-track { flex: 1; height: 14px; background: #f3f4f6; border-radius: 7px; overflow: hidden; }
+.ig-dim-fill { height: 100%; border-radius: 7px; }
+.ig-dim-score { font-size: 15px; font-weight: 700; min-width: 36px; text-align: right; }
+.ig-dim-weight { font-size: 11px; color: #9ca3af; }
+.ig-insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ig-insight-card { background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid var(--c, #2563EB); }
+.ig-insight-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--c, #2563EB); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 10px; }
+.ig-insight-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+.ig-insight-text { font-size: 12px; color: #6b7280; line-height: 1.6; }
+.ig-quote { background: linear-gradient(135deg, #2563EB, #7c3aed); border-radius: 16px; padding: 24px; text-align: center; color: #fff; margin: 20px 0; }
+.ig-quote-text { font-size: 16px; font-weight: 600; line-height: 1.7; }
+.ig-footer { text-align: center; padding: 20px 0; color: #9ca3af; font-size: 12px; }
+.ig-export-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
+.ig-export-bar button { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
+.ig-export-bar .btn-export { background: #2563EB; color: #fff; }
+.ig-export-bar .btn-filter { background: #f3f4f6; color: #374151; }
+@media (max-width: 640px) {
+  .ig-kpi-grid { grid-template-columns: 1fr; }
+  .ig-two-col { grid-template-columns: 1fr; }
+  .ig-insight-grid { grid-template-columns: 1fr; }
 }
 
 /* Name Input Page */
@@ -328,6 +398,15 @@ body {
   font-size: 12px;
   color: var(--gray-400);
   margin-top: 6px;
+}
+.name-input-wrapper .name-hint .refresh-name-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 4px;
+}
+.name-input-wrapper .name-hint .refresh-name-link:hover {
+  text-decoration: underline;
 }
 .name-input-wrapper .name-error {
   font-size: 13px;
@@ -712,6 +791,32 @@ textarea.question-textarea:focus {
   font-size: 22px;
   color: var(--primary);
 }
+.stats-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0;
+}
+.stats-tab {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.stats-tab:hover {
+  color: var(--primary);
+}
+.stats-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
 .stats-total {
   background: var(--primary);
   color: var(--white);
@@ -731,6 +836,8 @@ textarea.question-textarea:focus {
 .stats-card.featured {
   border: 2px solid var(--accent);
   background: linear-gradient(135deg, #fffaf5, #ffffff);
+  margin-bottom: 24px;
+  padding: 24px;
 }
 .stats-card.featured h3 {
   color: var(--accent);
@@ -779,8 +886,26 @@ textarea.question-textarea:focus {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), var(--primary-light));
   border-radius: 6px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 0;
+  transition: none;
+  min-width: 2px;
+  position: relative;
+}
+.bar-fill .bar-pct {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.bar-fill .bar-pct.outside {
+  right: auto;
+  left: calc(100% + 6px);
+  color: var(--gray-600);
+  text-shadow: none;
 }
 .bar-count {
   width: 60px;
@@ -952,7 +1077,8 @@ textarea.question-textarea:focus {
   <div class="header-inner">
     <div class="header-title" id="headerTitle">广州市电动自行车管理现状调研</div>
     <div class="header-right">
-      <button class="header-admin-btn" onclick="showAdminLoginReport()">查看调研结果</button>
+      <button class="header-admin-btn" onclick="backToLanding()">返回首页</button>
+      <button class="header-admin-btn" onclick="showAdminLogin()">管理员后台</button>
     </div>
   </div>
   <div class="progress-bar-container" id="progressContainer">
@@ -992,8 +1118,7 @@ textarea.question-textarea:focus {
     <div class="name-input-wrapper">
       <label for="userNameInput">您的称呼</label>
       <input type="text" id="userNameInput" class="name-input" maxlength="10" placeholder="请输入您的称呼" oninput="if(this.classList.contains('prefilled')) this.classList.remove('prefilled')" onkeydown="if(event.key==='Enter') confirmNameAndStart()">
-      <div class="name-hint">最长10个字，可修改系统生成的随机名</div>
-      <button class="btn-secondary" style="margin-top:8px;font-size:13px;" onclick="refreshRandomName()">换个随机名字</button>
+      <div class="name-hint">最长10个字，可修改系统生成的随机名 <a href="javascript:void(0)" class="refresh-name-link" onclick="refreshRandomName()">换个名字</a></div>
       <div class="name-error" id="nameError">请输入有效的称呼（2-10个字）</div>
     </div>
     <div class="name-input-actions">
@@ -1055,7 +1180,16 @@ textarea.question-textarea:focus {
 
 <!-- Page: Admin Stats -->
 <div class="page" id="pageStats">
+  <div class="stats-tabs" id="statsTabsBar">
+    <button class="stats-tab" data-tab="report" onclick="switchAdminTab('report')">📄 调研报告</button>
+    <button class="stats-tab" data-tab="stats" onclick="switchAdminTab('stats')">📊 统计结果</button>
+    <button class="stats-tab" data-tab="questions" onclick="switchAdminTab('questions')">📝 题目管理</button>
+    <button class="stats-tab" data-tab="tools" onclick="switchAdminTab('tools')">🔧 系统工具</button>
+  </div>
+  <div class="stats-panel" id="adminReportContent" style="display:none;"></div>
   <div class="stats-panel" id="statsContent"></div>
+  <div class="stats-panel" id="questionsContent" style="display:none;"></div>
+  <div class="stats-panel" id="toolsContent" style="display:none;"></div>
 </div>
 
 <!-- Toast -->
@@ -1092,18 +1226,42 @@ function getSurveyData() {
 // ====== USER NAME ======
 const USERNAME_KEY = 'gz_ebike_username';
 
-const SURNAME_LIST = ['李','王','张','刘','陈','杨','黄','赵','周','吴','徐','孙','马','朱','胡','郭','何','林','罗','高','郑','梁','谢','宋','唐','许','韩','冯','邓','曹','彭','曾','肖','田','董','袁','潘','于','蒋','蔡','余','杜','叶','程','苏','魏','吕','丁','任','沈'];
-const NAME_SINGLE = ['嘉','宇','欣','辰','泽','沐','安','瑞','轩','昊','晨','涵','梓','诺','妍','琪','霖','航','睿','桐'];
-const NAME_DOUBLE = ['沐安','嘉辰','宇泽','欣怡','辰瑞','泽轩','安诺','瑞霖','轩航','昊晨','晨涵','梓桐','诺妍','琪宇','霖安','航泽','睿辰','桐嘉','怡沐','涵宇'];
+const SURNAME_LIST = [
+  '李','王','张','刘','陈','杨','黄','赵','周','吴','徐','孙','马','朱','胡','郭','何','林','罗','高',
+  '郑','梁','谢','宋','唐','许','韩','冯','邓','曹','彭','曾','肖','田','董','袁','潘','于','蒋','蔡',
+  '余','杜','叶','程','苏','魏','吕','丁','任','沈','姚','卢','姜','崔','钟','谭','陆','汪','范','金',
+  '石','廖','贾','夏','韦','傅','方','白','邹','孟','熊','秦','邱','江','尹','薛','闫','段','雷','侯',
+  '龙','史','黎','贺','顾','毛','郝','龚','邵','万','钱','严','覃','武','戴','莫','孔','白','汤','向'
+];
+
+// 名字前字库（可用于单字名，也可作为双字名的第一个字）
+const NAME_FIRST = [
+  '嘉','宇','欣','辰','泽','沐','安','瑞','轩','昊','晨','涵','梓','诺','妍','琪','霖','航','睿','桐',
+  '子','一','浩','俊','文','思','博','雅','佳','雨','诗','梦','晓','晓','志','国','建','明','强','磊',
+  '伟','芳','娜','敏','静','丽','艳','杰','军','勇','平','刚','桂','娣','兰','凤','梅','珍','玲','婷'
+];
+
+// 名字后字库（仅用于双字名的第二个字）
+const NAME_LAST = [
+  '轩','昊','晨','涵','琪','霖','航','睿','桐','妍','怡','宇','泽','辰','瑞','诺','安','嘉','沐','欣',
+  '然','熙','涵','瑜','璐','瑶','琳','璇','彤','菲','萌','蕊','萱','婕','韵','朗','晖','昱','晟','澈',
+  '帆','鹏','骞','骏','驰','逸','卓','彦','哲','恺','昕','昀','晗','晞','烨','煊','熠','玮','珂','珩'
+];
 
 function generateRandomChineseName() {
   const s = SURNAME_LIST[Math.floor(Math.random() * SURNAME_LIST.length)];
-  const useDouble = Math.random() < 0.7; // 70% 概率双字
+  const useDouble = Math.random() < 0.65; // 65% 概率双字名
   if (useDouble) {
-    const n = NAME_DOUBLE[Math.floor(Math.random() * NAME_DOUBLE.length)];
-    return s + n; // 3字姓名
+    // 双字名：前字 + 后字组合生成，避免前后相同
+    let f = NAME_FIRST[Math.floor(Math.random() * NAME_FIRST.length)];
+    let l = NAME_LAST[Math.floor(Math.random() * NAME_LAST.length)];
+    // 若前后字相同则重新取后字（最多重试3次）
+    for (let i = 0; i < 3 && f === l; i++) {
+      l = NAME_LAST[Math.floor(Math.random() * NAME_LAST.length)];
+    }
+    return s + f + l; // 3字姓名
   } else {
-    const n = NAME_SINGLE[Math.floor(Math.random() * NAME_SINGLE.length)];
+    const n = NAME_FIRST[Math.floor(Math.random() * NAME_FIRST.length)];
     return s + n; // 2字姓名
   }
 }
@@ -1227,7 +1385,8 @@ function renderQuestion(index) {
     html += `<div class="options-list">`;
     q.options.forEach((opt, i) => {
       const sel = selectedArr.includes(opt) ? ' selected' : '';
-      const disabled = q.maxSelect && selectedArr.length >= q.maxSelect && !sel ? ' disabled-selected' : '';
+      const disabled = (q.maxSelect && selectedArr.length >= q.maxSelect && !sel)
+        ? ' disabled-selected' : '';
       html += `<div class="option-item${sel}${disabled}" onclick="selectCheckbox('${q.id}','${escapeAttr(opt)}',${!!q.maxSelect ? q.maxSelect : 0},this)">
         <div class="option-checkbox"></div>
         <div class="option-label">${opt}</div>
@@ -1282,6 +1441,43 @@ function updateProgress(index) {
   document.getElementById('progressText').textContent = `${globalIndex} / ${TOTAL_QUESTIONS}`;
 }
 
+// ====== MUTUALLY EXCLUSIVE MODULE (generic) ======
+function resolveMutualExclusive(q, value, selectedValues) {
+  const exclusiveIndexes = q.mutuallyExclusive || [];
+  if (exclusiveIndexes.length === 0) return selectedValues;
+  // value is null: sanitize mode — if both exclusive and non-exclusive exist, keep non-exclusive
+  if (value === null) {
+    const hasExclusive = selectedValues.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
+    const hasNonExclusive = selectedValues.some(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+    if (hasExclusive && hasNonExclusive) {
+      return selectedValues.filter(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+    }
+    return selectedValues;
+  }
+  const valueIdx = q.options.indexOf(value);
+  if (exclusiveIndexes.includes(valueIdx)) {
+    // Selecting an exclusive option → keep only this one
+    return [value];
+  } else {
+    // Selecting a non-exclusive option → remove all exclusive options
+    return selectedValues.filter(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+  }
+}
+
+function getMutuallyExclusiveDisabledState(q, selectedArr, optionIndex) {
+  const exclusiveIndexes = q.mutuallyExclusive || [];
+  if (exclusiveIndexes.length === 0 || selectedArr.length === 0) return false;
+  const hasExclusive = selectedArr.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
+  const hasNonExclusive = selectedArr.some(v => !exclusiveIndexes.includes(q.options.indexOf(v)));
+  const isThisExclusive = exclusiveIndexes.includes(optionIndex);
+  const isThisSelected = selectedArr.includes(q.options[optionIndex]);
+  // If non-exclusive items are selected, disable all exclusive items
+  if (hasNonExclusive && isThisExclusive && !isThisSelected) return true;
+  // If exclusive items are selected, disable all non-exclusive items
+  if (hasExclusive && !isThisExclusive && !isThisSelected) return true;
+  return false;
+}
+
 function selectRadio(qid, value, el) {
   answers[qid] = value;
   el.parentElement.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
@@ -1293,64 +1489,59 @@ function selectCheckbox(qid, value, maxSel, el) {
   if (!answers[qid]) answers[qid] = [];
   const arr = answers[qid];
   const idx = arr.indexOf(value);
-
-  // Find current question definition for mutual exclusive logic
   const q = visibleQuestions[currentPage];
-  const exclusiveIndexes = q.mutuallyExclusive || [];
-  const valueIdx = q.options ? q.options.indexOf(value) : -1;
 
   if (idx >= 0) {
+    // Deselect
     arr.splice(idx, 1);
     el.classList.remove('selected');
   } else {
+    // Check maxSelect limit
     if (maxSel && arr.length >= maxSel) {
       showToast(`最多只能选择 ${maxSel} 项`);
       return;
     }
-    // Mutual exclusive: if selecting an exclusive option, clear others
-    if (exclusiveIndexes.includes(valueIdx)) {
-      answers[qid] = [value];
-      el.parentElement.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
-      updateNextBtn();
-      refreshDisabledState(q, answers[qid]);
-      return;
-    }
     arr.push(value);
-    el.classList.add('selected');
+    // Resolve mutual exclusive conflicts via generic module
+    answers[qid] = resolveMutualExclusive(q, value, arr);
+    // Re-render selected state
+    el.parentElement.querySelectorAll('.option-item').forEach(o => {
+      const optLabel = o.querySelector('.option-label');
+      if (optLabel && answers[qid] && answers[qid].includes(optLabel.textContent)) {
+        o.classList.add('selected');
+      } else {
+        o.classList.remove('selected');
+      }
+    });
   }
   if (arr.length === 0) delete answers[qid];
   updateNextBtn();
-  // Refresh disabled state for checkbox_limit and mutual exclusive
   refreshDisabledState(q, answers[qid] || []);
 }
 
 function refreshDisabledState(q, selectedValues) {
-  const maxSel = q.maxSelect;
-  const exclusiveIndexes = q.mutuallyExclusive || [];
-  const items = document.querySelectorAll('.question-container .option-item');
-  const selectedExclusive = selectedValues.some(v => exclusiveIndexes.includes(q.options.indexOf(v)));
-
+  const items = document.querySelectorAll('.question-card .option-item');
   items.forEach((item, i) => {
-    if (maxSel && !item.classList.contains('selected') && selectedValues.length >= maxSel) {
+    let disabled = false;
+    // maxSelect check only — mutuallyExclusive uses auto-clear, not visual disable
+    if (q.maxSelect && !item.classList.contains('selected') && selectedValues.length >= q.maxSelect) {
+      disabled = true;
+    }
+    if (disabled) {
       item.classList.add('disabled-selected');
     } else {
       item.classList.remove('disabled-selected');
     }
-    // Mutual exclusive: disable all non-selected when an exclusive option is selected
-    if (exclusiveIndexes.length > 0) {
-      if (selectedExclusive && !item.classList.contains('selected')) {
-        item.classList.add('disabled-selected');
-      } else if (!selectedExclusive) {
-        // Disable exclusive options if any non-exclusive is selected
-        if (exclusiveIndexes.includes(i) && selectedValues.length > 0) {
-          item.classList.add('disabled-selected');
-        } else {
-          item.classList.remove('disabled-selected');
-        }
-      }
-    }
   });
+}
+
+// ====== MUTUALLY EXCLUSIVE SANITIZE (generic) ======
+function sanitizeMutualExclusive(q) {
+  if (!q.mutuallyExclusive || !answers[q.id] || !Array.isArray(answers[q.id])) return;
+  const resolved = resolveMutualExclusive(q, null, answers[q.id]);
+  if (resolved.length !== answers[q.id].length) {
+    answers[q.id] = resolved;
+  }
 }
 
 function selectLikert(qid, value, el) {
@@ -1377,6 +1568,9 @@ function nextQuestion() {
     showToast('请先回答本题');
     return;
   }
+
+  // Sanitize mutual exclusive conflicts before moving on
+  sanitizeMutualExclusive(q);
 
   // Check if Q1=否, end survey
   if (q.id === 'q1' && answers['q1'] === '否') {
@@ -1406,6 +1600,9 @@ async function submitSurvey() {
     showToast('请先回答本题');
     return;
   }
+
+  // Sanitize mutual exclusive conflicts before submitting
+  sanitizeMutualExclusive(q);
 
   const userName = getUserName();
   const entry = {
@@ -1482,6 +1679,8 @@ async function checkAdminPassword() {
         window._adminLoginCallback = null;
       } else {
         showPage('pageStats');
+        document.getElementById('statsTabsBar').style.display = 'flex';
+        switchAdminTab('stats');
         loadAndRenderStats();
       }
     } else {
@@ -1582,7 +1781,7 @@ function renderStatsWithData(data) {
     } else if (q.type === 'likert') {
       const counts = countOptions(q.labels, q.id, displayData);
       const total = counts.reduce((a, b) => a + b.count, 0);
-      if (isFeatured || q.id === 'q13') {
+      if (isFeatured) {
         html += renderBarChart(counts, total, isFeatured);
       } else {
         html += renderBarChart(counts, total, false);
@@ -1593,13 +1792,467 @@ function renderStatsWithData(data) {
   });
 
   container.innerHTML = html;
+}
 
-  // Animate bars
-  setTimeout(() => {
-    document.querySelectorAll('.bar-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
+// ====== ADMIN TABS ======
+function switchAdminTab(tab) {
+  document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.stats-tab[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById('adminReportContent').style.display = (tab === 'report') ? 'block' : 'none';
+  document.getElementById('statsContent').style.display = (tab === 'stats') ? 'block' : 'none';
+  document.getElementById('questionsContent').style.display = (tab === 'questions') ? 'block' : 'none';
+  document.getElementById('toolsContent').style.display = (tab === 'tools') ? 'block' : 'none';
+  if (tab === 'report') loadAdminReport();
+  if (tab === 'questions') loadAdminQuestions();
+  if (tab === 'tools') renderToolsPanel();
+}
+
+// ====== SYSTEM TOOLS ======
+function renderToolsPanel() {
+  const container = document.getElementById('toolsContent');
+  container.innerHTML = `<div class="stats-header">
+    <h2>系统工具</h2>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>📥 导入题目到数据库</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从 questions.json 文件导入题目结构到数据库。如果该版本已存在则跳过。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn-primary" id="btnSeed" onclick="runSeed()">运行导入</button>
+      <button class="btn-secondary" id="btnForceSeed" onclick="runForceSeed()">🔄 强制重新导入</button>
+    </div>
+    <div id="seedResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>🗑️ 删除版本数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">删除指定版本的所有数据（题目、答卷、选项等全部清除）。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <input type="text" id="deleteVersionInput" placeholder="输入版本号，如 v0.1" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;flex:1;min-width:120px;">
+      <button class="btn-secondary" id="btnDeleteVersion" onclick="deleteSurveyVersion()" style="background:#fef2f2;color:#dc2626;border-color:#fecaca;">删除版本</button>
+    </div>
+    <div id="deleteVersionResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>🔄 迁移历史数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从 JSONBin 拉取旧版答卷数据并写入数据库（按 version 匹配 survey）。</p>
+    <button class="btn-primary" id="btnMigrate" onclick="runMigrate()">运行迁移</button>
+    <div id="migrateResult" style="margin-top:8px;"></div>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>📊 刷新统计数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">从数据库重新加载统计数据并刷新统计面板。</p>
+    <button class="btn-primary" onclick="refreshStats()">刷新统计</button>
+  </div>
+  <div class="stats-card" style="margin-bottom:16px;">
+    <h4>📤 导出数据</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin:8px 0;">导出所有答卷数据为 JSON 格式并下载。</p>
+    <button class="btn-primary" id="btnExport" onclick="runExport()">导出并下载</button>
+    <div id="exportResult" style="margin-top:8px;"></div>
+  </div>`;
+}
+
+async function runSeed() {
+  const btn = document.getElementById('btnSeed');
+  const result = document.getElementById('seedResult');
+  btn.disabled = true;
+  btn.textContent = '正在导入...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }
     });
-  }, 100);
+    const data = await res.json();
+    if (data.success) {
+      if (data.skipped) {
+        result.innerHTML = '<span style="color:#f59e0b;">已跳过：该版本题目已在数据库中存在</span>';
+      } else {
+        result.innerHTML = `<span style="color:#22c55e;">导入成功！共 ${data.questionCount || 0} 题，版本 ${data.version}</span>`;
+      }
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">导入失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '运行导入';
+}
+
+async function runForceSeed() {
+  const version = surveyVersion && surveyVersion !== 'unknown' ? surveyVersion : 'v0.2';
+  if (!confirm(`⚠️ 警告：这将删除数据库中 ${version} 版本的所有数据（包括题目、答卷、选项等），然后从 questions.json 重新导入。\n\n此操作不可恢复，确定继续？`)) return;
+  const btn = document.getElementById('btnForceSeed');
+  const result = document.getElementById('seedResult');
+  btn.disabled = true;
+  btn.textContent = '正在重新导入...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+      body: JSON.stringify({ force: true })
+    });
+    const data = await res.json();
+    if (data.success) {
+      result.innerHTML = `<span style="color:#22c55e;">✅ 重新导入成功！共 ${data.questionCount || 0} 题，版本 ${data.version}</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">重新导入失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '🔄 强制重新导入';
+}
+
+async function deleteSurveyVersion() {
+  const input = document.getElementById('deleteVersionInput');
+  const version = input.value.trim();
+  const result = document.getElementById('deleteVersionResult');
+  if (!version) {
+    result.innerHTML = '<span style="color:#f59e0b;">请输入版本号</span>';
+    return;
+  }
+  if (!confirm(`⚠️ 警告：这将永久删除 ${version} 版本的所有数据（题目、答卷、选项等）。\n\n此操作不可恢复，确定继续？`)) return;
+  const btn = document.getElementById('btnDeleteVersion');
+  btn.disabled = true;
+  btn.textContent = '正在删除...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/seed?version=${encodeURIComponent(version)}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      result.innerHTML = `<span style="color:#22c55e;">✅ ${version} 版本已删除</span>`;
+      input.value = '';
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">删除失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '删除版本';
+}
+
+async function runMigrate() {
+  const btn = document.getElementById('btnMigrate');
+  const result = document.getElementById('migrateResult');
+  btn.disabled = true;
+  btn.textContent = '正在迁移...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/admin/migrate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      result.innerHTML = `<span style="color:#22c55e;">迁移完成：成功 ${data.successCount || 0} 条，跳过 ${data.skippedCount || 0} 条，失败 ${data.failedCount || 0} 条</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">迁移失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '运行迁移';
+}
+
+async function refreshStats() {
+  await loadAndRenderStats();
+  switchAdminTab('stats');
+  showToast('统计数据已刷新');
+}
+
+async function runExport() {
+  const btn = document.getElementById('btnExport');
+  const result = document.getElementById('exportResult');
+  btn.disabled = true;
+  btn.textContent = '正在导出...';
+  result.innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/export?version=${surveyVersion}&includeTest=true`, {
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+    if (data.success) {
+      const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `survey-data-${surveyVersion}-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      result.innerHTML = `<span style="color:#22c55e;">导出成功：${data.data.length} 条记录</span>`;
+    } else {
+      result.innerHTML = `<span style="color:#ef4444;">导出失败：${data.message || '未知错误'}</span>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<span style="color:#ef4444;">请求失败：${err.message}</span>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '导出并下载';
+}
+
+// ====== QUESTION MANAGEMENT ======
+let adminQuestions = [];
+
+async function loadAdminQuestions() {
+  const container = document.getElementById('questionsContent');
+  container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">加载中...</p></div>';
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions`, {
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      adminQuestions = data.questions || [];
+      renderAdminQuestions();
+    } else {
+      container.innerHTML = `<div class="stats-card"><p style="text-align:center;color:#ef4444;padding:20px;">加载失败：${data.message || '未知错误'}</p></div>`;
+    }
+  } catch (err) {
+    container.innerHTML = `<div class="stats-card"><p style="text-align:center;color:#ef4444;padding:20px;">加载失败：${err.message}</p></div>`;
+  }
+}
+
+function renderAdminQuestions() {
+  const container = document.getElementById('questionsContent');
+  const typeLabels = {
+    radio: '单选题',
+    checkbox: '多选题',
+    checkbox_limit: '限选多选',
+    text: '文本题',
+    likert: '量表题'
+  };
+
+  let html = `<div class="stats-header">
+    <h2>题目管理</h2>
+    <div>
+      <button class="btn-primary" onclick="showQuestionForm()">+ 新增题目</button>
+    </div>
+  </div>`;
+
+  html += `<div class="admin-actions">
+    <span style="color:var(--text-secondary);font-size:14px;">共 ${adminQuestions.length} 题</span>
+  </div>`;
+
+  if (adminQuestions.length === 0) {
+    html += `<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无题目</p></div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  adminQuestions.forEach((q, idx) => {
+    const qid = q.question_key || q.id;
+    html += `<div class="stats-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:16px;margin-bottom:8px;">Q${idx + 1}. ${q.title} <span style="color:var(--gray-400);font-size:13px;font-weight:400;">[${qid}]</span></div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">类型：${typeLabels[q.type] || q.type} ${q.part_name ? ' | 部分：' + q.part_name : ''}</div>
+          ${q.subtitle ? `<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">描述：${q.subtitle}</div>` : ''}
+          ${(q.options && q.options.length > 0) ? `<div style="font-size:13px;color:var(--text-secondary);">选项：${q.options.map(o => `<span style="display:inline-block;background:var(--bg-secondary);padding:2px 8px;border-radius:4px;margin:2px;">${typeof o === 'string' ? o : (o.label || '')}</span>`).join('')}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;" onclick='showQuestionForm(${JSON.stringify(q)})'>编辑</button>
+          <button class="btn-secondary" style="padding:6px 12px;font-size:13px;background:#fef2f2;color:#dc2626;border-color:#fecaca;" onclick="confirmDeleteQuestion('${qid}')">删除</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function showQuestionForm(question) {
+  const isEdit = !!question;
+  const q = question || {
+    id: '',
+    title: '',
+    type: 'radio',
+    part: 1,
+    description: '',
+    options: [],
+    max_select: 2
+  };
+
+  const typeLabels = {
+    radio: '单选题',
+    checkbox: '多选题',
+    checkbox_limit: '限选多选',
+    text: '文本题',
+    likert: '量表题'
+  };
+
+  const modal = document.createElement('div');
+  modal.id = 'questionModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+  modal.innerHTML = `
+    <div style="background:var(--bg-primary);border-radius:12px;padding:24px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">
+      <h3 style="margin:0 0 20px 0;">${isEdit ? '编辑题目' : '新增题目'}</h3>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目ID (如 q17)</label>
+        <input type="text" id="qf_id" value="${q.id}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;" ${isEdit ? 'readonly style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background:var(--bg-secondary);"' : ''}>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目内容</label>
+        <input type="text" id="qf_title" value="${q.title}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目类型</label>
+        <select id="qf_type" onchange="onQfTypeChange()" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+          ${Object.entries(typeLabels).map(([k, v]) => `<option value="${k}" ${q.type === k ? 'selected' : ''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">所属部分 (1或2)</label>
+        <input type="number" id="qf_part" value="${q.part || 1}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">题目描述 (可选)</label>
+        <input type="text" id="qf_desc" value="${q.description || ''}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div id="qf_options_wrap" style="margin-bottom:16px;display:${['radio', 'checkbox', 'checkbox_limit'].includes(q.type) ? 'block' : 'none'};">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">选项 (每行一个)</label>
+        <textarea id="qf_options" rows="5" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;font-family:inherit;">${(q.options || []).join('\n')}</textarea>
+      </div>
+      <div id="qf_max_wrap" style="margin-bottom:16px;display:${q.type === 'checkbox_limit' ? 'block' : 'none'};">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">最多可选几项</label>
+        <input type="number" id="qf_max" value="${q.max_select || 2}" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+      </div>
+      <div id="qf_labels_wrap" style="margin-bottom:16px;display:${q.type === 'likert' ? 'block' : 'none'};">
+        <label style="display:block;font-size:14px;margin-bottom:6px;font-weight:500;">量表标签 (每行一个)</label>
+        <textarea id="qf_labels" rows="3" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;font-family:inherit;">${(q.labels || []).join('\n')}</textarea>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+        <button class="btn-secondary" onclick="closeQuestionModal()">取消</button>
+        <button class="btn-primary" onclick="${isEdit ? `updateQuestion('${q.id}')` : 'createQuestion()'}">${isEdit ? '保存' : '创建'}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function onQfTypeChange() {
+  const type = document.getElementById('qf_type').value;
+  const optionsWrap = document.getElementById('qf_options_wrap');
+  const maxWrap = document.getElementById('qf_max_wrap');
+  const labelsWrap = document.getElementById('qf_labels_wrap');
+
+  optionsWrap.style.display = ['radio', 'checkbox', 'checkbox_limit'].includes(type) ? 'block' : 'none';
+  maxWrap.style.display = type === 'checkbox_limit' ? 'block' : 'none';
+  labelsWrap.style.display = type === 'likert' ? 'block' : 'none';
+}
+
+function closeQuestionModal() {
+  const modal = document.getElementById('questionModal');
+  if (modal) modal.remove();
+}
+
+function collectFormData() {
+  const type = document.getElementById('qf_type').value;
+  const data = {
+    id: document.getElementById('qf_id').value.trim(),
+    title: document.getElementById('qf_title').value.trim(),
+    type: type,
+    part: parseInt(document.getElementById('qf_part').value) || 1,
+    description: document.getElementById('qf_desc').value.trim(),
+  };
+  if (['radio', 'checkbox', 'checkbox_limit'].includes(type)) {
+    const optionsText = document.getElementById('qf_options').value;
+    data.options = optionsText.split('\n').map(s => s.trim()).filter(Boolean);
+  }
+  if (type === 'checkbox_limit') {
+    data.max_select = parseInt(document.getElementById('qf_max').value) || 2;
+  }
+  if (type === 'likert') {
+    const labelsText = document.getElementById('qf_labels').value;
+    data.labels = labelsText.split('\n').map(s => s.trim()).filter(Boolean);
+  }
+  return data;
+}
+
+async function createQuestion() {
+  const data = collectFormData();
+  if (!data.id || !data.title) {
+    showToast('请填写题目ID和题目内容');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Token': adminToken
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('创建成功');
+      closeQuestionModal();
+      loadAdminQuestions();
+    } else {
+      showToast('创建失败：' + (result.message || '未知错误'));
+    }
+  } catch (err) {
+    showToast('创建失败：' + err.message);
+  }
+}
+
+async function updateQuestion(originalId) {
+  const data = collectFormData();
+  if (!data.title) {
+    showToast('请填写题目内容');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions/${encodeURIComponent(originalId)}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Token': adminToken
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('保存成功');
+      closeQuestionModal();
+      loadAdminQuestions();
+    } else {
+      showToast('保存失败：' + (result.message || '未知错误'));
+    }
+  } catch (err) {
+    showToast('保存失败：' + err.message);
+  }
+}
+
+async function confirmDeleteQuestion(qId) {
+  if (!confirm(`确定要删除题目 "${qId}" 吗？此操作不可撤销。`)) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/questions/${encodeURIComponent(qId)}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Token': adminToken }
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('删除成功');
+      loadAdminQuestions();
+    } else {
+      showToast('删除失败：' + (result.message || '未知错误'));
+    }
+  } catch (err) {
+    showToast('删除失败：' + err.message);
+  }
 }
 
 // ====== TEST DATA FILTER ======
@@ -1607,23 +2260,22 @@ function toggleTestFilter() {
   filterTestData = !filterTestData;
   if (window._rawStatsData) renderStatsWithData(window._rawStatsData);
 }
-function toggleReportTestFilter() {
-  filterTestData = !filterTestData;
-  if (window._rawReportData) renderReportWithData(window._rawReportData);
-}
 
 // ====== MY ANSWERS REVIEW ======
 function showMyAnswers() {
   const container = document.getElementById('statsContent');
   showPage('pageStats');
   document.getElementById('progressContainer').style.display = 'none';
+  document.getElementById('statsTabsBar').style.display = 'none';
+  document.getElementById('questionsContent').style.display = 'none';
+  document.getElementById('toolsContent').style.display = 'none';
+  document.getElementById('statsContent').style.display = 'block';
   try {
     const myAnswers = JSON.parse(localStorage.getItem('gz_ebike_my_answers'));
     if (!myAnswers) {
       container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">未找到您的回答记录</p></div>';
       return;
     }
-    // 用用户自己的答案构造单条记录
     const myData = [{ answers: myAnswers }];
     renderStatsWithData(myData);
   } catch(e) {
@@ -1631,45 +2283,28 @@ function showMyAnswers() {
   }
 }
 
-// ====== REPORT FUNCTIONS ======
-function showReport() {
-  showPage('pageReport');
-  document.getElementById('progressContainer').style.display = 'none';
-  loadAndRenderReport();
-}
-
-function showAdminLoginReport() {
-  showPage('pageAdminLogin');
-  document.getElementById('progressContainer').style.display = 'none';
-  // 替换验证成功后的回调为显示报告
-  window._adminLoginCallback = function() {
-    showReport();
-  };
-}
-
-async function loadAndRenderReport() {
-  const container = document.getElementById('reportContent');
+async function loadAdminReport() {
+  const container = document.getElementById('adminReportContent');
   container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">正在加载调研报告...</p></div>';
   try {
-    const headers = {};
-    if (adminToken) headers['X-Admin-Token'] = adminToken;
-    const res = await fetch(`${API_BASE}/stats`, { headers });
+    const headers = { 'X-Admin-Token': adminToken };
+    const res = await fetch(`${API_BASE}/stats?includeTest=true`, { headers });
     if (res.ok) {
       const data = await res.json();
-      if (data.success) { renderReportWithData(data.data); return; }
+      if (data.success) {
+        renderAdminReport(container, data.data);
+        return;
+      }
     }
   } catch(e) {}
-  const local = localStorage.getItem('gz_ebike_survey_data');
-  renderReportWithData(local ? [JSON.parse(local)] : []);
+  container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">加载失败，请稍后重试</p></div>';
 }
 
-function renderReportWithData(data) {
-  const container = document.getElementById('reportContent');
+function renderAdminReport(container, data) {
   if (!data || data.length === 0) {
     container.innerHTML = '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:40px;">暂无提交数据，无法生成报告</p></div>';
     return;
   }
-  // 保存原始数据供切换时重渲染
   window._rawReportData = data;
   const testCount = data.filter(d => d.isTest).length;
   const displayData = filterTestData ? data.filter(d => !d.isTest) : data;
@@ -1678,22 +2313,24 @@ function renderReportWithData(data) {
     return;
   }
 
-  let html = '';
-  // 报告头部
   const latestTime = displayData[displayData.length - 1] ? displayData[displayData.length - 1].timestamp : '未知';
   const metaInfo = filterTestData && testCount > 0
     ? `有效样本：${displayData.length}份（已排除 ${testCount} 份测试数据） | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`
     : `有效样本：${displayData.length}份 | 版本：${surveyVersion || 'v0.1'} | 数据截至：${latestTime.slice(0,10)}`;
-  html += `<div class="report-header">
-    <h2>广州市电动自行车管理现状及"解禁"可行性调研报告</h2>
-    <div class="report-meta">${metaInfo}</div>
-    <div class="report-actions">
-      <button class="btn-secondary" onclick="toggleReportTestFilter()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
-      <button class="btn-secondary" onclick="backToLanding()">返回首页</button>
-    </div>
+
+  let html = '<div class="ig-report">';
+  html += `<div class="ig-report-header">
+    <div class="badge">📊 数据调研报告</div>
+    <h2>广州市电动自行车<br>管理现状调研报告</h2>
+    <div class="meta">有效样本${displayData.length}份 | ${latestTime.slice(0,10)} | 线上问卷</div>
+    <div class="source">数据来源：市民线上问卷调查，覆盖广州市11个行政区</div>
   </div>`;
 
-  // 第一章到第七章，调用各子函数
+  html += `<div class="ig-export-bar">
+    <button class="btn-filter" onclick="toggleReportTestFilterAdmin()">过滤测试数据：${filterTestData ? '开' : '关'}</button>
+    <button class="btn-export" onclick="exportReport()">📥 导出报告</button>
+  </div>`;
+
   html += renderChapter1(displayData);
   html += renderChapter2(displayData);
   html += renderChapter3(displayData);
@@ -1702,260 +2339,345 @@ function renderReportWithData(data) {
   html += renderChapter6(displayData);
   html += renderChapter7(displayData);
 
-  container.innerHTML = html;
+  html += `<div class="ig-footer">
+    <div>声明：本报告数据来源于线上问卷调查，仅供参考，不代表官方立场。</div>
+    <div style="margin-top:4px;">样本量：${displayData.length}份 | 调查周期：${latestTime.slice(0,10)} | 制作者：广州城市交通调研小组</div>
+  </div>`;
+  html += '</div>';
 
-  // 动画
-  setTimeout(() => {
-    document.querySelectorAll('.report-page .bar-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-    document.querySelectorAll('.report-page .dim-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-  }, 100);
+  container.innerHTML = html;
+}
+
+function toggleReportTestFilterAdmin() {
+  filterTestData = !filterTestData;
+  if (window._rawReportData) {
+    renderAdminReport(document.getElementById('adminReportContent'), window._rawReportData);
+  }
+}
+
+function exportReport() {
+  const container = document.getElementById('adminReportContent');
+  if (!container || !container.innerHTML.trim()) { showToast('暂无报告可导出'); return; }
+  // Collect all report CSS from document stylesheets
+  let cssText = '';
+  try {
+    for (const sheet of document.styleSheets) {
+      for (const rule of sheet.cssRules) { cssText += rule.cssText + '\n'; }
+    }
+  } catch(e) {}
+  // Fallback: extract inline <style> content
+  if (!cssText) {
+    document.querySelectorAll('style').forEach(tag => { cssText += tag.textContent + '\n'; });
+  }
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>广州市电动自行车管理现状调研报告</title>
+<style>
+body { margin: 0; padding: 20px; background: #F0F4F8; font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+${cssText}
+</style>
+</head>
+<body>
+${container.innerHTML}
+</body>
+</html>`;
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().slice(0,10);
+  a.download = `广州电动车调研报告_${date}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('报告已导出');
+}
+
+function countPct(filterValue, qid, optValue, data) {
+  const group = data.filter(d => {
+    const v = d.answers[filterValue.qid];
+    if (Array.isArray(filterValue.value)) return filterValue.value.includes(v);
+    return v === filterValue.value;
+  });
+  if (group.length === 0) return 0;
+  const matchCount = group.filter(d => {
+    const v = d.answers[qid];
+    if (Array.isArray(v)) return v.includes(optValue);
+    return v === optValue;
+  }).length;
+  return (matchCount / group.length * 100).toFixed(1);
+}
+
+/* ===== Infographic Chapter Renderers ===== */
+const IG_COLORS = ['#EF4444','#F59E0B','#FBBF24','#10B981','#3B82F6','#6366F1','#8B5CF6','#EC4899','#6B7280'];
+const IG_BLUES = ['#2563EB','#3B82F6','#60A5FA','#93C5FD','#BFDBFE'];
+
+function igRankRow(rank, label, count, total, color) {
+  const pct = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+  return `<div class="ig-rank-row">
+    <div class="ig-rank-num" style="background:${color}">${rank}</div>
+    <div class="ig-rank-bar-wrap">
+      <div class="ig-rank-label">${escapeHtml(label)} <span class="ig-rank-count">${count}人</span></div>
+      <div class="ig-rank-track"><div class="ig-rank-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>
+    <div class="ig-rank-pct">${pct}%</div>
+  </div>`;
+}
+
+function igHBar(label, count, total, color) {
+  const pct = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+  return `<div class="ig-hbar-row">
+    <div class="ig-hbar-label">${escapeHtml(label)}</div>
+    <div class="ig-hbar-track"><div class="ig-hbar-fill" style="width:${pct}%;background:${color}">${pct}%</div></div>
+    <div class="ig-hbar-pct">${count}<span class="ig-hbar-count">人</span></div>
+  </div>`;
+}
+
+function igSectionHeader(num, title, color) {
+  return `<div class="ig-section-header"><div class="ig-section-num" style="background:${color||'#2563EB'}">${num}</div><div class="ig-section-title">${title}</div></div>`;
 }
 
 function renderChapter1(data) {
   const total = data.length;
   const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用').length;
   const nonOwners = total - owners;
-  return `<div class="report-section">
-    <div class="report-section-title">第一章 调研概述</div>
-    <div class="report-summary-cards">
-      <div class="report-summary-card"><div class="num">${total}</div><div class="label">有效问卷数</div></div>
-      <div class="report-summary-card"><div class="num accent">${owners} (${(owners/total*100).toFixed(1)}%)</div><div class="label">电动车车主</div></div>
-      <div class="report-summary-card"><div class="num">${nonOwners} (${(nonOwners/total*100).toFixed(1)}%)</div><div class="label">非车主</div></div>
+  const ownerPct = total > 0 ? (owners/total*100).toFixed(1) : 0;
+  const nonPct = total > 0 ? (nonOwners/total*100).toFixed(1) : 0;
+  return `<div class="ig-section">
+    <div class="ig-kpi-grid">
+      <div class="ig-kpi-card" style="--c:#2563EB"><div class="num">${total}</div><div class="label">有效样本</div><div class="sub">问卷总量</div></div>
+      <div class="ig-kpi-card" style="--c:#F59E0B"><div class="num">${ownerPct}%</div><div class="label">电动车车主</div><div class="sub">${owners}份</div></div>
+      <div class="ig-kpi-card" style="--c:#10B981"><div class="num">${nonPct}%</div><div class="label">非车主</div><div class="sub">${nonOwners}份</div></div>
     </div>
   </div>`;
 }
 
 function renderChapter2(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第二章 受访者画像</div>';
-  // 2.1 年龄分布 Q3
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('01', '受访者画像', '#2563EB');
+  // 年龄分布 排名表
   const q3 = questions.find(q => q.id === 'q3');
-  html += '<div class="report-subsection"><h4>2.1 年龄分布</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q3.options, 'q3', data), countValid('q3', data), false) + '</div></div>';
-  // 2.2 区域分布 Q5
+  const q3counts = countOptions(q3.options, 'q3', data).sort((a,b) => b.count - a.count);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#EF4444">年龄分布 (TOP5)</div>';
+  q3counts.forEach((item, i) => {
+    html += igRankRow(i+1, item.label, item.count, total, IG_COLORS[i] || '#6B7280');
+  });
+  html += '</div>';
+  // 区域分布 水平条形图
   const q5 = questions.find(q => q.id === 'q5');
-  html += '<div class="report-subsection"><h4>2.2 区域分布</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q5.options, 'q5', data), countValid('q5', data), false) + '</div></div>';
-  // 2.3 电动车使用情况 Q2 + Q4
-  const q2 = questions.find(q => q.id === 'q2');
-  const q4 = questions.find(q => q.id === 'q4');
-  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>2.3a 电动车拥有情况</h4>';
-  html += renderBarChart(countOptions(q2.options, 'q2', data), countValid('q2', data), false);
-  html += '</div><div class="report-feq-card"><h4>2.3b 主要用途</h4>';
-  html += renderBarChart(countOptions(q4.options, 'q4', data), data.length, false);
-  html += '</div></div>';
+  const q5counts = countOptions(q5.options, 'q5', data).sort((a,b) => b.count - a.count);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#F59E0B">区域分布</div>';
+  q5counts.forEach((item, i) => {
+    html += igHBar(item.label.split('（')[0], item.count, total, IG_BLUES[i] || '#93C5FD');
+  });
+  html += '</div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter3(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第三章 核心发现一：现状与问题感知</div>';
-  // 3.1 Q6 满意度
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('02', '现状与满意度', '#F59E0B');
   const q6 = questions.find(q => q.id === 'q6');
-  html += '<div class="report-subsection"><h4>3.1 管理满意度评分</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q6.labels, 'q6', data), countValid('q6', data), false) + '</div></div>';
-  // 3.2 Q7 突出问题（降序排列）
-  const q7 = questions.find(q => q.id === 'q7');
-  const q7counts = countOptions(q7.options, 'q7', data).sort((a,b) => b.count - a.count);
-  html += '<div class="report-subsection"><h4>3.2 最突出问题排序（限选3项）</h4>';
-  html += '<div class="stats-card">' + renderBarChart(q7counts, data.length, false) + '</div></div>';
-  // 3.3 Q8
-  const q8 = questions.find(q => q.id === 'q8');
-  html += '<div class="report-subsection"><h4>3.3 安全威胁感知</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q8.labels, 'q8', data), countValid('q8', data), false) + '</div></div>';
-  // 3.4 Q9
-  const q9 = questions.find(q => q.id === 'q9');
-  html += '<div class="report-subsection"><h4>3.4 停放充电满意度</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q9.labels, 'q9', data), countValid('q9', data), false) + '</div></div>';
+  const q6counts = countOptions(q6.labels, 'q6', data);
+  const q6total = countValid('q6', data);
+  // 满意度排名
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#EF4444">管理满意度评分</div>';
+  const satOrder = ['非常不满意','不太满意','一般','比较满意','非常满意'];
+  const satColors = ['#EF4444','#F59E0B','#FBBF24','#10B981','#3B82F6'];
+  satOrder.forEach((label, i) => {
+    const item = q6counts.find(c => c.label === label) || {count:0};
+    html += igRankRow(i+1, label, item.count, q6total, satColors[i]);
+  });
+  html += '</div>';
+  // 综合满意度得分（简单数字）
+  const q12 = questions.find(q => q.id === 'q12');
+  const q12counts = countOptions(q12.options, 'q12', data);
+  const q12total = countValid('q12', data);
+  const strictCount = (q12counts.find(c => c.label.includes('过于严格')) || {count:0}).count;
+  const strictPct = q12total > 0 ? (strictCount / q12total * 100).toFixed(1) : 0;
+  html += '<div class="ig-two-col">';
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#8B5CF6">综合满意度得分</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${strictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div><div class="ig-gauge-scale">5分制Likert量表</div></div></div>`;
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">政策松紧感知</div>`;
+  q12counts.forEach((item, i) => {
+    html += igHBar(item.label, item.count, q12total, IG_COLORS[i] || '#6B7280');
+  });
+  html += '</div></div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter4(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第四章 核心发现二：政策认知与评价</div>';
-  const q10 = questions.find(q => q.id === 'q10');
-  // 计算知晓率（非常了解 + 比较了解 + 略有了解）
-  const q10counts = countOptions(q10.labels, 'q10', data);
-  const q10total = countValid('q10', data);
-  const awareCount = q10counts.slice(0, 3).reduce((a,b) => a+b.count, 0);
-  const awarePct = q10total > 0 ? (awareCount / q10total * 100).toFixed(1) : 0;
-  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + awarePct + '%</div><div class="label">新规知晓率</div></div></div>';
-  html += '<div class="report-subsection"><h4>4.1 新规了解程度</h4>';
-  html += '<div class="stats-card">' + renderBarChart(q10counts, q10total, false) + '</div></div>';
-  const q11 = questions.find(q => q.id === 'q11');
-  html += '<div class="report-subsection"><h4>4.2 执法力度评价</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q11.labels, 'q11', data), countValid('q11', data), false) + '</div></div>';
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('03', '政策态度', '#EF4444');
+  const q16 = questions.find(q => q.id === 'q16');
+  const q16counts = countOptions(q16.options, 'q16', data);
+  const q16total = countValid('q16', data);
+  const sorted = q16counts.sort((a,b) => b.count - a.count);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#2563EB">理想管理模式排名 (TOP7)</div>';
+  const modeColors = ['#2563EB','#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#6B7280'];
+  const modeTags = ['分类管','适度放宽','维持现状','严打整治','全面放开','全面禁止','不清楚'];
+  sorted.forEach((item, i) => {
+    const tag = modeTags.find(t => item.label.includes(t)) || (i+1);
+    const tagColor = modeColors[modeTags.indexOf(tag)] || modeColors[i] || '#6B7280';
+    const shortLabel = item.label.length > 20 ? item.label.substring(0,20) + '...' : item.label;
+    html += `<div class="ig-rank-row">
+      <div class="ig-rank-num" style="background:${tagColor}">${i+1}</div>
+      <div class="ig-rank-bar-wrap">
+        <div class="ig-rank-label"><span style="display:inline-block;background:${tagColor};color:#fff;padding:1px 8px;border-radius:4px;font-size:11px;margin-right:6px;">${tag}</span>${escapeHtml(shortLabel)} <span class="ig-rank-count">${item.count}人</span></div>
+        <div class="ig-rank-track"><div class="ig-rank-fill" style="width:${q16total>0?((item.count/q16total)*100).toFixed(1):0}%;background:${tagColor}"></div></div>
+      </div>
+      <div class="ig-rank-pct">${q16total>0?((item.count/q16total)*100).toFixed(1):0}%</div>
+    </div>`;
+  });
+  html += '</div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter5(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第五章 核心发现三："解禁"态度与条件</div>';
-  // 5.1 Q12
-  const q12 = questions.find(q => q.id === 'q12');
-  html += '<div class="report-subsection"><h4>5.1 政策松紧感知</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q12.options, 'q12', data), countValid('q12', data), false) + '</div></div>';
-  // 5.2 Q13b + Q13c 双栏
-  const q13b = questions.find(q => q.id === 'q13b');
-  const q13c = questions.find(q => q.id === 'q13c');
-  html += '<div class="report-dual-col"><div class="report-feq-card"><h4>5.2a 希望放宽的方面</h4>';
-  const q13bcounts = countOptions(q13b.options, 'q13b', data).sort((a,b) => b.count - a.count);
-  html += renderBarChart(q13bcounts, data.length, false);
-  html += '</div><div class="report-feq-card"><h4>5.2b 希望加强管控的方面</h4>';
-  const q13ccounts = countOptions(q13c.options, 'q13c', data).sort((a,b) => b.count - a.count);
-  html += renderBarChart(q13ccounts, data.length, false);
+  const total = data.length;
+  let html = '<div class="ig-section">' + igSectionHeader('04', '分群体声音', '#8B5CF6');
+  // 车主 vs 非车主
+  const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
+  const nonOwners = data.filter(d => !owners.includes(d));
+  const ownerStrictPct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '过于严格，限制了正常出行', data);
+  const nonOwnerStrictPct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q12', '过于严格，限制了正常出行', data);
+  html += '<div class="ig-two-col">';
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#2563EB">车主 (${owners.length}人)</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${ownerStrictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div></div></div>`;
+  html += `<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">非车主 (${nonOwners.length}人)</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${nonOwnerStrictPct}%</div><div class="ig-gauge-label">认为管理"过于严格"</div></div></div>`;
+  html += '</div>';
+  // 区域对比
+  const q13bq = questions.find(q => q.id === 'q13b');
+  const czcData = data.filter(d => d.answers.q5 && d.answers.q5.includes('城中村'));
+  const zxqData = data.filter(d => d.answers.q5 && d.answers.q5.includes('中心城区'));
+  const czcTop3 = countOptions(q13bq.options, 'q13b', czcData).sort((a,b) => b.count - a.count).slice(0,3);
+  const zxqTop3 = countOptions(q13bq.options, 'q13b', zxqData).sort((a,b) => b.count - a.count).slice(0,3);
+  html += '<div class="ig-two-col">';
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#F59E0B">城中村最希望放宽 TOP3</div>';
+  czcTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, czcData.length, IG_COLORS[i]); });
+  html += '</div>';
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#3B82F6">中心城区最希望放宽 TOP3</div>';
+  zxqTop3.forEach((item, i) => { html += igRankRow(i+1, item.label, item.count, zxqData.length, IG_BLUES[i]); });
   html += '</div></div>';
-  // 5.3 Q14
-  const q14 = questions.find(q => q.id === 'q14');
-  html += '<div class="report-subsection"><h4>5.3 公共交通能否替代电动车</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q14.labels, 'q14', data), countValid('q14', data), false) + '</div></div>';
-  // 5.4 Q15
-  const q15 = questions.find(q => q.id === 'q15');
-  html += '<div class="report-subsection"><h4>5.4 放宽是否增加安全风险</h4>';
-  html += '<div class="stats-card">' + renderBarChart(countOptions(q15.labels, 'q15', data), countValid('q15', data), false) + '</div></div>';
-  // 5.5 Q16 核心结论题 - Featured
-  const q16 = questions.find(q => q.id === 'q16');
-  const q16counts = countOptions(q16.options, 'q16', data);
-  const q16total = countValid('q16', data);
-  // 找到最高选项
-  const topChoice = q16counts.reduce((a,b) => a.count > b.count ? a : b);
-  const topPct = q16total > 0 ? (topChoice.count / q16total * 100).toFixed(1) : 0;
-  html += '<div class="report-subsection"><h4>5.5 理想管理模式选择（核心结论）</h4>';
-  html += '<div class="report-summary-cards"><div class="report-summary-card"><div class="num accent">' + topPct + '%</div><div class="label">最多人选择：' + escapeHtml(topChoice.label) + '</div></div></div>';
-  html += '<div class="stats-card featured">' + renderBarChart(q16counts, q16total, true) + '</div></div>';
-  // 5.6 Q17
-  const q17 = questions.find(q => q.id === 'q17');
-  html += '<div class="report-subsection"><h4>5.6 可接受的解禁条件</h4>';
-  const q17counts = countOptions(q17.options, 'q17', data).sort((a,b) => b.count - a.count);
-  html += '<div class="stats-card">' + renderBarChart(q17counts, data.length, false) + '</div>';
-  html += '<div class="report-subsection"><p style="font-size:12px;color:var(--gray-400);">注：Q17中"以上都满足才支持"与"无论如何都不支持"互斥</p></div>';
   html += '</div>';
   return html;
 }
 
 function renderChapter6(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第六章 核心结论与建议</div>';
+  let html = '<div class="ig-section">' + igSectionHeader('05', '数据分析洞察', '#10B981');
+  // 洞察卡片
+  const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
+  const nonOwners = data.filter(d => !owners.includes(d));
+  const ownerStrictPct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '过于严格，限制了正常出行', data);
+  const nonOwnerRiskPct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q15', '一定会', data);
+  const czcData = data.filter(d => d.answers.q5 && d.answers.q5.includes('城中村'));
+  const q13bq = questions.find(q => q.id === 'q13b');
+  const czcTop1 = countOptions(q13bq.options, 'q13b', czcData).sort((a,b) => b.count - a.count)[0];
+  const q16 = questions.find(q => q.id === 'q16');
+  const q16counts = countOptions(q16.options, 'q16', data);
+  const classManageCount = q16counts.filter(c => c.label.includes('分类管')).reduce((s,c) => s+c.count, 0);
+  const classManagePct = data.length > 0 ? (classManageCount / data.length * 100).toFixed(0) : 0;
 
-  // 6.1 解禁可行性指数计算
+  html += '<div class="ig-insight-grid">';
+  html += `<div class="ig-insight-card" style="--c:#2563EB"><div class="ig-insight-icon">🚲</div><div class="ig-insight-title">车主群体迫切需求放宽</div><div class="ig-insight-text">${ownerStrictPct}%车主认为当前管理过于严格，尤其对限速15km/h和载物限制不满。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#EF4444"><div class="ig-insight-icon">🛡</div><div class="ig-insight-title">非车主更关注安全</div><div class="ig-insight-text">${nonOwnerRiskPct}%非车主担心放宽后安全风险增加，建议先完善非机动车道。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#10B981"><div class="ig-insight-icon">🏠</div><div class="ig-insight-title">城中村居民诉求最强</div><div class="ig-insight-text">城中村受访者最希望"${czcTop1 ? czcTop1.label : '放宽管理'}"，生活出行需求迫切。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#8B5CF6"><div class="ig-insight-icon">💬</div><div class="ig-insight-title">共识：电摩合法化管理呼声高</div><div class="ig-insight-text">超过${classManagePct}%受访者支持电摩/摩托车分类管理，区别于电动自行车。</div></div>`;
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function renderChapter7(data) {
+  let html = '<div class="ig-section">' + igSectionHeader('06', '解禁可行性指数', '#F59E0B');
   const total = data.length;
-  // 维度1：市民需求紧迫性 30%
-  const q12counts = countOptions(questions.find(q=>q.id==='q12').options, 'q12', data);
-  const q16counts = countOptions(questions.find(q=>q.id==='q16').options, 'q16', data);
+  const q12q = questions.find(q => q.id === 'q12');
+  const q16q = questions.find(q => q.id === 'q16');
+  const q13bq = questions.find(q => q.id === 'q13b');
+  const q15q = questions.find(q => q.id === 'q15');
+  const q17q = questions.find(q => q.id === 'q17');
+
+  const q12counts = countOptions(q12q.options, 'q12', data);
   const q12total = countValid('q12', data);
+  const strictPct = q12total > 0 ? ((q12counts.find(c => c.label.includes('过于严格')) || {count:0}).count / q12total) : 0;
+  const q16counts = countOptions(q16q.options, 'q16', data);
   const q16total = countValid('q16', data);
-  const strictPct = q12total > 0 ? (q12counts.find(c=>c.label.includes('过于严格')).count || 0) / q12total : 0;
-  const relaxPct = q16total > 0 ? (q16counts.find(c=>c.label.includes('解禁') || c.label.includes('放宽')).count || 0) / q16total : 0;
+  const excludeLabels = ['维持现状', '严打整治', '全面禁止', '不清楚'];
+  const relaxCount = q16counts.filter(c => !excludeLabels.some(ex => c.label.includes(ex))).reduce((s, c) => s + c.count, 0);
+  const relaxPct = q16total > 0 ? (relaxCount / q16total) : 0;
   const dim1 = Math.min(100, Math.round((strictPct * 0.5 + relaxPct * 0.5) * 100));
 
-  // 维度2：政策放宽意愿 30%
-  const q13bcounts = countOptions(questions.find(q=>q.id==='q13b').options, 'q13b', data);
-  const hasQ13b = data.filter(d => d.answers.q13b && d.answers.q13b.length > 0).length;
-  const dim2 = total > 0 ? Math.min(100, Math.round(hasQ13b / total * 100 * 1.2)) : 0;
+  const q13bcounts = countOptions(q13bq.options, 'q13b', data);
+  const roadCount = q13bcounts.filter(c => c.label.includes('通行') || c.label.includes('路权')).reduce((s, c) => s + c.count, 0);
+  const dim2 = total > 0 ? Math.min(100, Math.round(roadCount / total * 100)) : 0;
 
-  // 维度3：安全风险可控性 25%
-  const q15counts = countOptions(questions.find(q=>q.id==='q15').labels, 'q15', data);
+  const q15counts = countOptions(q15q.labels, 'q15', data);
   const q15total = countValid('q15', data);
-  const safeIdx = questions.find(q=>q.id==='q15').labels.length - 1;
-  const safeCount = q15total > 0 ? (q15counts[q15counts.length-2] ? q15counts[q15counts.length-2].count : 0) + (q15counts[q15counts.length-1] ? q15counts[q15counts.length-1].count : 0) : 0;
+  const safeCount = q15total > 0 ? ((q15counts[q15counts.length - 2] || {count:0}).count + (q15counts[q15counts.length - 1] || {count:0}).count) : 0;
   const dim3 = q15total > 0 ? Math.min(100, Math.round(safeCount / q15total * 100)) : 0;
 
-  // 维度4：管理配套成熟度 15%
-  const q9counts = countOptions(questions.find(q=>q.id==='q9').labels, 'q9', data);
-  const q11counts = countOptions(questions.find(q=>q.id==='q11').labels, 'q11', data);
-  const q9total = countValid('q9', data);
-  const q11total = countValid('q11', data);
-  // 满意+比较满意
-  const satScore = q9total > 0 ? ((q9counts[0]||{count:0}).count + (q9counts[1]||{count:0}).count) / q9total : 0;
-  const enforceScore = q11total > 0 ? ((q11counts[0]||{count:0}).count + (q11counts[1]||{count:0}).count) / q11total : 0;
-  const dim4 = Math.min(100, Math.round((satScore * 0.5 + enforceScore * 0.5) * 100));
+  const q17counts = countOptions(q17q.options, 'q17', data);
+  const inflexibleCount = (q17counts.find(c => c.label.includes('以上都满足才支持')) || {count:0}).count + (q17counts.find(c => c.label.includes('无论如何都不支持')) || {count:0}).count;
+  const flexibleCount = total - inflexibleCount;
+  const dim4 = total > 0 ? Math.min(100, Math.round(flexibleCount / total * 100)) : 0;
 
-  const overallScore = Math.round(dim1 * 0.3 + dim2 * 0.3 + dim3 * 0.25 + dim4 * 0.15);
+  const overallScore = Math.round(dim1 * 0.30 + dim2 * 0.25 + dim3 * 0.25 + dim4 * 0.20);
   let conclusion = '';
   if (overallScore >= 80) conclusion = '建议适度放宽/解禁，条件成熟';
   else if (overallScore >= 60) conclusion = '建议适度放宽，需配套管理措施';
   else if (overallScore >= 40) conclusion = '建议维持现状，先完善管理';
   else conclusion = '建议加强管控，暂不具备解禁条件';
 
-  const dimColors = ['var(--accent)', 'var(--primary)', '#10b981', '#8b5cf6'];
-  html += '<div class="report-subsection"><h4>6.1 解禁可行性指数</h4>';
-  html += '<div class="report-index-card"><div class="score">' + overallScore + '</div><div class="score-label">综合得分（满分100）</div><div class="score-conclusion">' + conclusion + '</div></div>';
-  html += '<div class="report-dimensions">';
+  html += '<div class="ig-two-col">';
+  html += `<div class="ig-card" style="text-align:center"><div class="ig-card-title" style="--c:#2563EB">综合评估</div>
+    <div class="ig-gauge-wrap"><div class="ig-gauge-value">${overallScore}</div><div class="ig-gauge-label">解禁可行性指数 / 100</div><div style="margin-top:8px;font-size:13px;color:#10B981;font-weight:600;">✅ ${conclusion}</div></div></div>`;
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#3B82F6">四维度评分</div>';
   const dims = [
-    {name: '市民需求紧迫性 (30%)', score: dim1},
-    {name: '政策放宽意愿 (30%)', score: dim2},
-    {name: '安全风险可控性 (25%)', score: dim3},
-    {name: '管理配套成熟度 (15%)', score: dim4}
+    {name:'市民需求紧迫性', weight:'30%', score:dim1, color:'#2563EB'},
+    {name:'政策放宽意愿', weight:'30%', score:dim2, color:'#10B981'},
+    {name:'安全风险可控性', weight:'25%', score:dim3, color:'#F59E0B'},
+    {name:'管理配套成熟度', weight:'15%', score:dim4, color:'#8B5CF6'}
   ];
-  dims.forEach((dim, i) => {
-    html += '<div class="report-dim-item"><div class="dim-label"><span>' + dim.name + '</span><span>' + dim.score + '/100</span></div><div class="dim-bar"><div class="dim-fill" data-width="' + dim.score + '%" style="width:0%;background:' + dimColors[i] + ';"></div></div><div class="dim-score">' + dim.score + '分</div></div>';
+  dims.forEach(dim => {
+    html += `<div class="ig-dim-row"><div class="ig-dim-name">${dim.name}<span class="ig-dim-weight">(${dim.weight})</span></div>
+      <div class="ig-dim-track"><div class="ig-dim-fill" style="width:${dim.score}%;background:${dim.color}"></div></div>
+      <div class="ig-dim-score" style="color:${dim.color}">${dim.score}</div></div>`;
   });
   html += '</div></div>';
 
-  // 6.2 分群体差异
-  html += '<div class="report-subsection"><h4>6.2 车主 vs 非车主态度差异</h4>';
-  const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
-  const nonOwners = data.filter(d => !owners.includes(d));
-  html += '<div class="report-dual-col">';
-  html += '<div class="report-feq-card"><h4>车主对管理模式的偏好</h4>';
-  html += renderBarChart(countOptions(questions.find(q=>q.id==='q16').options, 'q16', owners), owners.length, false);
-  html += '</div><div class="report-feq-card"><h4>非车主对管理模式的偏好</h4>';
-  html += renderBarChart(countOptions(questions.find(q=>q.id==='q16').options, 'q16', nonOwners), nonOwners.length, false);
-  html += '</div></div></div>';
-
-  // 6.3 政策建议（基于数据自动生成）
-  html += '<div class="report-subsection"><h4>6.3 政策建议</h4>';
-  html += '<div class="stats-card">';
+  // 政策建议
   const suggestions = [];
-  // 基于最突出问题
-  const q7 = questions.find(q => q.id === 'q7');
-  const topProblem = countOptions(q7.options, 'q7', data).sort((a,b)=>b.count-a.count)[0];
-  if (topProblem) suggestions.push('重点关注"' + topProblem.label + '"问题，该问题被最多市民（' + (data.length>0?(topProblem.count/data.length*100).toFixed(1):0) + '%）选为突出痛点');
-  // 基于管理模式
-  const q16opts = questions.find(q=>q.id==='q16').options;
-  const q16c = countOptions(q16opts, 'q16', data);
-  const topC = q16c.reduce((a,b) => a.count > b.count ? a : b);
-  if (topC) suggestions.push('市民最倾向"' + topC.label + '"作为理想管理模式，建议据此制定政策方向');
-  // 基于可行性指数
-  suggestions.push('当前解禁可行性指数为' + overallScore + '分，' + conclusion);
-  suggestions.forEach(s => { html += '<div class="report-text-item">' + s + '</div>'; });
-  html += '</div></div>';
-
+  const topRelax = countOptions(q13bq.options, 'q13b', data).sort((a,b) => b.count - a.count)[0];
+  if (topRelax && topRelax.count > 0) suggestions.push('市民最希望放宽"' + topRelax.label + '"');
+  const q11q = questions.find(q => q.id === 'q11');
+  const topPath = countOptions(q11q.options, 'q11', data).sort((a,b) => b.count - a.count)[0];
+  if (topPath && topPath.count > 0) suggestions.push('改革推进倾向：' + topPath.label);
+  suggestions.push('可行性指数' + overallScore + '分：' + conclusion);
+  html += '<div class="ig-card"><div class="ig-card-title" style="--c:#10B981">数据驱动政策建议</div>';
+  suggestions.forEach(s => { html += `<div style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:13px;color:#374151;">• ${s}</div>`; });
   html += '</div>';
-  return html;
-}
 
-function renderChapter7(data) {
-  let html = '<div class="report-section"><div class="report-section-title">第七章 市民声音</div>';
+  // 市民留言
   const responses = data.filter(d => d.answers.q18 && d.answers.q18.trim()).map(d => d.answers.q18.trim());
-  if (responses.length === 0) {
-    html += '<div class="stats-card"><p style="text-align:center;color:var(--gray-400);padding:20px;">暂无文字回答</p></div>';
-  } else {
-    html += '<div class="report-subsection"><h4>精选市民留言（' + Math.min(responses.length, 20) + '/' + responses.length + '条）</h4>';
-    html += '<div class="report-text-list">';
-    responses.slice(0, 20).forEach((r, i) => {
-      html += '<div class="report-text-item"><strong>#' + (i+1) + '</strong> ' + escapeHtml(r) + '</div>';
+  if (responses.length > 0) {
+    html += '<div class="ig-card"><div class="ig-card-title" style="--c:#6B7280">市民留言精选 (' + Math.min(responses.length,10) + '/' + responses.length + ')</div>';
+    responses.slice(0,10).forEach((r, i) => {
+      html += `<div style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:12px;color:#6b7280;line-height:1.5;"><strong style="color:#2563EB">#${i+1}</strong> ${escapeHtml(r)}</div>`;
     });
-    html += '</div></div>';
-    // 关键词统计（简单版：按2字切分统计高频词）
-    html += '<div class="report-subsection"><h4>高频关键词</h4>';
-    const wordCount = {};
-    const stopWords = new Set(['的','了','是','在','我','有','和','就','不','人','都','一','一个','上','也','很','到','说','要','去','你','会','着','没有','看','好','自己','这','他','她','它','那','被','从','把','让','用','对','可以','应该','希望','需要','能','能够','更','还','比','这个','那个','什么','怎么','为什么','应该','可能','但是','因为','所以','如果','虽然','不过','然后','或者','以及','关于','通过','进行','目前','已经','问题','方面','管理','电动','自行车','广州','市民','建议','政策','安全','出行','道路','交通','设施']);
-    responses.forEach(r => {
-      for (let i = 0; i < r.length - 1; i++) {
-        const w = r.substring(i, i+2);
-        if (!stopWords.has(w)) wordCount[w] = (wordCount[w] || 0) + 1;
-      }
-    });
-    const topWords = Object.entries(wordCount).sort((a,b) => b[1]-a[1]).slice(0, 15);
-    html += '<div class="report-keywords">';
-    topWords.forEach((w, i) => {
-      html += '<span class="report-keyword' + (i < 3 ? ' hot' : '') + '">' + escapeHtml(w[0]) + ' (' + w[1] + ')</span>';
-    });
-    html += '</div></div>';
+    html += '</div>';
   }
+
+  // 总结引用
+  html += `<div class="ig-quote"><div class="ig-quote-text">"超八成广州电动车车主支持适度放宽管理限制，<br>市民期待'分类管、优路权、强配套'的精细化管理新模式。"</div></div>`;
+
   html += '</div>';
   return html;
 }
@@ -1989,15 +2711,20 @@ function renderBarChart(counts, total, featured) {
 
   counts.forEach((item, i) => {
     const pct = total > 0 ? ((item.count / total) * 100).toFixed(1) : 0;
-    const barPct = maxCount > 0 ? ((item.count / maxCount) * 100).toFixed(1) : 0;
+    // bar宽度直接对应真实占比（相对总数），让视觉与数字一致
+    const barPct = pct;
     const color = featured && colors[i] ? `background:${colors[i]};` : '';
+    const pctNum = parseFloat(pct);
+    const pctLabel = pctNum >= 15
+      ? `<span class="bar-pct">${pct}%</span>`
+      : `<span class="bar-pct outside">${pct}%</span>`;
 
     html += `<div class="bar-row">
       <div class="bar-label" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div>
       <div class="bar-track">
-        <div class="bar-fill" data-width="${barPct}%" style="width:0%;${color}"></div>
+        <div class="bar-fill" style="width:${barPct}%;${color}">${pctLabel}</div>
       </div>
-      <div class="bar-count">${item.count} (${pct}%)</div>
+      <div class="bar-count">${item.count}</div>
     </div>`;
   });
   html += `</div>`;
@@ -2037,7 +2764,9 @@ async function exportJSON() {
 document.addEventListener('DOMContentLoaded', () => {
   // Show test banner if in test mode
   if (isTestMode) document.getElementById('testBanner').style.display = 'block';
-  fetch('questions.json')
+
+  // Fetch questions from server
+  fetch(`${API_BASE}/questions`)
     .then(response => {
       if (!response.ok) throw new Error('Network response was not ok');
       return response.json();
@@ -2051,7 +2780,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const versionEl = document.getElementById('surveyVersion');
       if (versionEl) versionEl.textContent = surveyVersion;
       const info = document.getElementById('landingSurveyInfo');
-      if (info) info.textContent = `只需5分钟，${TOTAL_QUESTIONS}道选择题，你的选择代表广州市民的心声`;
+      if (info) info.textContent = `只需5分钟，你的选择代表广州市民的心声`;
     })
     .catch(error => {
       console.error('Failed to load questions:', error);

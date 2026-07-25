@@ -1,0 +1,5 @@
+#!/bin/sh
+# Git pre-commit hook
+# 安装方式: cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# 或运行: npm run precommit (手动触发)
+node "$(git rev-parse --show-toplevel)/test-precommit.js"
