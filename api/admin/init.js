@@ -26,19 +26,24 @@ module.exports = async function handler(req, res) {
     const sqlPath = path.join(process.cwd(), 'db', 'init.sql');
     const sqlContent = fs.readFileSync(sqlPath, 'utf8');
 
-    // Split into individual statements (init.sql has no semicolons inside strings)
+    // Remove comment-only lines, then split into statements
     const statements = sqlContent
+      .split('\n')
+      .map(line => line.trim().startsWith('--') ? '' : line)
+      .join('\n')
       .split(';')
       .map(s => s.trim())
-      .filter(s => s.length > 0 && !s.startsWith('--'));
+      .filter(s => s.length > 0);
 
     const client = await getClient();
     try {
+      await client.query('BEGIN');
       let executed = 0;
       for (const stmt of statements) {
         await client.query(stmt);
         executed++;
       }
+      await client.query('COMMIT');
 
       // Check what tables exist now
       const tablesResult = await client.query(
@@ -51,6 +56,9 @@ module.exports = async function handler(req, res) {
         statementsExecuted: executed,
         tables: tablesResult.rows.map(r => r.tablename)
       });
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
     } finally {
       client.release();
     }
