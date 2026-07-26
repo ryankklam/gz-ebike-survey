@@ -2625,21 +2625,32 @@ function renderChapter6(data) {
   // 洞察卡片
   const owners = data.filter(d => d.answers.q2 === '拥有并经常使用' || d.answers.q2 === '拥有但不常用');
   const nonOwners = data.filter(d => !owners.includes(d));
-  const ownerStrictPct = countPct({qid:'q2', value:['拥有并经常使用','拥有但不常用']}, 'q12', '过于严格，限制了正常出行', data);
-  const nonOwnerRiskPct = countPct({qid:'q2', value:['不拥有但偶尔使用','不使用']}, 'q15', '一定会', data);
   const czcData = data.filter(d => d.answers.q5 && d.answers.q5.includes('城中村'));
   const q13bq = questions.find(q => q.id === 'q13b');
-  const czcTop1 = countOptions(q13bq.options, 'q13b', czcData).sort((a,b) => b.count - a.count)[0];
+  const q13cq = questions.find(q => q.id === 'q13c');
   const q16 = questions.find(q => q.id === 'q16');
+
+  // 车主：q13b（最需要放宽）选得最多的选项
+  function topChoice(group, q) {
+    if (group.length === 0) return null;
+    const counts = countOptions(q.options, q.id, group).sort((a,b) => b.count - a.count);
+    const top = counts[0];
+    if (!top || top.count === 0) return null;
+    return { label: top.label, pct: (top.count / group.length * 100).toFixed(0) };
+  }
+  const ownerTop = topChoice(owners, q13bq);
+  const nonOwnerTop = topChoice(nonOwners, q13cq);
+  const czcTop1 = countOptions(q13bq.options, 'q13b', czcData).sort((a,b) => b.count - a.count)[0];
+  const czcPct = czcData.length > 0 && czcTop1 ? (czcTop1.count / czcData.length * 100).toFixed(0) : 0;
   const q16counts = countOptions(q16.options, 'q16', data);
   const classManageCount = q16counts.filter(c => c.label.includes('分类管')).reduce((s,c) => s+c.count, 0);
   const classManagePct = data.length > 0 ? (classManageCount / data.length * 100).toFixed(0) : 0;
 
   html += '<div class="ig-insight-grid">';
-  html += `<div class="ig-insight-card" style="--c:#2563EB"><div class="ig-insight-icon">🚲</div><div class="ig-insight-title">车主群体迫切需求放宽</div><div class="ig-insight-text">${ownerStrictPct}%车主认为当前管理过于严格，尤其对限速15km/h和载物限制不满。</div></div>`;
-  html += `<div class="ig-insight-card" style="--c:#EF4444"><div class="ig-insight-icon">🛡</div><div class="ig-insight-title">非车主更关注安全</div><div class="ig-insight-text">${nonOwnerRiskPct}%非车主担心放宽后安全风险增加，建议先完善非机动车道。</div></div>`;
-  html += `<div class="ig-insight-card" style="--c:#10B981"><div class="ig-insight-icon">🏠</div><div class="ig-insight-title">城中村居民诉求最强</div><div class="ig-insight-text">城中村受访者最希望"${czcTop1 ? czcTop1.label : '放宽管理'}"，生活出行需求迫切。</div></div>`;
-  html += `<div class="ig-insight-card" style="--c:#8B5CF6"><div class="ig-insight-icon">💬</div><div class="ig-insight-title">共识：电摩合法化管理呼声高</div><div class="ig-insight-text">超过${classManagePct}%受访者支持电摩/摩托车分类管理，区别于电动自行车。</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#2563EB"><div class="ig-insight-icon">🚲</div><div class="ig-insight-title">车主群体迫切需求放宽</div><div class="ig-insight-text">${ownerTop ? ownerTop.pct + '%车主最希望' + escapeHtml(ownerTop.label) + '。' : '暂无车主数据。'}</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#EF4444"><div class="ig-insight-icon">🛡</div><div class="ig-insight-title">非车主更关注安全</div><div class="ig-insight-text">${nonOwnerTop ? nonOwnerTop.pct + '%非车主最希望' + escapeHtml(nonOwnerTop.label) + '。' : '暂无非车主数据。'}</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#10B981"><div class="ig-insight-icon">🏠</div><div class="ig-insight-title">城中村居民诉求最强</div><div class="ig-insight-text">${czcTop1 && czcTop1.count > 0 ? czcPct + '%城中村受访者最希望' + escapeHtml(czcTop1.label) + '。' : '暂无城中村数据。'}</div></div>`;
+  html += `<div class="ig-insight-card" style="--c:#8B5CF6"><div class="ig-insight-icon">💬</div><div class="ig-insight-title">共识：电摩合法化管理呼声高</div><div class="ig-insight-text">${classManagePct > 0 ? '超过' + classManagePct + '%受访者支持电摩/摩托车分类管理。' : '暂无数据。'}</div></div>`;
   html += '</div>';
   html += '</div>';
   return html;
